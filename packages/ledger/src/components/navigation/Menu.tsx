@@ -153,7 +153,7 @@ export function Menu({ trigger, items, align = "start", className, style }: Menu
                 close(true);
               }}
             >
-              {item.icon && <Icon as={item.icon} size={15} />}
+              {item.icon && <Icon as={item.icon} />}
               {item.label}
             </button>
           ))}

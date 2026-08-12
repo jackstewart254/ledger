@@ -135,7 +135,7 @@ export function Table<Row>({
                               : ChevronDown
                             : ChevronsUpDown
                         }
-                        size={12}
+                       
                       />
                     </span>
                   </button>

@@ -23,7 +23,7 @@ export function Button({
   const classes = cx("lg-btn", `lg-btn--${variant}`, className);
   return (
     <button type={type} className={classes} {...rest}>
-      {icon && <Icon as={icon} size={14} />}
+      {icon && <Icon as={icon} />}
       {children}
     </button>
   );

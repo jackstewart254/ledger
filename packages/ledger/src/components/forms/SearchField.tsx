@@ -57,7 +57,7 @@ export function SearchField({
       )}
       style={style}
     >
-      <Icon as={Search} size={15} className="lg-control__icon" />
+      <Icon as={Search} className="lg-control__icon" />
       <input
         ref={inputRef}
         type="search"
@@ -69,7 +69,7 @@ export function SearchField({
       />
       {val !== "" && !disabled && (
         <button type="button" aria-label="Clear search" className="lg-search__clear" onClick={clear}>
-          <Icon as={X} size={14} />
+          <Icon as={X} />
         </button>
       )}
     </span>

@@ -146,14 +146,14 @@ export function MultiSelect({
           {summary}
         </span>
         {selected.length > 0 && <span className="lg-ms__badge">{selected.length}</span>}
-        <Icon as={ChevronDown} size={15} className="lg-control__icon" />
+        <Icon as={ChevronDown} className="lg-control__icon" />
       </button>
 
       {open && (
         <div className="lg-ms__pop">
           {showSearch && (
             <div className="lg-ms__search">
-              <Icon as={Search} size={14} className="lg-control__icon" />
+              <Icon as={Search} className="lg-control__icon" />
               <input
                 autoFocus
                 value={query}
@@ -166,7 +166,13 @@ export function MultiSelect({
           <div ref={listRef} className="lg-ms__list">
             {filtered.length === 0 && <span className="lg-ms__empty">No matches</span>}
             {filtered.map((opt) => (
-              <label key={opt.value} className="lg-ms__option">
+              <label
+                key={opt.value}
+                className={cx(
+                  "lg-ms__option",
+                  selected.includes(opt.value) && "lg-ms__option--selected",
+                )}
+              >
                 {/* reuses the Checkbox box/mark classes — see checkbox.css */}
                 <span className="lg-checkbox__box">
                   <input

@@ -24,7 +24,10 @@ export interface IconProps {
   style?: CSSProperties;
 }
 
-export function Icon({ as: As, size = 16, strokeWidth = 1.75, className, style }: IconProps) {
+/* 17px at stroke 2 is the kit's standard icon. Lucide's own 24px default is
+   too big beside 14px text, and 16/1.75 rendered thin and slightly undersized
+   next to it. Components should take this default rather than passing sizes. */
+export function Icon({ as: As, size = 17, strokeWidth = 2, className, style }: IconProps) {
   return (
     <As
       className={cx("lg-icon", className)}

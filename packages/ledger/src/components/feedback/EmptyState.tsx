@@ -31,7 +31,7 @@ export function EmptyState({
   return (
     <div className={cx("lg-empty", compact && "lg-empty--compact", className)} style={style}>
       <span className="lg-empty-icon">
-        <Icon as={icon} size={20} />
+        <Icon as={icon} />
       </span>
       <div className="lg-empty-title">{title}</div>
       {description && <div className="lg-empty-desc">{description}</div>}

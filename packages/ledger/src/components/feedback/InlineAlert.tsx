@@ -52,7 +52,7 @@ export function InlineAlert({
   return (
     <div role="alert" className={cx("lg-alert", `lg-alert--${TONE_CLASS[tone]}`, className)} style={style}>
       <span className="lg-alert-icon">
-        <Icon as={TONE_ICON[tone]} size={16} />
+        <Icon as={TONE_ICON[tone]} />
       </span>
       <div className="lg-alert-body">
         {title && <div className="lg-alert-title">{title}</div>}
@@ -61,7 +61,7 @@ export function InlineAlert({
       {action}
       {onClose && (
         <button type="button" aria-label="Dismiss" className="lg-alert-close" onClick={onClose}>
-          <Icon as={X} size={14} />
+          <Icon as={X} />
         </button>
       )}
     </div>

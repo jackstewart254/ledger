@@ -75,7 +75,7 @@ export function Drawer({ open, onClose, title, children, footer, width = 360, cl
             {title}
           </h2>
           <button type="button" aria-label="Close" className="lg-drawer-close" onClick={onClose}>
-            <Icon as={X} size={16} />
+            <Icon as={X} />
           </button>
         </div>
         <div className="lg-drawer-body">{children}</div>

@@ -44,7 +44,7 @@ export interface RailItemProps {
 export function RailItem({ icon, label, active = false, href, onClick, className, style }: RailItemProps) {
   const inner = (
     <>
-      <Icon as={icon} size={18} />
+      <Icon as={icon} />
       <span className="lg-rail-flyout" aria-hidden="true">
         {label}
       </span>

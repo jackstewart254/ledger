@@ -44,7 +44,7 @@ export function Pagination({ page, pageCount, onPageChange, className, style }: 
         disabled={page <= 1}
         onClick={() => onPageChange(page - 1)}
       >
-        <Icon as={ChevronLeft} size={14} />
+        <Icon as={ChevronLeft} />
       </button>
       {pageWindow(page, pageCount).map((item, slot) => (
         /* Keyed by SLOT, not page number. Keying by the number makes React
@@ -68,7 +68,7 @@ export function Pagination({ page, pageCount, onPageChange, className, style }: 
         disabled={page >= pageCount}
         onClick={() => onPageChange(page + 1)}
       >
-        <Icon as={ChevronRight} size={14} />
+        <Icon as={ChevronRight} />
       </button>
     </nav>
   );

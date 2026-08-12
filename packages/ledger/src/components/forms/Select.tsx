@@ -64,7 +64,7 @@ export function Select({
             </option>
           ))}
       </select>
-      <Icon as={ChevronDown} size={15} className="lg-select__chevron" />
+      <Icon as={ChevronDown} className="lg-select__chevron" />
     </span>
   );
 }

@@ -1,10 +1,14 @@
-/* Drawer — right-side sheet over the scrim; slides in at --dur-slow. */
+/* Drawer — right-side sheet over the scrim; slides in at --dur-slow.
+   Inset and rounded rather than a full-height slab welded to the viewport
+   edge: everything else in the kit floats on the page background, and a
+   square-cornered panel butting three edges is the one thing that doesn't. */
 .lg-drawer {
   position: fixed;
   inset: 0;
   z-index: var(--z-overlay);
   display: flex;
   justify-content: flex-end;
+  padding: var(--space-2);
   background: var(--scrim);
   animation: lg-drawer-fade var(--dur-base) var(--ease-out);
 }
@@ -14,8 +18,10 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background: var(--surface);
-  border-left: var(--space-px) solid var(--border);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-overlay);
   box-shadow: var(--shadow-lg);
   animation: lg-drawer-slide var(--dur-slow) var(--ease-out);
 }

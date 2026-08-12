@@ -31,7 +31,7 @@ export function Input({ invalid = false, icon, className, style, disabled, ...re
       )}
       style={style}
     >
-      {icon && <Icon as={icon} size={15} className="lg-control__icon" />}
+      {icon && <Icon as={icon} className="lg-control__icon" />}
       <input className="lg-control__input" disabled={disabled} aria-invalid={invalid || undefined} {...rest} />
     </span>
   );

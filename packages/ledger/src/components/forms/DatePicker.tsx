@@ -191,7 +191,7 @@ export function DatePicker({
         <span className={cx("lg-dp__value", !selected && "lg-dp__value--placeholder")}>
           {selected ? formatDate(selected) : placeholder}
         </span>
-        <Icon as={Calendar} size={15} className="lg-control__icon" />
+        <Icon as={Calendar} className="lg-control__icon" />
       </button>
 
       {open && (

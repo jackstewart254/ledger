@@ -90,7 +90,7 @@ export function Modal({
             )}
           </div>
           <button type="button" aria-label="Close" className="lg-modal-close" onClick={onClose}>
-            <Icon as={X} size={16} />
+            <Icon as={X} />
           </button>
         </div>
         {children && <div className="lg-modal-body">{children}</div>}

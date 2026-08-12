@@ -33,12 +33,14 @@
 }
 
 .lg-dp__pop {
-  --lg-dp-cell: var(--control-h-sm);
+  /* Roomier cells: --control-h-sm packed seven columns of numerals into a
+     228px panel with no air between them. */
+  --lg-dp-cell: var(--control-h-lg);
   position: absolute;
   top: calc(100% + var(--space-1));
   left: 0;
   z-index: var(--z-overlay);
-  padding: var(--space-2);
+  padding: var(--space-3);
   background: var(--surface-raised);
   border: var(--space-px) solid var(--border);
   border-radius: var(--radius-overlay);
@@ -70,7 +72,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: var(--control-h-xs);
+  height: var(--control-h-sm);
   font-size: var(--text-xs);
   font-weight: var(--fw-body);
   color: var(--text-subtle);
@@ -86,14 +88,15 @@
   color: var(--text);
   font-family: var(--font-sans);
   font-weight: var(--fw-body);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   font-variant-numeric: tabular-nums;
   cursor: pointer;
   transition: var(--transition-colors);
 }
 .lg-dp__day:hover { background: var(--surface-hover); }
-/* days borrowed from the neighbouring months — still selectable, just quieter */
-.lg-dp__day--muted { color: var(--text-subtle); }
+/* Blank slot where the month hasn't started or has ended — the neighbouring
+   months are not rendered at all. */
+.lg-dp__day--blank { display: block; }
 
 .lg-dp__day--selected,
 .lg-dp__day--selected:hover {

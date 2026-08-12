@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { AppShell, Card, PageColumn, Table, formatDate } from "@mcleanstewart/ledger";
+import { AppShell, Button, Card, EmptyState, PageColumn, Table, formatDate } from "@mcleanstewart/ledger";
 import type { TableColumn } from "@mcleanstewart/ledger";
 
 const sub: CSSProperties = {
@@ -162,13 +162,12 @@ export default function LayoutSection() {
             </>
           }
         >
-          <PageColumn>
-            <Card header="Scrollable main">
-              <div style={{ color: "var(--text-muted)" }}>
-                56px rail + 52px header + scrollable content — the shell shape every
-                dashboard rebuilt by hand, as slots.
-              </div>
-            </Card>
+          <PageColumn style={{ height: "100%", display: "grid", placeItems: "center" }}>
+            <EmptyState
+              title="No transactions yet"
+              description="Connect an account and activity will appear here."
+              action={<Button>Connect account</Button>}
+            />
           </PageColumn>
         </AppShell>
       </div>

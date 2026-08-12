@@ -80,7 +80,7 @@
 .lg-ms__list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-px);
+  gap: 0;
   overflow-y: auto;
 }
 .lg-ms__empty {
@@ -105,11 +105,22 @@
 }
 .lg-ms__option:hover { background: var(--surface-hover); }
 /* Selected rows take a quiet tint, not an ink fill. A solid black row inside a
-   near-white popover is a slab: it out-weighs the panel it sits in, and three
-   of them stacked read as a different component entirely. The checkbox already
-   states the selection; the row tint just makes it scannable. */
-.lg-ms__option:has(.lg-checkbox__input:checked) {
+   near-white popover is a slab: it out-weighs the panel it sits in.
+   Runs of adjacent selections merge into ONE block — the touching corners
+   square off and the gap between them closes, so three selected daemons read
+   as one selected range rather than three separate chips. Needs a real class
+   rather than :has(:checked): :has() cannot be nested inside :has(), so the
+   "is my neighbour also selected" test has no pure-CSS form. */
+.lg-ms__option--selected {
   background: var(--surface-active);
+}
+.lg-ms__option--selected:has(+ .lg-ms__option--selected) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.lg-ms__option--selected + .lg-ms__option--selected {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 .lg-ms__option-label { flex: 1; min-width: 0; }
 .lg-ms__option-count {

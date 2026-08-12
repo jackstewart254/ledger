@@ -59,7 +59,7 @@ export function Toast({
   return (
     <div className={cx("lg-toast", `lg-toast--${tone}`, className)} style={style}>
       <span className="lg-toast-icon">
-        <Icon as={TONE_ICON[tone]} size={16} />
+        <Icon as={TONE_ICON[tone]} />
       </span>
       <div className="lg-toast-body">
         <div className="lg-toast-title">{title}</div>
@@ -68,7 +68,7 @@ export function Toast({
       </div>
       {onClose && (
         <button type="button" aria-label="Dismiss" className="lg-toast-close" onClick={onClose}>
-          <Icon as={X} size={14} />
+          <Icon as={X} />
         </button>
       )}
     </div>

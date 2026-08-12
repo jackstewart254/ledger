@@ -147,7 +147,7 @@ export function CommandMenu({ open, onClose, items, className, style }: CommandM
                   onMouseEnter={() => setActiveIndex(i)}
                   onClick={() => commit(item)}
                 >
-                  {item.icon && <Icon as={item.icon} size={17} strokeWidth={2} />}
+                  {item.icon && <Icon as={item.icon} />}
                   {item.label}
                 </button>
               </div>
