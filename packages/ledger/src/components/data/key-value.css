@@ -27,3 +27,52 @@
   text-align: right;
   font-feature-settings: var(--num-features);
 }
+
+/* ---- columns: the pairs run across the container instead of down ---------
+   Equal fractions rather than auto columns, so the separators land on a rhythm
+   and two of these cards side by side agree with each other. The value goes
+   BELOW its label and left-aligned: stacked, right-aligning would push each
+   figure against the next column's label. */
+.lg-keyvalue--columns {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+/* Every cell is identical: same width (1fr), same padding both sides, content
+   centred in it. The first and last used to drop their outer padding so the
+   text sat flush with the card's edge — which made those two cells wider than
+   the ones between them and put the dividers on an uneven rhythm. Equal cells
+   is the point of the layout, so the card's own padding provides the outer
+   inset and every cell keeps its gutters. */
+.lg-keyvalue--columns .lg-keyvalue-row {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1_5);
+  min-height: 0;
+  padding: var(--space-2) var(--space-4);
+  text-align: center;
+}
+/* The separator turns with the layout, and steps UP a weight doing it:
+   --border-subtle carries between rows a few pixels apart, and disappears as a
+   tall vertical rule with a whole column either side of it. */
+.lg-keyvalue--columns .lg-keyvalue-row + .lg-keyvalue-row {
+  border-top: none;
+  border-left: var(--space-px) solid var(--border);
+}
+.lg-keyvalue--columns .lg-keyvalue-label {
+  font-size: var(--text-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.lg-keyvalue--columns .lg-keyvalue-value {
+  text-align: center;
+  /* the figure is the point of the column, so it takes the step up that the
+     row orientation doesn't need — there it is already isolated on the right */
+  font-size: var(--text-lg);
+  color: var(--text-strong);
+  letter-spacing: var(--tracking-tight);
+}

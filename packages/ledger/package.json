@@ -1,19 +1,50 @@
 {
   "name": "@mcleanstewart/ledger",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "description": "Ledger — a dashboard design system: dark-first, almost-monochrome, hairlines instead of shadows, tabular figures. Typed React components and vanilla CSS, no bundler and no runtime dependency beyond icons.",
+  "keywords": [
+    "design-system",
+    "react",
+    "components",
+    "dashboard",
+    "dark-mode",
+    "css-variables",
+    "design-tokens"
+  ],
+  "license": "MIT",
+  "author": "Jack Stewart",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackstewart254/ledger.git",
+    "directory": "packages/ledger"
+  },
+  "homepage": "https://github.com/jackstewart254/ledger/tree/main/packages/ledger#readme",
+  "bugs": "https://github.com/jackstewart254/ledger/issues",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles.css": "./dist/styles.css"
+    "./styles.css": "./dist/styles.css",
+    "./tokens/index.css": "./dist/tokens/index.css",
+    "./tokens/brand.css": "./dist/tokens/brand.css",
+    "./package.json": "./package.json"
   },
+  "//sideEffects": "CSS only. Without this a bundler tree-shakes the stylesheet import away and the consumer gets an unstyled kit in production and a styled one in dev.",
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
-    "build": "tsc && node scripts/copy-css.mjs"
+    "build": "tsc && node scripts/copy-css.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "react": ">=18",

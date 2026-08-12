@@ -211,6 +211,54 @@ export default function KpiLabE() {
           </SummaryCard>
         </div>
       </div>
+
+      <h3
+        style={{
+          fontSize: "var(--text-md)",
+          fontWeight: "var(--fw-medium)",
+          margin: "var(--space-8) 0 var(--space-3)",
+        }}
+      >
+        KeyValue, columns — the same list across the container instead of down it
+      </h3>
+      <SummaryCard>
+        <KeyValue
+          orientation="columns"
+          items={[
+            { label: "Organic search", value: "1,412" },
+            { label: "Direct", value: "968" },
+            { label: "Referral", value: "431" },
+            { label: "Paid social", value: "219" },
+            { label: "Email", value: "87" },
+          ]}
+        />
+      </SummaryCard>
+
+      <div style={{ display: "grid", gap: "var(--space-4)", marginTop: "var(--space-4)" }}>
+        {/* two items, and a set with labels long enough to run out of room */}
+        <SummaryCard>
+          <KeyValue
+            orientation="columns"
+            items={[
+              { label: "This month", value: "325" },
+              { label: "Last month", value: "214" },
+            ]}
+          />
+        </SummaryCard>
+        <SummaryCard>
+          <KeyValue
+            orientation="columns"
+            items={[
+              { label: "Organic search", value: "18,204" },
+              { label: "Paid search and shopping", value: "9,118" },
+              { label: "Referral and partnerships", value: "4,330" },
+              { label: "Email and lifecycle", value: "2,876" },
+              { label: "Paid social", value: "1,942" },
+              { label: "Direct", value: "1,204" },
+            ]}
+          />
+        </SummaryCard>
+      </div>
     </section>
   );
 }

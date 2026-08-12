@@ -2,8 +2,13 @@ import type { CSSProperties, ReactNode } from "react";
 import { cx } from "../../internal/cx.js";
 
 export interface SummaryCardProps {
-  /** The metric's name. Wraps rather than truncating — a long title is still a title. */
-  title: ReactNode;
+  /**
+   * The metric's name. Wraps rather than truncating — a long title is still a
+   * title. Optional: a body that names its own parts (a columns KeyValue, where
+   * every cell is labelled) has nothing left for a title to say, and the head
+   * is dropped entirely rather than left as an empty row taking up space.
+   */
+  title?: ReactNode;
   /**
    * Top-right slot. A MetricDelta when the card reports a CHANGE, a Badge when
    * it reports a STATE ("Normal"). One slot, not two props: a card carries one
@@ -52,10 +57,12 @@ export function SummaryCard({
 }: SummaryCardProps) {
   return (
     <div className={cx("lg-sum", className)} style={style}>
-      <div className="lg-sum-head">
-        <span className="lg-sum-title">{title}</span>
-        {aside}
-      </div>
+      {(title != null || aside != null) && (
+        <div className="lg-sum-head">
+          {title != null && <span className="lg-sum-title">{title}</span>}
+          {aside}
+        </div>
+      )}
 
       {(value != null || caption != null) && (
         <div className="lg-sum-figures">
