@@ -19,7 +19,6 @@ export interface ModalProps {
   open: boolean;
   onClose: () => void;
   title?: ReactNode;
-  description?: ReactNode;
   children?: ReactNode;
   /** Right-aligned action slot under a hairline. */
   footer?: ReactNode;
@@ -33,7 +32,6 @@ export function Modal({
   open,
   onClose,
   title,
-  description,
   children,
   footer,
   width = 480,
@@ -47,7 +45,6 @@ export function Modal({
 
   const id = useId();
   const titleId = `${id}-title`;
-  const descId = `${id}-desc`;
   const trapRef = useFocusTrap<HTMLDivElement>(active);
 
   useEffect(() => {
@@ -74,7 +71,6 @@ export function Modal({
       role="dialog"
       aria-modal="true"
       aria-labelledby={title == null ? undefined : titleId}
-      aria-describedby={description == null ? undefined : descId}
       ref={trapRef}
       className="lg-modal"
       onMouseDown={(e) => {
@@ -91,11 +87,6 @@ export function Modal({
               <h2 id={titleId} className="lg-modal-title">
                 {title}
               </h2>
-            )}
-            {description && (
-              <p id={descId} className="lg-modal-desc">
-                {description}
-              </p>
             )}
           </div>
           <button type="button" aria-label="Close" className="lg-modal-close" onClick={onClose}>

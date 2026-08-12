@@ -19,9 +19,7 @@ interface WirableProps {
 
 export interface FormFieldProps {
   label: ReactNode;
-  /** Optional hint line. Renders nothing when unset. */
-  hint?: ReactNode;
-  /** Error line — replaces the hint and marks the control invalid. */
+  /** Error line — marks the control invalid. The only text under a field. */
   error?: ReactNode;
   /** Control id — defaults to the child's id, else an auto id. */
   htmlFor?: string;
@@ -31,13 +29,18 @@ export interface FormFieldProps {
 }
 
 /**
- * FormField — label + control slot + optional hint/error line. Wires
- * aria-describedby / aria-invalid onto a single element child.
+ * FormField — label + control slot + error line. Wires aria-describedby /
+ * aria-invalid onto a single element child.
+ *
+ * There is deliberately NO hint slot. Explainer text under a field is a model
+ * narrating its own interface; a field that needs a caption to be understood
+ * needs a better label or a better control. Errors stay — those report
+ * something the user could not have known in advance.
  */
-export function FormField({ label, hint, error, htmlFor, children, className, style }: FormFieldProps) {
+export function FormField({ label, error, htmlFor, children, className, style }: FormFieldProps) {
   const autoId = useId();
   const descId = `${autoId}-desc`;
-  const showDesc = error != null || hint != null;
+  const showDesc = error != null;
 
   let control = children;
   let controlId = htmlFor;
@@ -57,15 +60,11 @@ export function FormField({ label, hint, error, htmlFor, children, className, st
         {label}
       </label>
       {control}
-      {error != null ? (
+      {error != null && (
         <span className="lg-field__error" id={descId}>
           {error}
         </span>
-      ) : hint != null ? (
-        <span className="lg-field__hint" id={descId}>
-          {hint}
-        </span>
-      ) : null}
+      )}
     </div>
   );
 }

@@ -15,7 +15,7 @@
   line-height: var(--leading-none);
 }
 .lg-count-badge--neutral {
-  background: var(--bg-subtle);
+  background: var(--surface);
   color: var(--text-muted);
   border-color: var(--border-subtle);
 }

@@ -1,45 +1,59 @@
 "use client";
 
-import type { ComponentProps, CSSProperties } from "react";
+import { useState, type ComponentProps, type CSSProperties } from "react";
 import { cx } from "../../internal/cx.js";
 
-export interface RangeInputProps
-  extends Omit<ComponentProps<"input">, "type" | "size" | "ref"> {
-  /** Class + style land on the frame, not the bare input. */
-  wrapperClassName?: string;
-  wrapperStyle?: CSSProperties;
-}
+export type RangeInputProps = Omit<ComponentProps<"input">, "type" | "size" | "ref">;
+
+const pctOf = (value: number, min: number, max: number): number =>
+  max === min ? 0 : ((value - min) / (max - min)) * 100;
+
+const num = (v: unknown, fallback: number): number => {
+  const n = typeof v === "number" ? v : Number(v);
+  return Number.isFinite(n) ? n : fallback;
+};
 
 /**
- * RangeInput — a native range inside the shared `.lg-control` frame, so a
- * slider sits in a row of inputs as a field rather than a naked line with a
- * dot on it.
+ * RangeInput — a native range with a filled track: ink up to the thumb, faint
+ * after it, so the value reads at a glance instead of being inferred from the
+ * thumb's position against nothing.
  *
- * Single size on purpose — the kit ships one control size, no `size` prop.
+ * Deliberately NOT wrapped in the `.lg-control` frame. A pill frame is the
+ * shape for something you type into; around a slider it reads as a text field
+ * someone dropped a dot into, and it forces a second rail inside the first.
+ * The fill percentage rides a custom property because no browser exposes the
+ * filled portion of a native range to CSS.
  */
 export function RangeInput({
-  disabled,
   className,
-  wrapperClassName,
-  wrapperStyle,
+  style,
+  min = 0,
+  max = 100,
+  value,
+  defaultValue,
+  onChange,
   ...rest
 }: RangeInputProps) {
+  const lo = num(min, 0);
+  const hi = num(max, 100);
+  const controlled = value !== undefined;
+  const [internal, setInternal] = useState(() => num(defaultValue ?? value, lo));
+  const current = controlled ? num(value, lo) : internal;
+
   return (
-    <div
-      className={cx(
-        "lg-range-field",
-        "lg-control",
-        disabled && "lg-control--disabled",
-        wrapperClassName,
-      )}
-      style={wrapperStyle}
-    >
-      <input
-        type="range"
-        disabled={disabled}
-        className={cx("lg-range", className)}
-        {...rest}
-      />
-    </div>
+    <input
+      {...rest}
+      type="range"
+      min={min}
+      max={max}
+      value={value}
+      defaultValue={defaultValue}
+      onChange={(e) => {
+        if (!controlled) setInternal(num(e.target.value, lo));
+        onChange?.(e);
+      }}
+      className={cx("lg-range", className)}
+      style={{ "--lg-range-pct": `${pctOf(current, lo, hi)}%`, ...style } as CSSProperties}
+    />
   );
 }

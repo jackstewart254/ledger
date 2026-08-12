@@ -1,27 +1,19 @@
-/* RangeInput — native range inside the shared .lg-control frame. The frame
-   carries the border and height (see input.css); the track is just the line
-   inside it, so a slider reads as a field, not a bare rule with a dot on it.
+/* RangeInput — filled track, no surrounding field frame.
    Webkit and Gecko pseudo selectors cannot share a rule (an unknown selector
-   voids the whole block), so the pairs are duplicated. */
-.lg-range-field {
-  display: flex;
-  align-items: center;
-  width: var(--lg-range-w, 100%);
-}
-/* The frame does NOT take .lg-control's focus/hover border shift: that shift
-   says "you are typing in here", and on a slider it fires for the whole drag,
-   so the entire field goes ink while you move a 16px thumb. The thumb is the
-   interactive part and it already responds. */
-.lg-range-field:hover,
-.lg-range-field:focus-within {
-  --_bc: var(--border);
-}
-
+   voids the whole block), so the pairs are duplicated below.
+   The filled portion comes from a gradient driven by --lg-range-pct, set by the
+   component: no browser exposes "how much of a native range is filled" to CSS. */
 .lg-range {
   --_track: var(--space-1);
   --_thumb: var(--space-4);
+  --_fill: linear-gradient(
+    to right,
+    var(--accent) 0 var(--lg-range-pct, 0%),
+    var(--surface-active) var(--lg-range-pct, 0%) 100%
+  );
   appearance: none;
   -webkit-appearance: none;
+  display: block;
   width: 100%;
   height: var(--_thumb);
   margin: 0;
@@ -30,24 +22,19 @@
   cursor: pointer;
 }
 .lg-range:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
 .lg-range::-webkit-slider-runnable-track {
   height: var(--_track);
   border-radius: var(--radius-pill);
-  /* No visible rail. The pill frame around the slider already draws the line
-     the thumb runs along, so a second grey bar inside it is one rail too many.
-     The thumb slides on the frame's own ground. */
-  background: transparent;
+  background: var(--_fill);
 }
 .lg-range::-moz-range-track {
   height: var(--_track);
   border-radius: var(--radius-pill);
-  /* No visible rail. The pill frame around the slider already draws the line
-     the thumb runs along, so a second grey bar inside it is one rail too many.
-     The thumb slides on the frame's own ground. */
-  background: transparent;
+  background: var(--_fill);
 }
 
 .lg-range::-webkit-slider-thumb {
@@ -56,7 +43,7 @@
   width: var(--_thumb);
   height: var(--_thumb);
   margin-top: calc((var(--_track) - var(--_thumb)) / 2);
-  border: var(--space-px) solid var(--surface);
+  border: var(--space-0_5) solid var(--surface);
   border-radius: var(--radius-full);
   background: var(--accent);
   transition: var(--transition-colors);
@@ -65,7 +52,7 @@
   box-sizing: border-box;
   width: var(--_thumb);
   height: var(--_thumb);
-  border: var(--space-px) solid var(--surface);
+  border: var(--space-0_5) solid var(--surface);
   border-radius: var(--radius-full);
   background: var(--accent);
   transition: var(--transition-colors);

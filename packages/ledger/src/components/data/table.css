@@ -110,3 +110,19 @@
   color: var(--text-subtle);
   white-space: normal;
 }
+
+/* Full-page table: when a Table is the entire content of a shell page, it
+   drops its own frame and runs edge to edge inside the pane. The pane already
+   draws the border and the radius, so a second boxed table a gutter inside it
+   is a box in a box — and a full-page table wants every pixel of width.
+   Keyed off the layout, not a prop: there is nothing for a consumer to
+   remember and nothing to get out of sync. */
+.lg-app-shell-main > .lg-page-column--full-bleed:has(> .lg-table) {
+  padding: 0;
+  height: 100%;
+}
+.lg-app-shell-main > .lg-page-column--full-bleed > .lg-table {
+  height: 100%;
+  border: none;
+  border-radius: 0;
+}

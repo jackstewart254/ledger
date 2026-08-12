@@ -34,7 +34,6 @@ export interface DatePickerProps
 const WEEKDAYS = ["M", "T", "W", "T", "F", "S", "S"];
 const MONTH_LABEL = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric" });
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
-const ROWS = [0, 1, 2, 3, 4, 5];
 
 const cellKey = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 
@@ -223,9 +222,13 @@ export function DatePicker({
           </div>
 
           <div ref={gridRef} role="grid" aria-label={monthLabel} onKeyDown={onGridKeyDown}>
-            {ROWS.map((r) => (
+            {Array.from({ length: cells.length / 7 }, (_, r) => (
               <div key={r} role="row" className="lg-dp__row">
-                {cells.slice(r * 7, r * 7 + 7).map(({ date, inMonth }) => {
+                {cells.slice(r * 7, r * 7 + 7).map((cell, i) => {
+                  /* Blank slot — this month doesn't start on a Monday, or ends
+                     mid-week. The neighbouring months are not rendered. */
+                  if (!cell) return <span key={`blank-${i}`} className="lg-dp__day--blank" />;
+                  const { date, inMonth } = cell;
                   const isSelected = selected !== undefined && isSameDay(date, selected);
                   const isToday = isSameDay(date, today);
                   const off = blocked(date);

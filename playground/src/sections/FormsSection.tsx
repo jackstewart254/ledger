@@ -64,7 +64,6 @@ export default function FormsSection() {
         <Spec title="Form field">
           <FormField
             label="Transaction reference"
-            hint="Shown on the counterparty statement"
             style={fieldW}
           >
             <Input placeholder="e.g. TXN-2041" />
@@ -78,7 +77,6 @@ export default function FormsSection() {
           </FormField>
           <FormField
             label="Daemon notes"
-            hint="Visible to the whole desk"
             style={fieldW}
           >
             <Textarea placeholder="Why was reconcile paused?" />
@@ -222,9 +220,9 @@ export default function FormsSection() {
         </Spec>
 
         <Spec title="Range input">
-          <RangeInput aria-label="Alert threshold" defaultValue={40} wrapperStyle={fieldW} />
-          <RangeInput aria-label="Position size" min={0} max={100} step={5} defaultValue={65} wrapperStyle={fieldW} />
-          <RangeInput aria-label="Locked threshold" defaultValue={20} disabled wrapperStyle={fieldW} />
+          <RangeInput aria-label="Alert threshold" defaultValue={40} style={fieldW} />
+          <RangeInput aria-label="Position size" min={0} max={100} step={5} defaultValue={65} style={fieldW} />
+          <RangeInput aria-label="Locked threshold" defaultValue={20} disabled style={fieldW} />
         </Spec>
 
         <Spec title="Date picker">

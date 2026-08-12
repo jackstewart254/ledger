@@ -25,9 +25,13 @@
 
 .lg-control:hover { --_bc: var(--border-strong); }
 .lg-control:focus-within { --_bc: var(--accent); }
-.lg-control--invalid,
-.lg-control--invalid:hover,
-.lg-control--invalid:focus-within { --_bc: var(--danger); }
+/* Invalid does NOT paint the border red. A red ring around a pill is the
+   loudest shape in the kit and it fires while you are still typing; the error
+   line under the field already says what is wrong, in the same colour. The
+   value itself turns red so the eye lands on the thing to fix. */
+.lg-control--invalid .lg-control__input,
+.lg-control--invalid.lg-control__input,
+.lg-control--invalid .lg-textarea { color: var(--danger-text); }
 .lg-control--disabled,
 .lg-control--disabled:hover { --_bc: var(--border); opacity: 0.55; cursor: not-allowed; }
 

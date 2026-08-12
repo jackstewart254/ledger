@@ -7,12 +7,12 @@
   background: var(--surface);
   border: var(--space-px) solid var(--border);
   border-radius: var(--radius-surface);
-  transition: border-color var(--dur-fast) var(--ease-standard);
 }
 
-.lg-card:hover {
-  border-color: var(--border-strong);
-}
+/* No hover state. A card is a container, not a control — darkening its border
+   on hover promises an interaction that isn't there, and every card lighting
+   up as the cursor crosses the page reads as cheap. A card that IS clickable
+   should say so with its content, or wrap the whole thing in a real control. */
 
 .lg-card-header {
   display: flex;

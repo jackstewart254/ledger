@@ -57,7 +57,6 @@ export default function FeedbackSection() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         title="Close position"
-        description="This settles at the next market open."
         footer={
           <>
             <Button variant="tertiary" onClick={() => setModalOpen(false)}>

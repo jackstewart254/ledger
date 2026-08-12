@@ -21,18 +21,28 @@ export const isSameDay = (a: Date, b: Date): boolean =>
 export const weekdayIndex = (d: Date): number => (d.getDay() + 6) % 7;
 
 /**
- * 6×7 = 42 day cells covering `month` (0-indexed) of `year`, weeks starting
- * Monday. Always 42 so the popover never changes height between months.
- * Every cell is built through the Date constructor, which normalises days
- * outside the month — that is what carries the leading/trailing days across
- * month and year boundaries, and it stays DST-safe (no ms arithmetic).
+ * Day cells covering `month` (0-indexed) of `year`, weeks starting Monday.
+ *
+ * ONLY this month's days are returned; the leading and trailing slots are
+ * `null` blanks. Rendering the neighbouring months' days greys half the first
+ * and last rows and makes the reader check which month a number belongs to
+ * before trusting it — the whole point of the header is that they shouldn't
+ * have to. The grid is trimmed to whole weeks, so its height varies by month
+ * (4–6 rows) rather than always padding to 42.
+ *
+ * Dates are built through the Date constructor, which normalises across month
+ * and year boundaries and stays DST-safe (no millisecond arithmetic).
  */
-export function monthGrid(year: number, month: number): DayCell[] {
+export function monthGrid(year: number, month: number): (DayCell | null)[] {
   const first = new Date(year, month, 1);
   const m = first.getMonth();
   const lead = weekdayIndex(first);
-  return Array.from({ length: 42 }, (_, i) => {
-    const date = new Date(year, month, 1 - lead + i);
-    return { date, inMonth: date.getMonth() === m };
-  });
+  const days = new Date(year, month + 1, 0).getDate();
+  const cells: (DayCell | null)[] = Array.from({ length: lead }, () => null);
+  for (let d = 1; d <= days; d += 1) {
+    cells.push({ date: new Date(year, month, d), inMonth: true });
+  }
+  while (cells.length % 7 !== 0) cells.push(null);
+  void m;
+  return cells;
 }
