@@ -151,9 +151,11 @@ The log-panel series: caps micro-label, headline figure and secondary counts, th
 
 `BarChart` · props `BarChartProps` · [`packages/ledger/src/components/data/BarChart.tsx`](../../packages/ledger/src/components/data/BarChart.tsx)
 
-Colour is semantic only. Ordinary buckets are ink; a `tone` bar is the
-exception that should catch the eye, which is exactly what a red error spike
-in a monochrome run does.
+Ordinary buckets are the accent; a `tone` bar is the exception that should
+catch the eye, which is what a red error spike does against a run of blue.
+One exception, derived rather than configured: once ANY bucket carries a
+tone the series is a health series, so the untoned bars go green — among
+reds and ambers, blue would be the only colour saying nothing.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -371,7 +373,7 @@ type TableAlign = "left" | "center" | "right";
 
 ### BarTone
 
-A bar is ink unless its bucket is a claim — an error run, a breach, a win.
+A bar is the accent unless its bucket is a claim — an error run, a breach, a win.
 
 ```ts
 type BarTone = "neutral" | "success" | "warning" | "danger";

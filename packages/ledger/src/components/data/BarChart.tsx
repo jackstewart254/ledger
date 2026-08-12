@@ -4,7 +4,7 @@ import { useState, type CSSProperties, type PointerEvent, type ReactNode } from 
 import { scaleLinear, useChartHover } from "./chart-internals.js";
 import { ChartTooltip } from "./ChartTooltip.js";
 
-/** A bar is ink unless its bucket is a claim — an error run, a breach, a win. */
+/** A bar is the accent unless its bucket is a claim — an error run, a breach, a win. */
 export type BarTone = "neutral" | "success" | "warning" | "danger";
 
 export interface BarChartDatum {
@@ -46,9 +46,11 @@ const MIN_BAR = 1; // a bucket with traffic never renders as nothing
  * BarChart — the log-panel series: caps micro-label, headline figure and
  * secondary counts, then a dense bar run with start/end labels beneath.
  *
- * Colour is semantic only. Ordinary buckets are ink; a `tone` bar is the
- * exception that should catch the eye, which is exactly what a red error spike
- * in a monochrome run does.
+ * Ordinary buckets are the accent; a `tone` bar is the exception that should
+ * catch the eye, which is what a red error spike does against a run of blue.
+ * One exception, derived rather than configured: once ANY bucket carries a
+ * tone the series is a health series, so the untoned bars go green — among
+ * reds and ambers, blue would be the only colour saying nothing.
  */
 export function BarChart({
   data,

@@ -82,15 +82,16 @@
    .lg-barchart-bar--danger and paint the failures green. */
 .lg-barchart--health :where(.lg-barchart-bar) { --lg-bar-fill: var(--success); }
 
-/* Tone is a claim about the bucket. Untoned bars stay ink. */
+/* Tone is a claim about the bucket. Untoned bars stay the accent. */
 .lg-barchart-bar--success { --lg-bar-fill: var(--success); }
 .lg-barchart-bar--warning { --lg-bar-fill: var(--warning); }
 .lg-barchart-bar--danger  { --lg-bar-fill: var(--danger); }
 
-/* Hover lifts the bar towards ink without dropping its tone — an error bar
-   under the cursor is a brighter red, not a grey one. Untoned bars get the
-   darker wash rather than a blend, since blending a translucent fill towards
-   white only makes it fainter. */
+/* Hover brightens the bar without dropping its tone — an error bar under the
+   cursor is a brighter red, not a grey one. Toned bars blend towards
+   --text-bright; untoned ones take --chart-bar-hover (the accent's hover step)
+   instead, because blending an already-light fill towards white only makes it
+   fainter. */
 .lg-barchart-bar--active {
   fill: color-mix(in srgb, var(--text-bright) 30%, var(--lg-bar-fill));
 }

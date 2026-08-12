@@ -158,7 +158,7 @@ surfaces, borders or the text ramp.
 
 Charts draw in the accent, not in a status colour. A balance chart that is
 always red says nothing. `BarChart` is the one that reasons about this: bars are
-ink until any bucket carries a health `tone`, at which point the whole series is
+the accent until any bucket carries a health `tone`, at which point the series is
 a health series and the untoned bars go green — because among reds and ambers,
 "no colour" would be the only bar not saying anything. That is derived from the
 data, not asked of you.

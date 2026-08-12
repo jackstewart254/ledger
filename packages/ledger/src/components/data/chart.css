@@ -59,8 +59,9 @@
   color: var(--text-subtle);
 }
 
-/* Crosshair — the hovered column. Ink, not a grid hairline: it has to read as
-   a response to the pointer rather than as part of the furniture. */
+/* Crosshair — the hovered column. A washed-back tint of the series line rather
+   than another grid hairline: it has to read as a response to the pointer, not
+   as part of the furniture. */
 .lg-chart-crosshair {
   stroke: color-mix(in srgb, var(--chart-line) 40%, transparent);
   stroke-width: var(--space-px);
