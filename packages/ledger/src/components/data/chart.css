@@ -1,0 +1,115 @@
+/* Chart shell — the classes every chart in the kit shares: the positioned box,
+   the svg, grid hairlines, axis labels, the crosshair and the hover readout.
+   Individual charts add only what is theirs (a line, a bar, a dot). */
+/* Charts carry their own surface, the same hairline card Table and KpiTile
+   draw. A chart is a figure — it needs an edge to be a figure rather than ink
+   loose on the page, and without one a row of them has no boundary between the
+   axis of one and the head of the next.
+   Sparkline is deliberately NOT in here: it is inline in a row or a cell, where
+   a frame would be a box around a word. */
+.lg-trendchart,
+.lg-barchart {
+  padding: var(--space-4);
+  background: var(--surface);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-surface);
+}
+
+/* Inside a Card the Card already drew that edge — keyed off the layout, like
+   the full-bleed table rule, so there is nothing for a consumer to remember. */
+.lg-card-body .lg-trendchart,
+.lg-card-body .lg-barchart {
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+
+.lg-chart {
+  position: relative;
+  width: 100%;
+}
+
+/* overflow visible: a dot or a bar cap sitting on the extreme edge of the plot
+   is drawn half outside the viewBox, and clipping it reads as a bug */
+.lg-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Grid — hairlines, like every other separator in the system. non-scaling-stroke
+   so a grid line stays one device pixel whatever the svg is scaled to. */
+.lg-chart-grid {
+  stroke: var(--chart-grid);
+  stroke-width: var(--space-px);
+  vector-effect: non-scaling-stroke;
+}
+
+/* Axis ticks — the smallest type in the kit, muted, tabular. Both fill and
+   color are set: the class lands on <text> in one chart and a <span> in the
+   next, and only one of the two properties paints in each. */
+.lg-chart-axis {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-body);
+  font-feature-settings: var(--num-features);
+  fill: var(--text-subtle);
+  color: var(--text-subtle);
+}
+
+/* Crosshair — the hovered column. Ink, not a grid hairline: it has to read as
+   a response to the pointer rather than as part of the furniture. */
+.lg-chart-crosshair {
+  stroke: color-mix(in srgb, var(--chart-line) 40%, transparent);
+  stroke-width: var(--space-px);
+  vector-effect: non-scaling-stroke;
+}
+
+/* The readout. This is the crosshair tooltip — the one shadow the doctrine
+   sanctions. Position comes in as --lg-chart-tip-x/y, measured per move. */
+.lg-chart-tip {
+  position: absolute;
+  left: var(--lg-chart-tip-x, 0);
+  top: var(--lg-chart-tip-y, 0);
+  z-index: 1; /* local micro-stacking, above the svg — see z-index.css */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0_5);
+  width: max-content;
+  max-width: var(--overlay-w-tooltip);
+  padding: var(--space-1) var(--space-2);
+  background: color-mix(in srgb, var(--surface-raised) 92%, transparent);
+  -webkit-backdrop-filter: blur(var(--blur-chrome)) saturate(1.4);
+  backdrop-filter: blur(var(--blur-chrome)) saturate(1.4);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.lg-chart-tip--visible {
+  opacity: 1;
+}
+
+.lg-chart-tip-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-body);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.lg-chart-tip-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-emphasis);
+  font-feature-settings: var(--num-features);
+  line-height: var(--leading-tight);
+  color: var(--text);
+  white-space: nowrap;
+}

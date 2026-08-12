@@ -1,0 +1,106 @@
+/* CompareChart — one measure over two periods: legend, the two lines and the
+   hover dots. The box, grid, axis, crosshair and readout come from chart.css.
+
+   The previous period is the SAME measure as the current one, so it keeps the
+   same hue: a second brand colour would claim the two lines are two different
+   things. What separates them is time, and time is carried by weight — the
+   accent dropped to a third of its strength, plus a dash, which is also how the
+   pair survives greyscale and a colour-blind reader. */
+.lg-comparechart {
+  --lg-compare-prev: color-mix(in srgb, var(--chart-line) 34%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* Legend — keys, not a control row: sans, small, sentence case at the call
+   site. Nothing here is transformed. */
+.lg-comparechart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.lg-comparechart-key {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-body);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* The comparison key sits a step down the text ramp, same as its line. */
+.lg-comparechart-key--prev {
+  color: var(--text-subtle);
+}
+
+.lg-comparechart-swatch {
+  flex: none;
+  width: var(--space-1_5);
+  height: var(--space-1_5);
+  border-radius: var(--radius-full);
+  background: var(--chart-line);
+}
+
+.lg-comparechart-swatch--prev {
+  background: var(--lg-compare-prev);
+}
+
+/* No fill under either line: two stacked gradients fight, and the subject is
+   the gap between the periods rather than the volume under them. */
+.lg-comparechart-line {
+  fill: none;
+  stroke: var(--chart-line);
+  stroke-width: var(--chart-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lg-comparechart-line--prev {
+  stroke: var(--lg-compare-prev);
+  stroke-dasharray: var(--space-1) var(--space-1);
+}
+
+/* Hovered points. The ring is the page behind them, so a dot reads as sitting
+   on its line rather than as a bead threaded onto it. */
+.lg-comparechart-dot {
+  r: var(--chart-dot);
+  fill: var(--chart-line);
+  stroke: var(--surface);
+  stroke-width: var(--chart-stroke);
+}
+
+.lg-comparechart-dot--prev {
+  fill: var(--lg-compare-prev);
+}
+
+/* Readout — two rows, one per period, inside .lg-chart-tip-value: the figures
+   inherit its mono/tabular treatment and only the series name steps out of it. */
+.lg-comparechart-tip-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.lg-comparechart-tip-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.lg-comparechart-tip-name {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-body);
+  color: var(--text-muted);
+}
+
+/* Figures line up on the right edge whatever the two names measure. */
+.lg-comparechart-tip-val {
+  margin-left: auto;
+}

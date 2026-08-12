@@ -1,25 +1,31 @@
-/* TrendChart — hairline grid, --chart-line stroke, mono min/max labels. */
-.lg-trendchart {
-  display: block;
-}
-
-.lg-trendchart-grid { stroke: var(--chart-grid); }
-
+/* TrendChart — the line, its gradient area and the hover dot. The box, grid,
+   axis, crosshair and readout come from chart.css. */
 .lg-trendchart-line {
   fill: none;
   stroke: var(--chart-line);
+  stroke-width: var(--chart-stroke);
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.lg-trendchart-area { fill: url(#lg-trendchart-fill); }
-.lg-trendchart-stop-top { stop-color: var(--chart-fill); }
-.lg-trendchart-stop-bottom { stop-color: var(--chart-fill); stop-opacity: 0; }
+/* The gradient itself is per-instance (see the component) — these are its
+   stops: --chart-fill at the line, nothing at the baseline. */
+.lg-trendchart-area {
+  stroke: none;
+}
+.lg-trendchart-stop-top {
+  stop-color: var(--chart-fill);
+}
+.lg-trendchart-stop-bottom {
+  stop-color: var(--chart-fill);
+  stop-opacity: 0;
+}
 
-.lg-trendchart-label {
-  font-family: var(--font-mono);
-  font-weight: var(--fw-body);
-  font-size: var(--text-xs);
-  font-feature-settings: var(--num-features);
-  fill: var(--text-subtle);
+/* Hovered point. The ring is the page behind it, so the dot reads as sitting
+   on the line rather than being a bead threaded onto it. */
+.lg-trendchart-dot {
+  r: var(--chart-dot);
+  fill: var(--chart-line);
+  stroke: var(--surface);
+  stroke-width: var(--chart-stroke);
 }

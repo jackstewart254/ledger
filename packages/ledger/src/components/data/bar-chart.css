@@ -1,0 +1,107 @@
+/* BarChart — the log-panel series. Head (caps label + figure + counts), a
+   stretched-viewBox plot on a single baseline, start/end labels beneath. */
+.lg-barchart {
+  --lg-bar-h: var(--space-20);   /* 80px — a dense run, not a hero chart */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.lg-barchart-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* Same caps eyebrow as KpiTile: the label names the figure, it doesn't compete
+   with it. --tracking-caps is the only sanctioned caps treatment. */
+/* Sentence case at body weight — the caps eyebrow was borrowed from KpiTile,
+   where the label sits over a single figure. Here it sits over a figure, a
+   secondary count and a whole plot, and shouting the quietest thing on the card
+   fought everything under it. The string is written sentence case at the call
+   site; nothing is transformed. */
+.lg-barchart-label {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-body);
+  color: var(--text-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lg-barchart-figures {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.lg-barchart-value {
+  font-size: var(--text-2xl);
+  /* Body weight — at 26px the size is the emphasis (see KpiTile). */
+  font-weight: var(--fw-body);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--text-strong);
+  font-feature-settings: var(--num-features);
+}
+
+.lg-barchart-meta {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-feature-settings: var(--num-features);
+}
+
+/* The baseline is a border, not an SVG line: a stroke inside a stretched
+   viewBox thickens with the container's height. */
+.lg-barchart-plot {
+  height: var(--lg-bar-h);
+  border-bottom: var(--space-px) solid var(--chart-grid);
+}
+
+/* .lg-chart-svg gives display/width/overflow; only the height differs, because
+   this svg is stretched to the plot box rather than sized by its aspect ratio.
+   Two classes deep so it wins regardless of stylesheet order. */
+.lg-barchart-plot .lg-barchart-svg {
+  height: 100%;
+}
+
+.lg-barchart-bar {
+  --lg-bar-fill: var(--chart-bar);
+  fill: var(--lg-bar-fill);
+  transition: fill var(--dur-fast) var(--ease-standard);
+}
+
+/* A health series: the chart is about good/bad, so an untoned bucket is a GOOD
+   bucket and takes the success tone. The accent blue is for volume charts,
+   where the bars are a quantity and carry no verdict.
+   :where() keeps this at single-class weight so the tone rules below still win
+   on source order — without it, a two-class selector would beat
+   .lg-barchart-bar--danger and paint the failures green. */
+.lg-barchart--health :where(.lg-barchart-bar) { --lg-bar-fill: var(--success); }
+
+/* Tone is a claim about the bucket. Untoned bars stay ink. */
+.lg-barchart-bar--success { --lg-bar-fill: var(--success); }
+.lg-barchart-bar--warning { --lg-bar-fill: var(--warning); }
+.lg-barchart-bar--danger  { --lg-bar-fill: var(--danger); }
+
+/* Hover lifts the bar towards ink without dropping its tone — an error bar
+   under the cursor is a brighter red, not a grey one. Untoned bars get the
+   darker wash rather than a blend, since blending a translucent fill towards
+   white only makes it fainter. */
+.lg-barchart-bar--active {
+  fill: color-mix(in srgb, var(--text-bright) 30%, var(--lg-bar-fill));
+}
+.lg-barchart:not(.lg-barchart--health) .lg-barchart-bar--active:not([class*="--success"]):not([class*="--warning"]):not([class*="--danger"]) {
+  fill: var(--chart-bar-hover);
+}
+
+/* Layout only — the labels carry .lg-chart-axis, which is where every chart in
+   the kit gets its tick typography. */
+.lg-barchart-axis {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
