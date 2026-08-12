@@ -1,0 +1,134 @@
+/* Settings page layout — grid/columns only, ledger tokens only, .pg- prefixed.
+   No colour beyond the two text tokens the kit has no component for. */
+
+.pg-set-stack {
+  display: grid;
+  gap: var(--space-8);
+  align-content: start;
+}
+
+.pg-set-section {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+/* Two fields to a row; anything that needs the full measure takes --span. */
+.pg-set-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-6);
+  align-items: start;
+}
+
+.pg-set-span {
+  grid-column: 1 / -1;
+}
+
+/* Card body already pads the sides — the rule only needs vertical rhythm. */
+.pg-set-rule {
+  margin: var(--space-4) 0;
+}
+
+.pg-set-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.pg-set-actions-lead {
+  margin-right: auto;
+}
+
+.pg-set-toggles {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+.pg-set-checks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-6);
+  min-height: var(--control-h-md);
+}
+
+.pg-set-billing {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  align-items: start;
+}
+
+/* One line per plan: a two-line label makes the radio centre against a block
+   and the 8px group gap read as cramped. */
+.pg-set-plan {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.pg-set-plan-price {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-feature-settings: var(--num-features);
+}
+
+.pg-set-key {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pg-set-tip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.pg-set-member-search {
+  width: var(--search-w);
+}
+
+.pg-set-member {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+}
+
+.pg-set-member + .pg-set-member {
+  border-top: var(--space-px) solid var(--border-subtle);
+}
+
+.pg-set-member-id {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pg-set-invite {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: end;
+  gap: var(--space-3);
+}
+
+.pg-set-danger {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* Secondary text inside rows the kit has no component for. */
+.pg-set-muted {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}

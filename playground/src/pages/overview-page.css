@@ -1,0 +1,134 @@
+/* Overview (money) page layout — grid/columns only, ledger tokens only,
+   .pg- prefixed. No chrome of its own: borders, type and colour are the
+   components' or the tokens'. */
+
+.pg-ov-stack {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+
+.pg-ov-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+/* Accounts + transactions carry the page; the rails on the right are glances. */
+.pg-ov-split {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.pg-ov-col {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+  min-width: 0;
+}
+
+/* SectionHeading sits tight against the surface it labels. */
+.pg-ov-section {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  min-width: 0;
+}
+
+.pg-ov-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.pg-ov-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* account row: name + meta | 30-day trend | balance */
+.pg-ov-account {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2_5) var(--space-0);
+}
+.pg-ov-account + .pg-ov-account {
+  border-top: var(--space-px) solid var(--border-subtle);
+}
+.pg-ov-account:first-child {
+  padding-top: var(--space-0);
+}
+
+.pg-ov-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-top: var(--space-3);
+}
+
+/* Sparklines ship a fixed width attribute; the viewBox lets them scale. */
+.pg-ov-chart {
+  width: 100%;
+  height: auto;
+}
+
+.pg-ov-figure {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+}
+
+/* One shape for both metered lists: goals and category budgets. */
+.pg-ov-meter {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-0);
+}
+.pg-ov-meter + .pg-ov-meter {
+  border-top: var(--space-px) solid var(--border-subtle);
+}
+.pg-ov-meter:first-child {
+  padding-top: var(--space-0);
+}
+.pg-ov-meter:last-child {
+  padding-bottom: var(--space-0);
+}
+.pg-ov-meter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.pg-ov-num {
+  font-variant-numeric: var(--num-features);
+}
+
+.pg-ov-figure-value {
+  font-size: var(--text-2xl);
+  letter-spacing: var(--tracking-price);
+  font-variant-numeric: var(--num-features);
+}
+
+.pg-ov-muted {
+  color: var(--text-muted);
+}
+.pg-ov-dim {
+  color: var(--text-subtle);
+}
+.pg-ov-credit {
+  color: var(--success-text);
+}
+.pg-ov-debt {
+  color: var(--danger-text);
+}

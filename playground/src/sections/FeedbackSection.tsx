@@ -159,7 +159,6 @@ export default function FeedbackSection() {
         <EmptyState
           icon={Inbox}
           title="No transactions yet"
-          description="Connect an account and activity will appear here."
           action={<Button variant="primary">Connect account</Button>}
         />
       </div>

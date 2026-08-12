@@ -1,0 +1,117 @@
+/* Dashboard layout — grid/columns only, ledger tokens only, .pg- prefixed.
+   No colour, no type, no chrome: every one of those comes from a component. */
+
+.pg-db-stack {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+
+.pg-db-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.pg-db-row--tight {
+  gap: var(--gap-sm);
+}
+
+.pg-db-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+/* Worker list beside the side panels — fractions, so no width literal. */
+.pg-db-split {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.pg-db-col {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+  min-width: 0;
+}
+
+.pg-db-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.pg-db-search {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* The result count sits beside the search field, which flexes into whatever is
+   left over — so proportional digits ("1 of 8" is narrower than "8 of 8") made
+   the field grow and shrink on every keystroke. Tabular figures and a reserved
+   measure pin it. */
+.pg-db-count {
+  flex: none;
+  min-width: 5ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Charts ship a fixed width attribute; the viewBox lets them scale. */
+.pg-db-chart {
+  width: 100%;
+  height: auto;
+}
+
+.pg-db-meter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-2) 0;
+}
+.pg-db-meter + .pg-db-meter {
+  border-top: var(--space-px) solid var(--border-subtle);
+}
+.pg-db-meter-bar {
+  grid-column: 1 / -1;
+}
+
+.pg-db-loading {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-1) 0;
+}
+.pg-db-loading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.pg-db-drawer {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+/* Playground-only: the view switch pinned in the shell header. */
+.pg-db-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+/* Secondary text inside cells the DS has no component for. */
+.pg-db-muted {
+  color: var(--text-muted);
+}
+.pg-db-dim {
+  color: var(--text-subtle);
+}

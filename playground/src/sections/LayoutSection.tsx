@@ -165,7 +165,6 @@ export default function LayoutSection() {
           <PageColumn style={{ height: "100%", display: "grid", placeItems: "center" }}>
             <EmptyState
               title="No transactions yet"
-              description="Connect an account and activity will appear here."
               action={<Button>Connect account</Button>}
             />
           </PageColumn>

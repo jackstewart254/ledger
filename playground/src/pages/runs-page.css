@@ -1,0 +1,84 @@
+/* Applications page layout — grid/columns only, ledger tokens only, .pg- prefixed.
+   No colour, no type, no chrome beyond what a component already draws. */
+
+.pg-runs-stack {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+/* Filters run as one wrapping row: search flexes, the rest keep their measure. */
+.pg-runs-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.pg-runs-search {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.pg-runs-date {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+}
+
+.pg-runs-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Two strings stacked in one cell (role over employer). */
+.pg-runs-cell {
+  display: grid;
+  gap: var(--space-0_5);
+  min-width: 0;
+}
+.pg-runs-cell > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pg-runs-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* Reserved measure + tabular figures: the count sits beside a flexing field and
+   must not resize it as the digits change. */
+.pg-runs-count {
+  flex: none;
+  min-width: 9ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* Loading rows mirror the table's own row height so the swap doesn't jump. */
+.pg-runs-skeleton {
+  display: grid;
+}
+.pg-runs-skeleton-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--control-h-lg);
+}
+.pg-runs-skeleton-row + .pg-runs-skeleton-row {
+  border-top: var(--space-px) solid var(--border-subtle);
+}
+
+/* Secondary text inside cells the DS has no component for. */
+.pg-runs-muted {
+  color: var(--text-muted);
+}
+.pg-runs-dim {
+  color: var(--text-subtle);
+}

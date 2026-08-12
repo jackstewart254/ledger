@@ -1,0 +1,92 @@
+/* Maintenance alerts layout — grid/columns only, ledger tokens only, .pg- prefixed.
+   No colour, no type, no chrome beyond the two muted-text helpers the kit has
+   no component for (same pair the dashboard carries). */
+
+.pg-al-stack {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+
+/* The alert region: one column, tight, so four rows read as one block. */
+.pg-al-alerts {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.pg-al-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.pg-al-split {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.pg-al-col {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+  min-width: 0;
+}
+
+.pg-al-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+/* Ticket cell: summary over the address, both clipped to the column. */
+.pg-al-cell {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  line-height: var(--leading-snug);
+}
+.pg-al-cell > * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pg-al-parts {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.pg-al-loading {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-1) 0;
+}
+.pg-al-loading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.pg-al-drawer {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+/* Prose inside the modal keeps a reading measure. */
+.pg-al-prose {
+  max-width: var(--measure-text);
+  color: var(--text-muted);
+}
+
+.pg-al-muted {
+  color: var(--text-muted);
+}
+.pg-al-dim {
+  color: var(--text-subtle);
+}

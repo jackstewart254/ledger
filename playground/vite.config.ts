@@ -12,7 +12,8 @@ export default defineConfig({
     },
   },
   server: {
-    // PORT comes from the preview harness (autoPort); 5173 is the bare-`vite` fallback.
-    port: Number(process.env.PORT) || 5173,
+    // PORT comes from the preview harness (autoPort); 5273 is the bare-`vite` fallback.
+    // Not 5173 — the rugby dev server squats there.
+    port: Number(process.env.PORT) || 5273,
   },
 });

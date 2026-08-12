@@ -10,7 +10,6 @@ import {
   ExternalLink,
   Funnel,
   Maximize,
-  Plus,
   PoundSterling,
   RefreshCw,
   Search,
@@ -106,13 +105,9 @@ export default function CoreSection() {
         </div>
         {/* No size row — the kit is deliberately single-size. */}
         <div style={{ ...row, marginTop: "var(--space-3)" }}>
-          <Button variant="primary" icon={Plus}>
-            Add position
-          </Button>
-          <Button icon={Download}>Download report</Button>
-          <Button variant="tertiary" icon={RefreshCw}>
-            Refresh
-          </Button>
+          <Button variant="primary">Add position</Button>
+          <Button>Download report</Button>
+          <Button variant="tertiary">Refresh</Button>
           <Button disabled>Sync accounts</Button>
           <Button variant="primary" disabled>
             New transaction
