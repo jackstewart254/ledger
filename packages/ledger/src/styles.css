@@ -36,10 +36,23 @@
   }
 
   /* ---- Scrollbars — thin, token-tinted, transparent track. var(--text)
-     flips per theme so the thumb stays warm-ink in both. ------------------- */
+     flips per theme so the thumb stays warm-ink in both.
+
+     `scrollbar-gutter: stable` is the important one: a classic scrollbar takes
+     its width OUT of the content box, so a list that grows past its container
+     shoves everything left the moment the bar appears — and shoves it back when
+     a filter empties the list. Reserving the track means the layout is the same
+     whether the bar is there or not. It only affects scroll containers
+     (overflow other than visible), so applying it broadly costs nothing on
+     elements that never scroll, and it covers app-authored containers too, not
+     just the kit's own.
+
+     Not a substitute for a stable layout: macOS overlay scrollbars float above
+     content and never caused the jump, so test this one on Windows. ---------- */
   * {
     scrollbar-width: thin;
     scrollbar-color: color-mix(in srgb, var(--text) 25%, transparent) transparent;
+    scrollbar-gutter: stable;
   }
   *::-webkit-scrollbar { width: 8px; height: 8px; }
   *::-webkit-scrollbar-track { background: transparent; }

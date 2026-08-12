@@ -27,7 +27,9 @@
   --control-h-sm: 30px;
   --control-h-md: 36px;
   --control-h-lg: 42px;
-  --icon-btn:     34px;   /* square icon button (chart toolbar) */
+  --icon-btn:     var(--control-h-md);  /* square icon button — same height as
+                                           every other inline control, so a row
+                                           of them lines up with a Button */
 
   /* per-size horizontal padding — pairs with --control-h-* */
   --control-pad-x-xs: var(--space-2);    /* 8px  */
@@ -41,7 +43,12 @@
   --gap-md: var(--space-2);    /* 8px */
 
   /* one pair for every micro pill — Badge, StatusPill and CountBadge each
-     used to carry their own height (18/20/22) */
+     used to carry their own height (18/20/22).
+     These stay small on purpose. A marker is read as a piece of text, not as a
+     control: raised to the 36px control height it becomes a lozenge that
+     out-weighs the number it is annotating. When a marker looks wrong beside a
+     button, the fix is not to inflate it — it is that a marker was put in a row
+     of controls. */
   --pill-h-sm:    16px;
   --pill-h-md:    18px;
   --row-h:        48px;   /* key-value / table row */
@@ -56,15 +63,25 @@
   /* app chrome — AppShell grid and Rail read these */
   --rail-w:   56px;
   --header-h: 52px;
+  --search-w: 320px;  /* the centred header search — one width across apps */
 
   /* status dot — the daemon-dot signature (StatusDot + StatusPill share it) */
   --dot-size: 7px;
   --dot-glow: 3px;
+
+  /* data-viz geometry — the two measurements every chart draws with.
+     1px reads as another grid hairline and 2px reads as a border; 1.5px is the
+     weight at which a series is the subject of the box it sits in. */
+  --chart-stroke: 1.5px;   /* series line + the ring around a hover dot */
+  --chart-dot:    3px;     /* hovered-point radius (SVG `r`, set in CSS)  */
 
   /* overlay widths — one place for every floating panel's measure */
   --overlay-w-menu:    10rem;      /* 160px — Menu panel min-width  */
   --overlay-w-tooltip: 17.5rem;    /* 280px — Tooltip max-width     */
   --overlay-w-toast:   21.25rem;   /* 340px — Toast width           */
   --overlay-w-command: 37.5rem;    /* 600px — CommandMenu panel     */
-  --measure-empty:     20rem;      /* 320px — EmptyState copy measure */
+  /* Reading measure for prose inside a component. EmptyState's copy slot is
+     gone; what is left that runs as a sentence is an alert body, and across a
+     1280px pane it was setting ~150 characters to the line. */
+  --measure-text:      44rem;      /* 704px — ~80 characters at 14px */
 }

@@ -1,0 +1,93 @@
+/* =============================================================================
+   ledger — Brand inputs  ·  the override surface
+
+   This file deliberately DEFINES NOTHING. It is the documented contract for
+   retinting the kit: every value in colors.css reads `var(--brand-x, <default>)`,
+   so declaring --brand-x anywhere that reaches the same elements retints
+   everything downstream — no fork, no build step, no !important.
+
+   Where to put your overrides (any of these work):
+     :root { --brand-primary: #4C4CF5; }               one brand, both themes
+     [data-theme="light"] { --brand-primary: #3A3AD8; }  per-theme value
+     [data-brand="ocean"] { --brand-primary: #0E7490; }  scoped to a subtree
+
+   Consumer CSS is unlayered, so it wins over the kit's @layer without effort.
+
+   A WARNING WORTH READING FIRST
+   This kit is almost-monochrome on purpose. `--accent` ships as ink, and colour
+   is reserved for meaning: green is "this went up", red is "this is wrong",
+   ochre is "look at this". Set --brand-primary to a hue and every primary
+   Button, active nav item, focus ring and selected segment becomes that hue —
+   which is fine, and it also means colour no longer *only* means something.
+   The semantic tones then have to shout over a page that is already coloured.
+   If you want a brand hue somewhere, the cheapest place is one accent, not all
+   of them.
+
+   ---------------------------------------------------------------------------
+   THE FULL KNOB LIST
+   Copy what you need. Anything you leave out keeps the default.
+   ---------------------------------------------------------------------------
+
+   BRAND
+     --brand-primary            fills, active states, focus. Ships as ink.
+     --brand-primary-hover      defaults to --brand-primary
+     --brand-primary-active
+     --brand-primary-fg         text/glyph ON a primary fill — check contrast
+     --brand-primary-subtle     tinted chip background (FilterChip pressed, etc.)
+     --brand-primary-subtle-fg  text on that tint
+     --brand-primary-border
+     --brand-secondary          NOT consumed by any component in the kit; it is
+     --brand-secondary-fg       here for app-level chrome you build yourself
+     --brand-focus              focus ring colour (defaults to accent)
+     --brand-focus-halo         the outer glow of the ring
+
+   SURFACES
+     --brand-bg-page            the canvas
+     --brand-bg-subtle          recessed wells, gutters
+     --brand-bg-surface         cards, panels, the AppShell pane
+     --brand-bg-surface-raised  tooltips, menus, hover chips
+     --brand-surface-subtle     nested surface
+     --brand-surface-hover      hover wash (translucent, so it works on any bg)
+     --brand-surface-active     pressed wash
+     --brand-control-ghost-bg   resting fill of ghost controls (transparent)
+     --brand-scrim              modal / drawer backdrop
+
+   BORDERS  (hairlines — this system separates with these, never shadows)
+     --brand-border             the hairline
+     --brand-border-subtle      row separators
+     --brand-border-strong      emphasised edges
+
+   TEXT RAMP  (bright > ink > strong > muted > subtle)
+     --brand-text               ink
+     --brand-text-muted         secondary
+     --brand-text-subtle        tertiary
+     --brand-text-bright        the tier above ink
+     --brand-text-inverse       text on an inverted fill
+     (--text-strong is derived from ink + muted and has no knob on purpose:
+      it is a ratio, and a hand-set value drifts out of step with the ramp.)
+
+   SEMANTIC TONES
+     --brand-positive           / --brand-positive-line
+     --brand-negative           / --brand-negative-line
+     --brand-success-fg  --brand-success-subtle  --brand-success-text
+     --brand-danger-fg   --brand-danger-subtle   --brand-danger-text
+     --brand-warning     --brand-warning-fg  --brand-warning-subtle  --brand-warning-text
+     --brand-neutral     --brand-neutral-subtle  --brand-neutral-text
+
+   DATA-VIZ  (tint charts without tinting the UI — often the only colour a
+   dashboard actually wants)
+     --brand-chart-line         series line, and what bars/fills derive from
+     --brand-chart-fill         area gradient under a TrendChart
+     --brand-chart-grid         grid lines
+     --brand-chart-bar          BarChart resting bar
+     --brand-chart-bar-hover    hovered bar
+
+   ---------------------------------------------------------------------------
+   WORKED EXAMPLE — charts in teal, UI untouched
+     :root {
+       --brand-chart-line: #0E7490;
+     }
+   Bars, the area gradient and the hover wash all derive from --chart-line, so
+   that one line retints every chart in the kit and leaves the interface
+   monochrome.
+   ============================================================================= */

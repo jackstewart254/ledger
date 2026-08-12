@@ -6,6 +6,10 @@
    apps do not follow @import url(...) — the nested files survive as literal
    rules and are then silently dropped, so every token vanishes from the build.
    ============================================================================= */
+/* brand.css declares nothing — it documents the --brand-* override surface that
+   colors.css reads through. Imported so it ships in dist beside the tokens it
+   describes. */
+@import "./brand.css";
 @import "./colors.css";
 @import "./typography.css";
 @import "./spacing.css";
