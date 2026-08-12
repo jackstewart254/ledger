@@ -1,5 +1,6 @@
-/* FilterChip — ghost hairline chip at rest; active is the subtle monochrome
-   fill + border shift, never an accent colour. */
+/* FilterChip — ghost hairline chip at rest; active is the accent's subtle tint
+   + a tinted border, never a solid accent fill. A filter is a state you are in,
+   not the action of the page. */
 .lg-chip {
   display: inline-flex;
   align-items: center;

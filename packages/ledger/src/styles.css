@@ -14,7 +14,8 @@
 @import "./components/feedback/index.css" layer(lg);
 
 @layer lg {
-  /* ---- Keyboard focus — the sanctioned monochrome ring, both themes.
+  /* ---- Keyboard focus — the one sanctioned ring, both themes: the accent,
+     held off the element by a page-coloured gap.
      No `border-radius: inherit` here: it would overwrite the focused element's
      OWN radius with its parent's (a --radius-md button goes square inside a
      square card). box-shadow already traces the element's border-radius. ---- */

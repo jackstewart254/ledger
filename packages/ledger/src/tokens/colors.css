@@ -95,7 +95,9 @@
   --secondary:     var(--brand-secondary, var(--text-secondary));
   --secondary-fg:  var(--brand-secondary-fg, var(--bg-page));
 
-  /* focus ring — monochrome, subtle */
+  /* focus ring — the accent, held off the element by a page-coloured gap. The
+     halo is a literal rather than a color-mix on --accent: a brand hue swap has
+     to set --brand-focus-halo too, or the ring stays blue. */
   --focus:         var(--brand-focus, var(--accent));
   --focus-ring:    0 0 0 2px var(--bg-page), 0 0 0 4px var(--brand-focus-halo, rgba(7, 149, 255, 0.45));
 

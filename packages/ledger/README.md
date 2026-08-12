@@ -1,9 +1,9 @@
 # @mcleanstewart/ledger
 
-A dashboard design system. Dark-first, almost-monochrome, hairlines instead of
-shadows, tabular figures. Typed React components and vanilla CSS — no bundler
-in the build, no CSS-in-JS, and one runtime dependency (`lucide-react`, for
-icons).
+A dashboard design system. Dark-first, one accent hue on warm neutrals,
+hairlines instead of shadows, tabular figures. Typed React components and
+vanilla CSS — no bundler in the build, no CSS-in-JS, and one runtime dependency
+(`lucide-react`, for icons).
 
 ```bash
 npm install @mcleanstewart/ledger
@@ -79,10 +79,13 @@ documented in `dist/tokens/brand.css`, which declares nothing itself:
 import "@mcleanstewart/ledger/tokens/brand.css";  // reference only
 ```
 
-One caveat worth reading before you reach for `--brand-primary`: this kit is
-almost-monochrome on purpose, and colour is reserved for meaning — green is
-"this went up", red is "this is wrong". Tint everything and the semantic tones
-have to shout over a page that is already coloured.
+One caveat worth reading before you reach for `--brand-primary`: this kit spends
+exactly one hue, and the colour left over is reserved for meaning — green is
+"this went up", red is "this is wrong". Swapping the accent is the knob doing
+its job, but keep clear of those tones (a green primary stops "up" reading as a
+verdict, a red one makes every page look like an error) and check
+`--brand-primary-fg` against your fill — a hue swap breaks the text-on-fill
+contrast ratio silently.
 
 ## What's in it
 
@@ -102,7 +105,12 @@ Skeleton · Spinner · Progress
 
 ## Conventions
 
-- One control height. There is no `size` prop anywhere, on purpose.
+- One control height, 36px, and no `size` prop on a control — emphasis is what
+  `variant` is for, width is what layout is for. Boxes still take dimensions:
+  `Avatar` and `Icon` take `size`, `Skeleton` takes `width`/`height`, `Modal`,
+  `Drawer` and `MultiSelect` take `width`, `Table` takes column `width` and
+  `maxHeight`, and the charts take their own. That is the size of a box, not a
+  step on a control scale.
 - A control is a word or a glyph, never both — `Button` takes text, `IconButton`
   takes an icon and carries its own tooltip.
 - Colour is semantic. `tone` on a component is a claim about the data.

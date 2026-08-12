@@ -1,7 +1,7 @@
 /* Table — hover rows, hairline separators, visually hidden header row.
    Row height flows through --lg-table-row-h (prop-driven). */
 .lg-table {
-  /* 44px rows with a generous horizontal inset — the Linear list proportion.
+  /* 42px rows with a generous horizontal inset — the Linear list proportion.
      48px + 12px read as a spreadsheet. */
   --lg-table-row-h: var(--control-h-lg);
   font-weight: var(--fw-body);

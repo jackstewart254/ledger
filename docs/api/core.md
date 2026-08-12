@@ -49,7 +49,7 @@ Single size on purpose — the kit ships one button height, no `size` prop. Text
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `ButtonVariant` | `"secondary"` | primary = ink-inverse fill · secondary = surface + hairline · tertiary = ghost · danger = semantic |
+| `variant` | `ButtonVariant` | `"secondary"` | primary = accent fill · secondary = surface + hairline · tertiary = ghost text · danger = the semantic red |
 | `type` | `"submit" \| "reset" \| "button"` | `"button"` | _(inherited)_ |
 
 Also accepts every prop of `ButtonHTMLAttributes<HTMLButtonElement>` — they are spread onto the underlying element.

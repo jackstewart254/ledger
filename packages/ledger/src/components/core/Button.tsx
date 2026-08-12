@@ -4,7 +4,7 @@ import { cx } from "../../internal/cx.js";
 export type ButtonVariant = "primary" | "secondary" | "tertiary" | "danger";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /** primary = ink-inverse fill · secondary = surface + hairline · tertiary = ghost · danger = semantic */
+  /** primary = accent fill · secondary = surface + hairline · tertiary = ghost text · danger = the semantic red */
   variant?: ButtonVariant;
 }
 

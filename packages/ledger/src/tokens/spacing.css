@@ -65,9 +65,9 @@
   --header-h: 52px;
   --search-w: 320px;  /* the centred header search — one width across apps */
 
-  /* status dot — the daemon-dot signature (StatusDot + StatusPill share it) */
+  /* status dot — one size, shared by StatusDot and StatusPill. The dot is bare:
+     the glow ring went, and its token with it. */
   --dot-size: 7px;
-  --dot-glow: 3px;
 
   /* data-viz geometry — the two measurements every chart draws with.
      1px reads as another grid hairline and 2px reads as a border; 1.5px is the
