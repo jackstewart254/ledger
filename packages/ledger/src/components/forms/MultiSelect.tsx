@@ -126,7 +126,6 @@ export function MultiSelect({
         className={cx(
           "lg-ms__trigger",
           "lg-control",
-          "lg-control--md",
           disabled && "lg-control--disabled",
           selected.length === 0 && "lg-ms__trigger--empty",
         )}

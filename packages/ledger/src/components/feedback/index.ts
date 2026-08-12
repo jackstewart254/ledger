@@ -13,6 +13,6 @@ export type { EmptyStateProps } from "./EmptyState.js";
 export { Skeleton } from "./Skeleton.js";
 export type { SkeletonProps, SkeletonShape } from "./Skeleton.js";
 export { Spinner } from "./Spinner.js";
-export type { SpinnerProps, SpinnerSize } from "./Spinner.js";
+export type { SpinnerProps } from "./Spinner.js";
 export { Progress } from "./Progress.js";
 export type { ProgressProps } from "./Progress.js";

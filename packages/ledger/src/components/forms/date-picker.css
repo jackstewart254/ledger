@@ -1,0 +1,136 @@
+/* DatePicker — .lg-control trigger + a raised month-grid popover. The native
+   <input type="date"> popup is the browser's own chrome and cannot be styled,
+   so the calendar is ours. Popover elevation = raised surface + hairline + the
+   one sanctioned shadow, same as Menu/MultiSelect. Cell metrics are
+   token-derived: seven columns of --control-h-sm squares. */
+.lg-dp {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-sans);
+}
+
+/* the shared .lg-control field frame carries the height, padding and type */
+.lg-dp__trigger {
+  width: 100%;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.lg-dp__trigger:disabled { cursor: not-allowed; }
+
+.lg-dp__value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+/* Empty field: the placeholder voice — lighter and dimmer than a real date. */
+.lg-dp__value--placeholder {
+  color: var(--text-subtle);
+  font-weight: var(--fw-light);
+}
+
+.lg-dp__pop {
+  --lg-dp-cell: var(--control-h-sm);
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  z-index: var(--z-overlay);
+  padding: var(--space-2);
+  background: var(--surface-raised);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-overlay);
+  box-shadow: var(--shadow-md);
+  animation: lg-dp-pop var(--dur-fast) var(--ease-out);
+}
+
+.lg-dp__head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  margin-bottom: var(--space-1);
+}
+.lg-dp__month {
+  flex: 1;
+  text-align: center;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-emphasis);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+/* one template for the weekday header and every week */
+.lg-dp__row {
+  display: grid;
+  grid-template-columns: repeat(7, var(--lg-dp-cell));
+}
+.lg-dp__weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--control-h-xs);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-body);
+  color: var(--text-subtle);
+}
+
+.lg-dp__day {
+  position: relative;
+  height: var(--lg-dp-cell);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: var(--fw-body);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-dp__day:hover { background: var(--surface-hover); }
+/* days borrowed from the neighbouring months — still selectable, just quieter */
+.lg-dp__day--muted { color: var(--text-subtle); }
+
+.lg-dp__day--selected,
+.lg-dp__day--selected:hover {
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-weight: var(--fw-emphasis);
+}
+
+/* Today is a bearing, not a selection: a dot under the numeral. The ink fill
+   is the selection's language and stays reserved for it. */
+.lg-dp__day--today::after {
+  content: "";
+  position: absolute;
+  bottom: var(--space-1);
+  left: 50%;
+  translate: -50% 0;
+  width: var(--space-1);
+  height: var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--text-subtle);
+}
+.lg-dp__day--selected::after { background: var(--accent-fg); }
+
+.lg-dp__day--blocked,
+.lg-dp__day--blocked:hover {
+  background: transparent;
+  color: var(--text-subtle);
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@keyframes lg-dp-pop {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--space-1))) scale(0.98);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-dp__pop { animation: none; }
+}

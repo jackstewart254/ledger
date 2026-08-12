@@ -2,9 +2,11 @@
    No tinted fill and no glow ring: tinting the whole chip in the status colour
    makes a row of them read as traffic lights, and the ring was a second copy of
    a signal the dot already carries. Colour lives in the dot alone. */
+/* Single size on purpose — one pill height, no sm/md modifiers. */
 .lg-status-pill {
   display: inline-flex;
   align-items: center;
+  height: var(--pill-h-md);
   gap: var(--gap-sm);
   padding: 0 var(--space-2);
   border-radius: var(--radius-control);
@@ -16,9 +18,6 @@
   line-height: var(--leading-none);
   white-space: nowrap;
 }
-.lg-status-pill--md { height: var(--pill-h-md); }
-.lg-status-pill--sm { height: var(--pill-h-sm); }
-
 .lg-status-pill-dot {
   width: var(--dot-size);
   height: var(--dot-size);

@@ -1,28 +1,27 @@
 /* Input — and the shared .lg-control field frame every text-entry component
    composes (Input, Textarea, Select, MultiSelect trigger, SearchField,
-   DateInput). Focus is a border token shift, not a ring — styles.css drops the
+   DatePicker). Focus is a border token shift, not a ring — styles.css drops the
    focus ring on text-entry fields. Border colour is driven through --_bc so
    the invalid/disabled overrides win by declaration order, not specificity. */
 
+/* Single size on purpose — the kit ships one control height (md). Do not
+   re-add sm/lg modifiers; consuming apps override with their own class. */
 .lg-control {
   --_bc: var(--border);
   display: inline-flex;
   align-items: center;
   gap: var(--gap-sm);
-  height: var(--_h);
-  padding: 0 var(--_pad);
+  height: var(--control-h-md);
+  padding: 0 var(--control-pad-x-md);
   background: var(--surface);
   border: var(--space-px) solid var(--_bc);
   border-radius: var(--radius-control);
   font-family: var(--font-sans);
   font-weight: var(--fw-body);
-  font-size: var(--_fs);
+  font-size: var(--text-sm);
   color: var(--text);
   transition: var(--transition-colors);
 }
-.lg-control--sm { --_h: var(--control-h-sm); --_pad: var(--control-pad-x-sm); --_fs: var(--text-xs); }
-.lg-control--md { --_h: var(--control-h-md); --_pad: var(--control-pad-x-md); --_fs: var(--text-sm); }
-.lg-control--lg { --_h: var(--control-h-lg); --_pad: var(--control-pad-x-lg); --_fs: var(--text-base); }
 
 .lg-control:hover { --_bc: var(--border-strong); }
 .lg-control:focus-within { --_bc: var(--accent); }

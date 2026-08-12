@@ -59,7 +59,7 @@ Everything required to build a dashboard, by category:
 - **typography**: PageHeader (title + subtitle — kills the 8×-copy-pasted heading block), SectionHeading
 - **layout**: AppShell (fixed rail slot + header slot + scrollable content — kills per-app Shell rebuilds), PageColumn (tokenised max-width + gutters, full-bleed opt-out — kills the negative-margin hack), Card (the dashboard hand-rolls a CARD literal today)
 - **navigation**: Rail (icon-only 56px, hover/focus flyout labels), Tabs, Menu (anchored action/kebab menu), CommandMenu (Cmd+K palette — filterable list, keyboard nav)
-- **forms**: FormField (label + hint + error wrapper), Input, Textarea, Select, MultiSelect, SearchField, Checkbox, RadioGroup, Switch, SegmentedControl, FilterChip, RangeInput, DateInput (styled native `<input type="date">` — no picker lib)
+- **forms**: FormField (label + hint + error wrapper), Input, Textarea, Select, MultiSelect, SearchField, Checkbox, RadioGroup, Switch, SegmentedControl, FilterChip, RangeInput, DatePicker (own month-grid popover on the `.lg-control` trigger — the native `<input type="date">` popup is the browser's own chrome, unstylable; still no picker dependency)
 - **data**: Table (render-prop columns, sticky header, sortable), KpiTile, MetricDelta, Sparkline, TrendChart, KeyValue (label/value meta rows on `--row-h` with hairline separators), Pagination
 - **feedback**: Modal, Drawer, Toast, Tooltip (CSS transitions — no gsap, no animation dep), InlineAlert, EmptyState, Skeleton, Spinner, Progress
 - **utils**: focusTrap, scrollLock, format helpers (`compactNumber`/`pct`)

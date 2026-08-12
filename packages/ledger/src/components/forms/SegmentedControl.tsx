@@ -15,7 +15,6 @@ export interface SegmentedControlProps {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
-  size?: "sm" | "md";
   disabled?: boolean;
   "aria-label"?: string;
   className?: string;
@@ -26,13 +25,14 @@ export interface SegmentedControlProps {
  * SegmentedControl — exclusive picker in a hairline group; the active segment
  * raises to --surface-raised. Radio semantics (it picks a value, Tabs own the
  * tablist pattern): one tab stop, arrow keys move the selection.
+ *
+ * Single size on purpose — the kit ships one control size, no `size` prop.
  */
 export function SegmentedControl({
   options,
   value,
   defaultValue,
   onChange,
-  size = "md",
   disabled = false,
   "aria-label": ariaLabel,
   className,
@@ -75,7 +75,7 @@ export function SegmentedControl({
       ref={groupRef}
       role="radiogroup"
       aria-label={ariaLabel}
-      className={cx("lg-seg", `lg-seg--${size}`, className)}
+      className={cx("lg-seg", className)}
       style={style}
       onKeyDown={onKeyDown}
     >

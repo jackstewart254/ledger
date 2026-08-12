@@ -2,7 +2,7 @@ import { useState, type CSSProperties, type ReactNode } from "react";
 import { PoundSterling } from "lucide-react";
 import {
   Checkbox,
-  DateInput,
+  DatePicker,
   FilterChip,
   FormField,
   Input,
@@ -85,10 +85,10 @@ export default function FormsSection() {
           </FormField>
         </Spec>
 
+        {/* One size only — the kit is deliberately single-size, so these are
+            states, not sizes. */}
         <Spec title="Input">
-          <Input size="sm" placeholder="Small — 30px" style={fieldW} />
-          <Input size="md" placeholder="Medium — 36px" style={fieldW} />
-          <Input size="lg" placeholder="Large — 42px" style={fieldW} />
+          <Input placeholder="Reference" style={fieldW} />
           <Input icon={PoundSterling} placeholder="0.00" style={fieldW} />
           <Input invalid defaultValue="£-52.10" style={fieldW} />
           <Input disabled defaultValue="Settled 2026-08-09" style={fieldW} />
@@ -113,7 +113,6 @@ export default function FormsSection() {
           </FormField>
           <Select
             aria-label="Currency"
-            size="sm"
             defaultValue="gbp"
             options={[
               { value: "gbp", label: "GBP" },
@@ -157,7 +156,6 @@ export default function FormsSection() {
         <Spec title="Search field">
           <SearchField placeholder="Search transactions…" style={fieldW} />
           <SearchField defaultValue="daemon:reconcile" aria-label="Search daemons" style={fieldW} />
-          <SearchField size="sm" placeholder="Filter…" />
           <SearchField disabled placeholder="Search transactions…" style={fieldW} />
         </Spec>
 
@@ -194,7 +192,6 @@ export default function FormsSection() {
         <Spec title="Switch">
           <Switch label="Auto-reconcile" defaultChecked />
           <Switch label="Alert on failed daemons" />
-          <Switch label="Compact rows" size="sm" defaultChecked />
           <Switch label="Live prices" disabled />
         </Spec>
 
@@ -206,7 +203,6 @@ export default function FormsSection() {
           />
           <SegmentedControl
             aria-label="Window"
-            size="sm"
             options={[
               { value: "1d", label: "1D" },
               { value: "1w", label: "1W" },
@@ -231,10 +227,17 @@ export default function FormsSection() {
           <RangeInput aria-label="Locked threshold" defaultValue={20} disabled wrapperStyle={fieldW} />
         </Spec>
 
-        <Spec title="Date input">
-          <DateInput aria-label="Value date" defaultValue="2026-08-12" style={fieldW} />
-          <DateInput aria-label="Settlement date" size="sm" style={fieldW} />
-          <DateInput aria-label="Locked date" disabled defaultValue="2026-07-31" style={fieldW} />
+        <Spec title="Date picker">
+          <DatePicker aria-label="Value date" defaultValue="2026-08-12" style={fieldW} />
+          <DatePicker aria-label="Settlement date" placeholder="Any date" style={fieldW} />
+          <DatePicker
+            aria-label="Statement date"
+            defaultValue="2026-08-12"
+            min="2026-08-03"
+            max="2026-08-21"
+            style={fieldW}
+          />
+          <DatePicker aria-label="Locked date" disabled defaultValue="2026-07-31" style={fieldW} />
         </Spec>
       </div>
     </section>

@@ -1,7 +1,7 @@
 export { Icon } from "./Icon.js";
 export type { IconProps, LucideIcon } from "./Icon.js";
 export { Button } from "./Button.js";
-export type { ButtonProps, ButtonVariant, ButtonSize } from "./Button.js";
+export type { ButtonProps, ButtonVariant } from "./Button.js";
 export { IconButton } from "./IconButton.js";
 export type { IconButtonProps } from "./IconButton.js";
 export { Badge } from "./Badge.js";

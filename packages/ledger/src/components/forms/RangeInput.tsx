@@ -5,8 +5,6 @@ import { cx } from "../../internal/cx.js";
 
 export interface RangeInputProps
   extends Omit<ComponentProps<"input">, "type" | "size" | "ref"> {
-  /** Frame height, matching the other fields. */
-  size?: "sm" | "md" | "lg";
   /** Class + style land on the frame, not the bare input. */
   wrapperClassName?: string;
   wrapperStyle?: CSSProperties;
@@ -16,9 +14,10 @@ export interface RangeInputProps
  * RangeInput — a native range inside the shared `.lg-control` frame, so a
  * slider sits in a row of inputs as a field rather than a naked line with a
  * dot on it.
+ *
+ * Single size on purpose — the kit ships one control size, no `size` prop.
  */
 export function RangeInput({
-  size = "md",
   disabled,
   className,
   wrapperClassName,
@@ -30,7 +29,6 @@ export function RangeInput({
       className={cx(
         "lg-range-field",
         "lg-control",
-        `lg-control--${size}`,
         disabled && "lg-control--disabled",
         wrapperClassName,
       )}

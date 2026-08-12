@@ -9,7 +9,7 @@
      grows to several lines it becomes a lozenge and the corners eat the copy. */
   border-radius: var(--radius-surface);
   min-height: calc(var(--lg-rows, 2) * var(--row-h));
-  padding: var(--space-2) var(--_pad);
+  padding: var(--space-2) var(--control-pad-x-md);
   /* No resize grabber: the native handle is a UA-drawn diagonal glyph we cannot
      restyle, and it is the only piece of chrome in the kit we do not draw.
      field-sizing grows the box with its content instead (Chromium/Safari); the

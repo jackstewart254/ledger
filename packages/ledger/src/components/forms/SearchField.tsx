@@ -4,17 +4,17 @@ import { useRef, useState, type ChangeEvent, type ComponentProps } from "react";
 import { Search, X } from "lucide-react";
 import { Icon } from "../core/Icon.js";
 import { cx } from "../../internal/cx.js";
-import type { FieldSize } from "./Textarea.js";
 
 export interface SearchFieldProps extends Omit<ComponentProps<"input">, "size" | "type" | "ref"> {
-  size?: FieldSize;
   /** Called after the clear button empties the field. */
   onClear?: () => void;
 }
 
-/** SearchField — Input frame + search icon + clear button. */
+/**
+ * SearchField — Input frame + search icon + clear button.
+ * Single size on purpose — the kit ships one control size, no `size` prop.
+ */
 export function SearchField({
-  size = "md",
   onClear,
   value,
   defaultValue,
@@ -52,13 +52,12 @@ export function SearchField({
       className={cx(
         "lg-search",
         "lg-control",
-        `lg-control--${size}`,
         disabled && "lg-control--disabled",
         className,
       )}
       style={style}
     >
-      <Icon as={Search} size={size === "sm" ? 14 : 15} className="lg-control__icon" />
+      <Icon as={Search} size={15} className="lg-control__icon" />
       <input
         ref={inputRef}
         type="search"

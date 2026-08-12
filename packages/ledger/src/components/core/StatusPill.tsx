@@ -9,23 +9,17 @@ export interface StatusPillProps extends HTMLAttributes<HTMLSpanElement> {
   label?: ReactNode;
   /** Optional tabular numeric value beside the label. */
   value?: ReactNode;
-  size?: "sm" | "md";
 }
 
+/** Single size on purpose — the kit ships one pill height, no `size` prop. */
 export function StatusPill({
   status = "unknown",
   label,
   value,
-  size = "md",
   className,
   ...rest
 }: StatusPillProps) {
-  const classes = cx(
-    "lg-status-pill",
-    `lg-status-pill--${status}`,
-    `lg-status-pill--${size}`,
-    className,
-  );
+  const classes = cx("lg-status-pill", `lg-status-pill--${status}`, className);
   return (
     <span className={classes} {...rest}>
       <span className="lg-status-pill-dot" />

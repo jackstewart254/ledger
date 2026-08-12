@@ -176,12 +176,12 @@ export default function FeedbackSection() {
       </div>
 
       <h3 style={H3}>Spinner</h3>
+      {/* One size only — the kit is deliberately single-size. */}
       <div style={ROW}>
-        <Spinner size="sm" />
-        <Spinner size="md" />
-        <Spinner size="lg" label="Loading positions" />
+        <Spinner />
+        <Spinner label="Loading positions" />
         <span style={{ color: "var(--success-text)" }}>
-          <Spinner size="md" />
+          <Spinner />
         </span>
       </div>
 
@@ -189,10 +189,10 @@ export default function FeedbackSection() {
       <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)", maxWidth: "24rem" }}>
         <Progress value={progress} aria-label="Upload progress" />
         <div style={{ display: "flex", gap: "var(--space-2)" }}>
-          <Button size="sm" onClick={() => setProgress((p) => Math.max(0, p - 10))}>
+          <Button onClick={() => setProgress((p) => Math.max(0, p - 10))}>
             Less
           </Button>
-          <Button size="sm" onClick={() => setProgress((p) => Math.min(100, p + 10))}>
+          <Button onClick={() => setProgress((p) => Math.min(100, p + 10))}>
             More
           </Button>
         </div>

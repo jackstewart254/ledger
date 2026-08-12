@@ -8,6 +8,14 @@
   align-items: center;
   width: var(--lg-range-w, 100%);
 }
+/* The frame does NOT take .lg-control's focus/hover border shift: that shift
+   says "you are typing in here", and on a slider it fires for the whole drag,
+   so the entire field goes ink while you move a 16px thumb. The thumb is the
+   interactive part and it already responds. */
+.lg-range-field:hover,
+.lg-range-field:focus-within {
+  --_bc: var(--border);
+}
 
 .lg-range {
   --_track: var(--space-1);
@@ -28,12 +36,18 @@
 .lg-range::-webkit-slider-runnable-track {
   height: var(--_track);
   border-radius: var(--radius-pill);
-  background: var(--surface-active);
+  /* No visible rail. The pill frame around the slider already draws the line
+     the thumb runs along, so a second grey bar inside it is one rail too many.
+     The thumb slides on the frame's own ground. */
+  background: transparent;
 }
 .lg-range::-moz-range-track {
   height: var(--_track);
   border-radius: var(--radius-pill);
-  background: var(--surface-active);
+  /* No visible rail. The pill frame around the slider already draws the line
+     the thumb runs along, so a second grey bar inside it is one rail too many.
+     The thumb slides on the frame's own ground. */
+  background: transparent;
 }
 
 .lg-range::-webkit-slider-thumb {

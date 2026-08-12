@@ -1,43 +1,40 @@
-/* EmptyState — quiet solid border; the icon is bare, not tiled. */
+/* EmptyState — the most minimal thing that still reads as deliberate rather
+   than broken: a bare muted icon, a sentence, an action.
+   No container border: an empty state almost always sits INSIDE something that
+   already has one (a Card, a Table, a pane), so its own outline draws a second
+   box a few pixels inside the first. No icon tile either — a rounded grey
+   square behind a grey glyph is chrome wrapped around chrome. */
 .lg-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-1);
-  padding: var(--space-12) var(--space-6);
-  border: var(--space-px) solid var(--border-subtle);
-  border-radius: var(--radius-overlay);
+  gap: var(--space-2);
+  padding: var(--space-10) var(--space-6);
   text-align: center;
 }
 .lg-empty--compact {
-  padding: var(--space-8) var(--space-5);
+  padding: var(--space-6) var(--space-4);
 }
 
 .lg-empty-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--space-10);
-  height: var(--space-10);
-  margin-bottom: var(--space-2);
-  border: var(--space-px) solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  background: var(--bg-subtle);
   color: var(--text-subtle);
 }
 
 .lg-empty-title {
   color: var(--text);
-  font-size: var(--text-md);
-  font-weight: var(--fw-emphasis);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-body);
 }
 .lg-empty-desc {
   max-width: var(--measure-empty);
   color: var(--text-muted);
   font-size: var(--text-sm);
-  line-height: var(--leading-normal);
+  line-height: var(--leading-snug);
 }
 .lg-empty-action {
-  margin-top: var(--space-3);
+  margin-top: var(--space-2);
 }

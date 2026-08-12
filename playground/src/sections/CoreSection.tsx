@@ -104,12 +104,7 @@ export default function CoreSection() {
           <Button variant="tertiary">View all</Button>
           <Button variant="danger">Delete account</Button>
         </div>
-        <div style={{ ...row, marginTop: "var(--space-3)" }}>
-          <Button size="xs">Filter</Button>
-          <Button size="sm">Export CSV</Button>
-          <Button size="md">Export CSV</Button>
-          <Button size="lg">Export CSV</Button>
-        </div>
+        {/* No size row — the kit is deliberately single-size. */}
         <div style={{ ...row, marginTop: "var(--space-3)" }}>
           <Button variant="primary" icon={Plus}>
             Add position
@@ -159,7 +154,7 @@ export default function CoreSection() {
           <StatusPill status="risk" label="Runway" />
           <StatusPill status="unknown" label="Brand safety" />
           <StatusPill status="good" label="Margin" value="18.2%" />
-          <StatusPill status="risk" size="sm" label="Burn" value="£4,120" />
+          <StatusPill status="risk" label="Burn" value="£4,120" />
         </div>
       </Specimen>
 

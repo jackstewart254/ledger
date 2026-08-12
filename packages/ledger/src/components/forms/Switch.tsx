@@ -8,16 +8,17 @@ export interface SwitchProps extends Omit<ComponentProps<"button">, "onChange" |
   defaultChecked?: boolean;
   onChange?: (checked: boolean) => void;
   label?: ReactNode;
-  size?: "sm" | "md";
 }
 
-/** Switch — track + thumb toggle. Controlled or uncontrolled. */
+/**
+ * Switch — track + thumb toggle. Controlled or uncontrolled.
+ * Single size on purpose — the kit ships one control size, no `size` prop.
+ */
 export function Switch({
   checked,
   defaultChecked = false,
   onChange,
   label,
-  size = "md",
   className,
   style,
   disabled,
@@ -35,7 +36,7 @@ export function Switch({
 
   return (
     <label
-      className={cx("lg-switch", `lg-switch--${size}`, disabled && "lg-switch--disabled", className)}
+      className={cx("lg-switch", disabled && "lg-switch--disabled", className)}
       style={style}
     >
       <button

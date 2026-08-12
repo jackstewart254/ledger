@@ -42,10 +42,10 @@ export default function TypographySection() {
             title="Open positions"
             actions={
               <>
-                <Button size="sm" variant="tertiary">
+                <Button variant="tertiary">
                   Filter
                 </Button>
-                <Button size="sm" icon={Download}>
+                <Button icon={Download}>
                   Export CSV
                 </Button>
               </>

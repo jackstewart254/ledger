@@ -49,7 +49,9 @@
 
   /* page geometry — PageColumn reads these (kills the negative-margin hack) */
   --page-max-width: 1288px;
-  --page-gutter:    var(--space-6);   /* 24px */
+  --page-gutter:    var(--space-4);   /* 16px — the pane already has its own
+                                         inset from the shell, so a 24px gutter
+                                         on top of it read as dead space */
 
   /* app chrome — AppShell grid and Rail read these */
   --rail-w:   56px;

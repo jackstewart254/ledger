@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { CSSProperties } from "react";
 import {
+  formatDate,
   KeyValue,
   KpiTile,
   MetricDelta,
@@ -42,7 +43,14 @@ const TXNS: Txn[] = [
 ];
 
 const TXN_COLUMNS: TableColumn<Txn>[] = [
-  { key: "date", header: "Date", width: "120px", sortable: true, numeric: true },
+  {
+    key: "date",
+    header: "Date",
+    width: "120px",
+    sortable: true,
+    numeric: true,
+    render: (r) => formatDate(r.date),
+  },
   { key: "description", header: "Description" },
   { key: "category", header: "Category", render: (r) => <span style={{ color: "var(--text-muted)" }}>{r.category}</span> },
   {

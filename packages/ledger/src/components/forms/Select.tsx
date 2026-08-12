@@ -4,7 +4,6 @@ import type { ComponentProps } from "react";
 import { ChevronDown } from "lucide-react";
 import { Icon } from "../core/Icon.js";
 import { cx } from "../../internal/cx.js";
-import type { FieldSize } from "./Textarea.js";
 
 export interface SelectOption {
   value: string;
@@ -13,16 +12,17 @@ export interface SelectOption {
 }
 
 export interface SelectProps extends Omit<ComponentProps<"select">, "size" | "ref"> {
-  size?: FieldSize;
   invalid?: boolean;
   /** Option list — or pass <option> children instead. */
   options?: SelectOption[];
   placeholder?: string;
 }
 
-/** Select — styled native <select> on the .lg-control frame, chevron overlay. */
+/**
+ * Select — styled native <select> on the .lg-control frame, chevron overlay.
+ * Single size on purpose — the kit ships one control size, no `size` prop.
+ */
 export function Select({
-  size = "md",
   invalid = false,
   options,
   placeholder,
@@ -37,7 +37,6 @@ export function Select({
       className={cx(
         "lg-select",
         "lg-control",
-        `lg-control--${size}`,
         invalid && "lg-control--invalid",
         disabled && "lg-control--disabled",
         className,

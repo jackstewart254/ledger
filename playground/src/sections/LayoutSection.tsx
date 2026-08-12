@@ -121,7 +121,7 @@ export default function LayoutSection() {
             </>
           }
         >
-          <PageColumn style={{ paddingTop: "var(--space-4)", paddingBottom: "var(--space-4)" }}>
+          <PageColumn>
             <Card header="Scrollable main">
               <div style={{ color: "var(--text-muted)" }}>
                 56px rail + 52px header + scrollable content — the shell shape every

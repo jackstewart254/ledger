@@ -23,7 +23,7 @@
 
 .lg-select__chevron {
   position: absolute;
-  right: var(--_pad);
+  right: var(--control-pad-x-md);
   pointer-events: none;
   color: var(--text-subtle);
 }

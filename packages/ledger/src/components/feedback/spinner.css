@@ -1,25 +1,15 @@
 /* Spinner — rotating stroke arc, currentColor. Ambient loop, outside the
    interaction band on purpose. */
+/* Single size on purpose — no sm/lg modifiers. */
 .lg-spinner {
   display: inline-flex;
+  width: var(--space-5);
+  height: var(--space-5);
   animation: lg-spin var(--dur-spin) linear infinite;
 }
 .lg-spinner svg {
   width: 100%;
   height: 100%;
-}
-
-.lg-spinner--sm {
-  width: var(--space-4);
-  height: var(--space-4);
-}
-.lg-spinner--md {
-  width: var(--space-5);
-  height: var(--space-5);
-}
-.lg-spinner--lg {
-  width: var(--space-6);
-  height: var(--space-6);
 }
 
 @keyframes lg-spin {

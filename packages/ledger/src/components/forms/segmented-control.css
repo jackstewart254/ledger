@@ -4,17 +4,16 @@
    block, segments are divided by hairlines, and the active segment is a filled
    cell rather than a raft. Tabular figures so count-carrying labels never
    resize the segment. */
+/* Single size on purpose — matches the one control height the kit ships. */
 .lg-seg {
   display: inline-flex;
   align-items: center;
-  height: var(--_h);
+  height: var(--control-h-md);
   background: transparent;
   border: var(--space-px) solid var(--border);
   border-radius: var(--radius-control);
   overflow: hidden;
 }
-.lg-seg--sm { --_h: var(--control-h-sm); --_fs: var(--text-xs); }
-.lg-seg--md { --_h: var(--control-h-md); --_fs: var(--text-sm); }
 
 .lg-seg__btn {
   display: inline-flex;
@@ -28,7 +27,7 @@
   background: transparent;
   color: var(--text-muted);
   font-family: var(--font-sans);
-  font-size: var(--_fs);
+  font-size: var(--text-sm);
   font-weight: var(--fw-body);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;

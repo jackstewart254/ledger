@@ -1,11 +1,16 @@
-/* PageColumn — tokenised centered column (--page-max-width / --page-gutter). */
+/* PageColumn — tokenised centered column (--page-max-width / --page-gutter).
+   Padding is EQUAL on all four sides. It previously set only padding-inline,
+   which left every consumer to add its own vertical value by hand — so the gap
+   above the content never matched the gap beside it. One gutter, four sides. */
 .lg-page-column {
   width: 100%;
   max-width: var(--page-max-width);
   margin-inline: auto;
-  padding-inline: var(--page-gutter);
+  padding: var(--page-gutter);
 }
 
+/* Full bleed drops the horizontal gutter and the max-width; the vertical
+   padding stays, so content still clears the chrome above and below it. */
 .lg-page-column--full-bleed {
   max-width: none;
   padding-inline: 0;
