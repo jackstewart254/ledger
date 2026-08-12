@@ -11,7 +11,7 @@ Generated from `src/components/feedback` — do not edit by hand, run `npm run d
 - [EmptyState](#emptystate) — A muted glyph, one line, and an action if there is one to take.
 - [Skeleton](#skeleton) — Shimmer loading placeholder.
 - [Spinner](#spinner) — Minimal stroke arc on currentColor; inherits the text color of its context.
-- [Progress](#progress) — Hairline track + ink fill, 0 to max.
+- [Progress](#progress) — Hairline track + accent fill, 0 to max.
 
 ## Components
 
@@ -235,7 +235,7 @@ Minimal stroke arc on currentColor; inherits the text color of its context. Deco
 
 ### Progress
 
-Hairline track + ink fill, 0 to max.
+Hairline track + accent fill, 0 to max.
 
 `Progress` · props `ProgressProps` · [`packages/ledger/src/components/feedback/Progress.tsx`](../../packages/ledger/src/components/feedback/Progress.tsx)
 

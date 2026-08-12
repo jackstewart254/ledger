@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 
 export interface AppShellProps {
-  /** Left icon-rail slot — fixed 56px column (--row-h-comfy). */
+  /** Left icon-rail slot — fixed --rail-w column (56px), matching Rail's width. */
   rail?: ReactNode;
   /** Header left slot — identity and location: breadcrumb, page context. */
   header?: ReactNode;

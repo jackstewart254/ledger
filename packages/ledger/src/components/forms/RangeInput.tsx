@@ -14,9 +14,9 @@ const num = (v: unknown, fallback: number): number => {
 };
 
 /**
- * RangeInput — a native range with a filled track: ink up to the thumb, faint
- * after it, so the value reads at a glance instead of being inferred from the
- * thumb's position against nothing.
+ * RangeInput — a native range with a filled track: the accent up to the thumb,
+ * faint after it, so the value reads at a glance instead of being inferred from
+ * the thumb's position against nothing.
  *
  * Deliberately NOT wrapped in the `.lg-control` frame. A pill frame is the
  * shape for something you type into; around a slider it reads as a text field

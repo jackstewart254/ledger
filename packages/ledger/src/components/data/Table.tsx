@@ -40,7 +40,8 @@ export interface TableProps<Row> {
 }
 
 /**
- * Table — render-prop columns, row hover, --row-h rows.
+ * Table — render-prop columns, row hover, 42px rows (--lg-table-row-h, which
+ * defaults to --control-h-lg; override per instance with `rowHeight`).
  *
  * The header row is in the DOM but hidden visually: a column of dates under a
  * heading that reads "Date" tells the reader what they already worked out, and

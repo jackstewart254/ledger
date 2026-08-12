@@ -114,7 +114,7 @@
   font-weight: var(--fw-emphasis);
 }
 
-/* Today is a bearing, not a selection: a dot under the numeral. The ink fill
+/* Today is a bearing, not a selection: a dot under the numeral. The accent fill
    is the selection's language and stays reserved for it. */
 .lg-dp__day--today::after {
   content: "";

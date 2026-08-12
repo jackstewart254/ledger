@@ -14,7 +14,7 @@ Generated from `src/components/forms` — do not edit by hand, run `npm run docs
 - [RadioGroup](#radiogroup) — Styled native radios, matches the Checkbox voice.
 - [Switch](#switch) — Track + thumb toggle.
 - [SegmentedControl](#segmentedcontrol) — Exclusive picker in a hairline group; the active segment raises to --surface-raised.
-- [RangeInput](#rangeinput) — A native range with a filled track: ink up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
+- [RangeInput](#rangeinput) — A native range with a filled track: the accent up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
 
 ## Components
 
@@ -315,7 +315,7 @@ Single size on purpose — the kit ships one control size, no `size` prop.
 
 ### RangeInput
 
-A native range with a filled track: ink up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
+A native range with a filled track: the accent up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
 
 `RangeInput` · props `RangeInputProps` · [`packages/ledger/src/components/forms/RangeInput.tsx`](../../packages/ledger/src/components/forms/RangeInput.tsx)
 

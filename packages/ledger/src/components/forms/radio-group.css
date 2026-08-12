@@ -41,7 +41,7 @@
   transition: var(--transition-colors);
 }
 /* Checked keeps the SAME hairline as unchecked — the dot is the state change.
-   Darkening the ring to ink as well double-marks it and makes the selected
+   Painting the ring the accent as well double-marks it and makes the selected
    option read as heavier than its siblings rather than just chosen. */
 .lg-radio__input:checked {
   background: radial-gradient(

@@ -126,9 +126,10 @@
   --neutral-status-text:   var(--brand-neutral-text, var(--text-secondary));
 
   /* data-viz (Sparkline / TrendChart / BarChart) */
-  /* Charts draw in INK, not in a status colour. A series is only red when the
-     thing it plots is bad; a balance chart that is always red says nothing.
-     Set --brand-chart-* to give data-viz its own colour without tinting the UI. */
+  /* Charts draw in the ACCENT, not in a status colour. A series is only red
+     when the thing it plots is bad; a balance chart that is always red says
+     nothing. Set --brand-chart-* to give data-viz its own colour without
+     tinting the UI. */
   --chart-line:    var(--brand-chart-line, var(--accent));
   --chart-grid:    var(--brand-chart-grid, var(--border-subtle));
   --chart-fill:    var(--brand-chart-fill, color-mix(in srgb, var(--chart-line) 18%, transparent));

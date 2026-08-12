@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { cx } from "../../internal/cx.js";
 
 /**
- * Progress — hairline track + ink fill, 0 to max.
+ * Progress — hairline track + accent fill, 0 to max.
  *
  * Determinate only. An indeterminate variant was tried and cut: a chunk
  * sliding back and forth reports nothing, and Spinner already covers "working,

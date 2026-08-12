@@ -587,10 +587,6 @@ render: (row) => <span onClick={swallow}><Menu trigger={…} items={…} /></spa
 `polarity`, but the union type itself isn't re-exported, so you can pass the
 string literal and you cannot name the type. Use `"lower-is-better"` inline.
 
-**`Table`'s `maxHeight` prop documents a sticky header that no longer exists.**
-The prop still works — it caps the scroll height of the body — but there is no
-sticky header to stay put, because the header is hidden.
-
 **`Progress` is determinate only.** There is no indeterminate variant: a chunk
 sliding back and forth reports nothing, and `Spinner` already covers "working,
 duration unknown". If you can't measure it, don't draw a bar.
@@ -601,34 +597,3 @@ so they detach from their anchor otherwise. Expected, occasionally surprising.
 **`SearchField` clears through a native setter.** It dispatches a real `input`
 event so a controlled consumer's `onChange` fires with `""`. If you were relying
 on `onClear` alone to know the field emptied, you will get both.
-
----
-
-## Where the shipped docs have drifted
-
-Worth naming, because you will read these files and they will mislead you.
-
-**The accent is no longer ink.** `SPEC.md`, the header comment at the top of
-`tokens/colors.css`, and the knob list in `tokens/brand.css` all state that
-`--accent` ships wired to the primary text colour — "almost-monochrome with
-accent = ink". It doesn't, and hasn't since the house accent landed: it ships as
-`#0795FF` (dark) / `#0A7BD8` (light), documented in detail sixty lines below the
-comment that contradicts it, in the same file. The doctrine that *is* still true
-is the narrower one: colour marks meaning and interaction, and it stays off
-surfaces, borders and text. `InlineAlert`'s doc comment ("Accent reads as ink")
-is stale for the same reason.
-
-**`SPEC.md` describes a Table that no longer exists.** It lists "sticky header,
-sortable". The shipped table has a hidden header and no sorting.
-
-**`SPEC.md` describes a StatusDot that no longer exists.** It lists "bare dot +
-soft glow + slow breathe — the daemon-dot signature". The glow and the breathe
-were removed; the dot's colour is the whole signal now.
-
-**`SPEC.md`'s component list is a wave behind.** `KpiTile` is gone, replaced by
-`SummaryCard` and `SummarySplit`; `BarChart` and `CompareChart` are not listed.
-The README's inventory is current.
-
-**`Icon`'s prop comment says "Defaults to 16".** The default is 17 at stroke 2,
-which is the kit's standard icon — 16/1.75 rendered thin and slightly undersized
-beside 14px text.

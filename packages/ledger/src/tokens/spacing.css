@@ -51,8 +51,10 @@
      of controls. */
   --pill-h-sm:    16px;
   --pill-h-md:    18px;
-  --row-h:        48px;   /* key-value / table row */
-  --row-h-comfy:  56px;
+  --row-h:        48px;   /* Card's header row, KeyValue's rows, and the unit
+                             Textarea and the MultiSelect popover measure in.
+                             NOT Table: its rows are --lg-table-row-h, which
+                             defaults to --control-h-lg. */
 
   /* page geometry — PageColumn reads these (kills the negative-margin hack) */
   --page-max-width: 1288px;

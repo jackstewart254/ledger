@@ -38,7 +38,7 @@ import "@mcleanstewart/ledger/styles.css";
 
 - [Rail](navigation.md#rail) — Icon-only 56px vertical rail.
 - [RailItem](navigation.md#railitem)
-- [Tabs](navigation.md#tabs) — Hairline bottom-border group; the active tab lifts to text-strong and carries an ink underline indicator.
+- [Tabs](navigation.md#tabs) — Rounded chips, no underline rail: inactive tabs are bare, the active one lifts to text-strong on a --surface-active cell.
 - [Menu](navigation.md#menu) — Anchored action menu (kebab/dropdown).
 - [CommandMenu](navigation.md#commandmenu) — The ⌘K palette.
 
@@ -56,11 +56,11 @@ import "@mcleanstewart/ledger/styles.css";
 - [RadioGroup](forms.md#radiogroup) — Styled native radios, matches the Checkbox voice.
 - [Switch](forms.md#switch) — Track + thumb toggle.
 - [SegmentedControl](forms.md#segmentedcontrol) — Exclusive picker in a hairline group; the active segment raises to --surface-raised.
-- [RangeInput](forms.md#rangeinput) — A native range with a filled track: ink up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
+- [RangeInput](forms.md#rangeinput) — A native range with a filled track: the accent up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
 
 ## [Data](data.md) · 10
 
-- [Table](data.md#table) — Render-prop columns, row hover, --row-h rows.
+- [Table](data.md#table) — Render-prop columns, row hover, 42px rows (--lg-table-row-h, which defaults to --control-h-lg; override per instance with `rowHeight`).
 - [MetricDelta](data.md#metricdelta) — A signed change as a tinted badge: good green, bad red, grey at zero.
 - [Sparkline](data.md#sparkline) — Tiny inline SVG polyline from a number[].
 - [TrendChart](data.md#trendchart) — Area chart: gradient fill under a hairline-thin line, grid at rounded tick values, y ticks in the left gutter, x labels at the ends.
@@ -82,7 +82,7 @@ import "@mcleanstewart/ledger/styles.css";
 - [EmptyState](feedback.md#emptystate) — A muted glyph, one line, and an action if there is one to take.
 - [Skeleton](feedback.md#skeleton) — Shimmer loading placeholder.
 - [Spinner](feedback.md#spinner) — Minimal stroke arc on currentColor; inherits the text color of its context.
-- [Progress](feedback.md#progress) — Hairline track + ink fill, 0 to max.
+- [Progress](feedback.md#progress) — Hairline track + accent fill, 0 to max.
 
 ## Utilities
 

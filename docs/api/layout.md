@@ -20,7 +20,7 @@ decision and not something each page re-derives with margin tricks.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `rail` | `ReactNode` | — | Left icon-rail slot — fixed 56px column (--row-h-comfy). |
+| `rail` | `ReactNode` | — | Left icon-rail slot — fixed --rail-w column (56px), matching Rail's width. |
 | `header` | `ReactNode` | — | Header left slot — identity and location: breadcrumb, page context. |
 | `search` | `ReactNode` | — | Header centre slot — search, always, optionally flanked by the controls that act on what it searches. Centred on the pane, not on whatever the left and right slots happen to weigh. |
 | `actions` | `ReactNode` | — | Header right slot — actions and view switches. |

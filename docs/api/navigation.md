@@ -4,7 +4,7 @@ Generated from `src/components/navigation` — do not edit by hand, run `npm run
 
 - [Rail](#rail) — Icon-only 56px vertical rail.
 - [RailItem](#railitem)
-- [Tabs](#tabs) — Hairline bottom-border group; the active tab lifts to text-strong and carries an ink underline indicator.
+- [Tabs](#tabs) — Rounded chips, no underline rail: inactive tabs are bare, the active one lifts to text-strong on a --surface-active cell.
 - [Menu](#menu) — Anchored action menu (kebab/dropdown).
 - [CommandMenu](#commandmenu) — The ⌘K palette.
 
@@ -51,9 +51,12 @@ Icon-only 56px vertical rail. Items are glyphs; the label lives in a flyout chip
 
 ### Tabs
 
-Hairline bottom-border group; the active tab lifts to text-strong and carries an ink underline indicator. Arrow keys move selection (automatic activation). Controlled via `value`/`onChange`, uncontrolled via `defaultValue`.
+Rounded chips, no underline rail: inactive tabs are bare, the active one lifts to text-strong on a --surface-active cell. Arrow keys move selection (automatic activation). Controlled via `value`/`onChange`, uncontrolled via `defaultValue`.
 
 `Tabs` · props `TabsProps` · [`packages/ledger/src/components/navigation/Tabs.tsx`](../../packages/ledger/src/components/navigation/Tabs.tsx)
+
+Same cell as SegmentedControl, ungrouped. Reach for Tabs to move between
+views, SegmentedControl to pick a value inside one.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -134,7 +137,7 @@ The ⌘K palette. Scrim + centered panel, borderless search input, filterable fl
 
 ### TabItem
 
-Tabs — hairline bottom-border group; the active tab lifts to text-strong and carries an ink underline indicator. Arrow keys move selection (automatic activation). Controlled via `value`/`onChange`, uncontrolled via `defaultValue`.
+Tabs — rounded chips, no underline rail: inactive tabs are bare, the active one lifts to text-strong on a --surface-active cell. Arrow keys move selection (automatic activation). Controlled via `value`/`onChange`, uncontrolled via `defaultValue`. Same cell as SegmentedControl, ungrouped. Reach for Tabs to move between views, SegmentedControl to pick a value inside one.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |

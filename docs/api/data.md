@@ -2,7 +2,7 @@
 
 Generated from `src/components/data` — do not edit by hand, run `npm run docs`.
 
-- [Table](#table) — Render-prop columns, row hover, --row-h rows.
+- [Table](#table) — Render-prop columns, row hover, 42px rows (--lg-table-row-h, which defaults to --control-h-lg; override per instance with `rowHeight`).
 - [MetricDelta](#metricdelta) — A signed change as a tinted badge: good green, bad red, grey at zero.
 - [Sparkline](#sparkline) — Tiny inline SVG polyline from a number[].
 - [TrendChart](#trendchart) — Area chart: gradient fill under a hairline-thin line, grid at rounded tick values, y ticks in the left gutter, x labels at the ends.
@@ -17,7 +17,7 @@ Generated from `src/components/data` — do not edit by hand, run `npm run docs`
 
 ### Table
 
-Render-prop columns, row hover, --row-h rows.
+Render-prop columns, row hover, 42px rows (--lg-table-row-h, which defaults to --control-h-lg; override per instance with `rowHeight`).
 
 `Table<Row>` · props `TableProps<Row>` · [`packages/ledger/src/components/data/Table.tsx`](../../packages/ledger/src/components/data/Table.tsx)
 

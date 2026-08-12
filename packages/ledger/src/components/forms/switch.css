@@ -27,7 +27,8 @@
   border-radius: var(--radius-pill);
   /* Off is quiet chrome, not a filled grey pill: --neutral-status is the grey
      of a STATUS dot and reads as a mid-grey blob when stretched over a track.
-     Off = outlined surface + muted thumb; on = ink fill + light thumb. */
+     Off = outlined surface + accent thumb; on = accent fill + --accent-fg
+     thumb. */
   background: var(--surface);
   border: var(--space-px) solid var(--border-strong);
   cursor: inherit;
@@ -47,9 +48,10 @@
   width: var(--_thumb);
   height: var(--_thumb);
   border-radius: var(--radius-full);
-  /* The thumb inverts with the track: ink on the light off-track, light on the
-     ink on-track. A single light thumb disappears against the off state, and a
-     grey one reads as disabled rather than off. */
+  /* The thumb inverts with the track: the accent on the bare off-track, then
+     --accent-fg once the track itself is the accent. A single light thumb
+     disappears against the off state, and a grey one reads as disabled rather
+     than off. */
   background: var(--accent);
   transition:
     left var(--dur-fast) var(--ease-standard),

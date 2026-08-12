@@ -4,10 +4,13 @@ import { useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNod
 import { cx } from "../../internal/cx.js";
 
 /**
- * Tabs — hairline bottom-border group; the active tab lifts to text-strong and
- * carries an ink underline indicator. Arrow keys move selection (automatic
- * activation). Controlled via `value`/`onChange`, uncontrolled via
- * `defaultValue`.
+ * Tabs — rounded chips, no underline rail: inactive tabs are bare, the active
+ * one lifts to text-strong on a --surface-active cell. Arrow keys move
+ * selection (automatic activation). Controlled via `value`/`onChange`,
+ * uncontrolled via `defaultValue`.
+ *
+ * Same cell as SegmentedControl, ungrouped. Reach for Tabs to move between
+ * views, SegmentedControl to pick a value inside one.
  */
 
 export interface TabItem {
