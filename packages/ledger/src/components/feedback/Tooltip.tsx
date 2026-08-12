@@ -15,16 +15,6 @@ import { createPortal } from "react-dom";
 
 const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
 
-/**
- * Tooltip — hover/focus label. Wraps a single child; shows on delay.
- * Portaled to <body> with fixed positioning, so no ancestor (overflow clip,
- * transform, stacking context) can cut it off or re-base its coordinates.
- * Pops from the anchor side on enter, fades on exit — CSS transitions only,
- * which keeps the library zero-dep. Reduced motion lands the same end states
- * instantly. The unmount is on a timer rather than transitionend, because a
- * hidden tab may never fire one.
- */
-
 export type TooltipSide = "top" | "bottom" | "left" | "right";
 
 /* matches the exit transition (--dur-fast) */
@@ -43,6 +33,15 @@ export interface TooltipProps {
   wrapperStyle?: CSSProperties;
 }
 
+/**
+ * Tooltip — hover/focus label. Wraps a single child; shows on delay.
+ * Portaled to <body> with fixed positioning, so no ancestor (overflow clip,
+ * transform, stacking context) can cut it off or re-base its coordinates.
+ * Pops from the anchor side on enter, fades on exit — CSS transitions only,
+ * which keeps the library zero-dep. Reduced motion lands the same end states
+ * instantly. The unmount is on a timer rather than transitionend, because a
+ * hidden tab may never fire one.
+ */
 export function Tooltip({
   label,
   side = "top",

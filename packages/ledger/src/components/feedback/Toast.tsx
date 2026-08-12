@@ -6,12 +6,6 @@ import { Icon, type LucideIcon } from "../core/Icon.js";
 
 const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
 
-/**
- * Toast — transient notification for the bottom-right stack. Semantic tone
- * colors the leading icon only; auto-dismisses via `duration` when `onClose`
- * is provided. Render inside a ToastViewport, which owns the live region.
- */
-
 export type ToastTone = "neutral" | "success" | "danger";
 
 const TONE_ICON: Record<ToastTone, LucideIcon> = {
@@ -33,6 +27,11 @@ export interface ToastProps {
   style?: CSSProperties;
 }
 
+/**
+ * Toast — transient notification for the bottom-right stack. Semantic tone
+ * colors the leading icon only; auto-dismisses via `duration` when `onClose`
+ * is provided. Render inside a ToastViewport, which owns the live region.
+ */
 export function Toast({
   tone = "neutral",
   title,

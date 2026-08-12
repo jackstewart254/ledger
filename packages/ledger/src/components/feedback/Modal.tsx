@@ -8,13 +8,6 @@ import { cx } from "../../internal/cx.js";
 import { useFocusTrap } from "../../utils/focusTrap.js";
 import { lockBodyScroll, unlockBodyScroll } from "../../utils/scrollLock.js";
 
-/**
- * Modal — centered dialog on the scrim. Surface-raised panel, hairline border,
- * the sanctioned shadow. Focus trapped, body scroll locked, Escape and
- * overlay-click close. Title + footer slots. Portaled to <body> so a
- * transformed or filtered ancestor can never re-base its fixed positioning.
- */
-
 export interface ModalProps {
   open: boolean;
   onClose: () => void;
@@ -28,6 +21,12 @@ export interface ModalProps {
   style?: CSSProperties;
 }
 
+/**
+ * Modal — centered dialog on the scrim. Surface-raised panel, hairline border,
+ * the sanctioned shadow. Focus trapped, body scroll locked, Escape and
+ * overlay-click close. Title + footer slots. Portaled to <body> so a
+ * transformed or filtered ancestor can never re-base its fixed positioning.
+ */
 export function Modal({
   open,
   onClose,

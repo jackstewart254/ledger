@@ -29,11 +29,18 @@ narrating its own interface; a field that needs a caption to be understood
 needs a better label or a better control. Errors stay — those report
 something the user could not have known in advance.
 
+A group-shaped child gets the fieldset/legend shape instead: `role="group"`
+named by the label. `<label htmlFor>` only names and activates a LABELABLE
+element (input, select, textarea, button), so pointing one at a radiogroup
+div names nothing and clicks nothing — the failure is silent, which is why
+this is a shape switch rather than an id the group accepts.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` **·** required | `ReactNode` | — |  |
 | `error` | `ReactNode` | — | Error line — marks the control invalid. The only text under a field. |
 | `htmlFor` | `string` | — | Control id — defaults to the child's id, else an auto id. |
+| `group` | `boolean` | — | Label a set of controls instead of one. On by default for the kit's group-shaped controls (RadioGroup, SegmentedControl); pass it for a hand-rolled set, e.g. a row of Checkboxes. |
 | `children` **·** required | `ReactNode` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |

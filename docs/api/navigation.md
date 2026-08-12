@@ -3,7 +3,7 @@
 Generated from `src/components/navigation` — do not edit by hand, run `npm run docs`.
 
 - [Rail](#rail) — Icon-only 56px vertical rail.
-- [RailItem](#railitem)
+- [RailItem](#railitem) — One glyph in the Rail.
 - [Tabs](#tabs) — Rounded chips, no underline rail: inactive tabs are bare, the active one lifts to text-strong on a --surface-active cell.
 - [Menu](#menu) — Anchored action menu (kebab/dropdown).
 - [CommandMenu](#commandmenu) — The ⌘K palette.
@@ -33,7 +33,14 @@ Icon-only 56px vertical rail. Items are glyphs; the label lives in a flyout chip
 
 ### RailItem
 
+One glyph in the Rail. `label` never renders inline: it is the item's accessible name and the text of the flyout chip, so the rail stays one icon wide whatever the labels say.
+
 `RailItem` · props `RailItemProps` · [`packages/ledger/src/components/navigation/Rail.tsx`](../../packages/ledger/src/components/navigation/Rail.tsx)
+
+Renders an anchor when `href` is set and a button otherwise — a destination
+should be a real link, openable in a new tab, and an action should not be.
+`active` follows that split too: aria-current="page" on the link,
+aria-pressed on the button.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -137,8 +144,6 @@ The ⌘K palette. Scrim + centered panel, borderless search input, filterable fl
 
 ### TabItem
 
-Tabs — rounded chips, no underline rail: inactive tabs are bare, the active one lifts to text-strong on a --surface-active cell. Arrow keys move selection (automatic activation). Controlled via `value`/`onChange`, uncontrolled via `defaultValue`. Same cell as SegmentedControl, ungrouped. Reach for Tabs to move between views, SegmentedControl to pick a value inside one.
-
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `value` **·** required | `string` | — |  |
@@ -146,8 +151,6 @@ Tabs — rounded chips, no underline rail: inactive tabs are bare, the active on
 | `disabled` | `boolean` | — |  |
 
 ### MenuItem
-
-Menu — anchored action menu (kebab/dropdown). Trigger + positioned panel (surface-raised, hairline, the sanctioned shadow). Arrow keys move focus, Enter/Space commit, Escape and click-outside close. Danger item variant for destructive actions.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -159,8 +162,6 @@ Menu — anchored action menu (kebab/dropdown). Trigger + positioned panel (surf
 | `onSelect` | `() => void` | — |  |
 
 ### CommandMenuItem
-
-CommandMenu — the ⌘K palette. Scrim + centered panel, borderless search input, filterable flat list with group labels. Arrow keys move selection, Enter commits, Escape closes. Focus trapped; scroll locked. Controlled: the consumer owns `open` and the item list. Portaled to &lt;body> so a transformed or filtered ancestor can never re-base its fixed positioning.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |

@@ -69,3 +69,7 @@ export function RadioGroup({
     </div>
   );
 }
+
+/* Several controls, not one: FormField names this with role="group" rather than
+   a <label htmlFor> that can never resolve to a div. */
+RadioGroup.__lgGroup = true as const;

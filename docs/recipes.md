@@ -678,11 +678,10 @@ export default function SettingsPage() {
           <SectionHeading title="Preferences" />
           <Card>
             <div className="rc-set-grid">
-              {/* Group controls need their own aria-label inside FormField —
-                  FormField's htmlFor wiring does not reach them. */}
+              {/* RadioGroup and SegmentedControl are several controls, not one:
+                  FormField labels them as a role="group". No aria-label needed. */}
               <FormField label="Appearance">
                 <SegmentedControl
-                  aria-label="Appearance"
                   options={["System", "Light", "Dark"].map((label) => ({
                     value: label.toLowerCase(),
                     label,
@@ -694,7 +693,6 @@ export default function SettingsPage() {
 
               <FormField label="Weeks start on">
                 <RadioGroup
-                  aria-label="Weeks start on"
                   orientation="horizontal"
                   options={[
                     { value: "mon", label: "Monday" },
@@ -707,7 +705,6 @@ export default function SettingsPage() {
 
               <FormField label="Tell me about" className="rc-set-span">
                 <MultiSelect
-                  aria-label="Tell me about"
                   options={EVENTS}
                   value={events}
                   onChange={setEvents}
@@ -716,7 +713,8 @@ export default function SettingsPage() {
                 />
               </FormField>
 
-              <FormField label="Send to" className="rc-set-span">
+              {/* hand-rolled set of controls — `group` earns the same shape */}
+              <FormField label="Send to" group className="rc-set-span">
                 <div className="rc-set-checks">
                   <Checkbox
                     label="Email"

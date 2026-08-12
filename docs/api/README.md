@@ -14,19 +14,19 @@ import "@mcleanstewart/ledger/styles.css";
 - [Icon](core.md#icon) — The styling wrapper around a lucide-react glyph (ISC licensed, the system's one sanctioned runtime dependency).
 - [Button](core.md#button) — Single size on purpose — the kit ships one button height, no `size` prop.
 - [IconButton](core.md#iconbutton) — The icon-only control.
-- [Badge](core.md#badge)
+- [Badge](core.md#badge) — A label on a thing: "Pending", "prod", "Over budget".
 - [StatusPill](core.md#statuspill) — Single size on purpose — the kit ships one pill height, no `size` prop.
-- [StatusDot](core.md#statusdot)
-- [CountBadge](core.md#countbadge)
-- [Avatar](core.md#avatar)
-- [Kbd](core.md#kbd)
-- [Divider](core.md#divider)
-- [Link](core.md#link)
+- [StatusDot](core.md#statusdot) — The bare dot, for when the thing already has a name beside it.
+- [CountBadge](core.md#countbadge) — A number and nothing else: nav counts, tab counts, queue depth in a cell.
+- [Avatar](core.md#avatar) — Image with an initials fallback and an optional corner indicator.
+- [Kbd](core.md#kbd) — One key cap: hairline box, mono, tabular figures, and a min-width equal to its height so "K" and "⌘" are the same square.
+- [Divider](core.md#divider) — The kit's hairline as an element, since separation here is a 1px border rather than a shadow.
+- [Link](core.md#link) — The anchor: ink-coloured text under a hairline underline that fills in to currentColor on hover, so a link inside a paragraph is legible without being a coloured interruption in it.
 
 ## [Typography](typography.md) · 2
 
 - [PageHeader](typography.md#pageheader) — The view title block (replaces the 8×-copy-pasted heading).
-- [SectionHeading](typography.md#sectionheading)
+- [SectionHeading](typography.md#sectionheading) — The title row for a section inside a page: a heading and an optional actions slot on the same line.
 
 ## [Layout](layout.md) · 3
 
@@ -37,7 +37,7 @@ import "@mcleanstewart/ledger/styles.css";
 ## [Navigation](navigation.md) · 5
 
 - [Rail](navigation.md#rail) — Icon-only 56px vertical rail.
-- [RailItem](navigation.md#railitem)
+- [RailItem](navigation.md#railitem) — One glyph in the Rail.
 - [Tabs](navigation.md#tabs) — Rounded chips, no underline rail: inactive tabs are bare, the active one lifts to text-strong on a --surface-active cell.
 - [Menu](navigation.md#menu) — Anchored action menu (kebab/dropdown).
 - [CommandMenu](navigation.md#commandmenu) — The ⌘K palette.
@@ -88,12 +88,12 @@ import "@mcleanstewart/ledger/styles.css";
 
 | Export | Signature | Summary |
 | --- | --- | --- |
-| `trapFocus` | `(container: HTMLElement) => () => void` |  |
-| `useFocusTrap` | `<T extends HTMLElement = HTMLElement>(active?: boolean) => RefObject<T \| null>` |  |
-| `lockBodyScroll` | `() => void` |  |
-| `unlockBodyScroll` | `() => void` |  |
-| `compactNumber` | `(n: number \| null \| undefined) => string` |  |
+| `trapFocus` | `(container: HTMLElement) => () => void` | Shared dialog focus trap. One behavior for every dialog surface (Modal, Drawer, CommandMenu): move focus to the first focusable inside on open, wrap Tab/Shift+Tab within the container, and hand focus back to the opener on close. Hand-rolled — no dependency. |
+| `useFocusTrap` | `<T extends HTMLElement = HTMLElement>(active?: boolean) => RefObject<T \| null>` | Hook form: attach the returned ref to the dialog root; `active` mirrors the open state so mount-once components (command palette) re-arm per open. |
+| `lockBodyScroll` | `() => void` | Body scroll-lock shared by every overlay that parks page scroll (Modal, Drawer, CommandMenu). A module-level counter so OVERLAPPING dialogs can't clobber each other: A opens, B opens, A closes — the body stays locked until the LAST holder releases. |
+| `unlockBodyScroll` | `() => void` | Releases one hold; page scroll comes back when the last holder lets go. |
+| `compactNumber` | `(n: number \| null \| undefined) => string` | Compact figure for a metric — 1284 becomes "1.3k", 2_400_000 becomes "2.4M". One decimal below ten of a unit and none above ("1.3k", "12k"); anything under a thousand prints as itself. Nullish and non-finite give an em dash, so a metric that never arrived reads as missing rather than as "NaN". |
 | `formatDate` | `(value: string \| number \| Date \| null \| undefined, locale?: string) => string` | Human date — "11 Aug 2026". ISO strings belong in the data layer, not on screen: `2026-08-11` makes the reader parse a format before reading a date, and a column of them reads as serial numbers. Native Intl, no dependency. |
-| `pct` | `(n: number \| null \| undefined, digits?: number) => string` |  |
+| `pct` | `(n: number \| null \| undefined, digits?: number) => string` | Percentage to `digits` places — 12.53 becomes "12.5%". Nullish and non-finite give an em dash, as compactNumber does. |
 
 _54 components, 26 exported types, 7 utilities._

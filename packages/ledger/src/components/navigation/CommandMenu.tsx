@@ -13,14 +13,6 @@ import { cx } from "../../internal/cx.js";
 import { useFocusTrap } from "../../utils/focusTrap.js";
 import { lockBodyScroll, unlockBodyScroll } from "../../utils/scrollLock.js";
 
-/**
- * CommandMenu — the ⌘K palette. Scrim + centered panel, borderless search
- * input, filterable flat list with group labels. Arrow keys move selection,
- * Enter commits, Escape closes. Focus trapped; scroll locked. Controlled:
- * the consumer owns `open` and the item list. Portaled to <body> so a
- * transformed or filtered ancestor can never re-base its fixed positioning.
- */
-
 export interface CommandMenuItem {
   id: string;
   label: string;
@@ -39,6 +31,13 @@ export interface CommandMenuProps {
   style?: CSSProperties;
 }
 
+/**
+ * CommandMenu — the ⌘K palette. Scrim + centered panel, borderless search
+ * input, filterable flat list with group labels. Arrow keys move selection,
+ * Enter commits, Escape closes. Focus trapped; scroll locked. Controlled:
+ * the consumer owns `open` and the item list. Portaled to <body> so a
+ * transformed or filtered ancestor can never re-base its fixed positioning.
+ */
 export function CommandMenu({ open, onClose, items, className, style }: CommandMenuProps) {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);

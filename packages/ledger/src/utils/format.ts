@@ -11,6 +11,12 @@ const UNITS: ReadonlyArray<readonly [number, string]> = [
 const mantissa = (m: number): string =>
   m.toFixed(Math.abs(m) >= 10 ? 0 : 1).replace(/\.0$/, "");
 
+/**
+ * Compact figure for a metric — 1284 becomes "1.3k", 2_400_000 becomes "2.4M".
+ * One decimal below ten of a unit and none above ("1.3k", "12k"); anything
+ * under a thousand prints as itself. Nullish and non-finite give an em dash,
+ * so a metric that never arrived reads as missing rather than as "NaN".
+ */
 export function compactNumber(n: number | null | undefined): string {
   if (n == null || !Number.isFinite(n)) return "—";
   const abs = Math.abs(n);
@@ -44,6 +50,10 @@ export function formatDate(
   }).format(d);
 }
 
+/**
+ * Percentage to `digits` places — 12.53 becomes "12.5%". Nullish and
+ * non-finite give an em dash, as compactNumber does.
+ */
 export function pct(n: number | null | undefined, digits = 1): string {
   if (n == null || !Number.isFinite(n)) return "—";
   const rounded = Number(n.toFixed(digits));

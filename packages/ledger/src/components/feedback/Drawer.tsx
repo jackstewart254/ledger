@@ -8,13 +8,6 @@ import { cx } from "../../internal/cx.js";
 import { useFocusTrap } from "../../utils/focusTrap.js";
 import { lockBodyScroll, unlockBodyScroll } from "../../utils/scrollLock.js";
 
-/**
- * Drawer — right-side sheet for filters/details. Slides in over the scrim,
- * focus trapped, scroll locked, Escape and overlay-click close. Header +
- * scrollable body + optional sticky footer. Portaled to <body> so a
- * transformed or filtered ancestor can never re-base its fixed positioning.
- */
-
 export interface DrawerProps {
   open: boolean;
   onClose: () => void;
@@ -27,6 +20,12 @@ export interface DrawerProps {
   style?: CSSProperties;
 }
 
+/**
+ * Drawer — right-side sheet for filters/details. Slides in over the scrim,
+ * focus trapped, scroll locked, Escape and overlay-click close. Header +
+ * scrollable body + optional sticky footer. Portaled to <body> so a
+ * transformed or filtered ancestor can never re-base its fixed positioning.
+ */
 export function Drawer({ open, onClose, title, children, footer, width = 360, className, style }: DrawerProps) {
   /* document.body only exists after mount — render nothing on the server */
   const [mounted, setMounted] = useState(false);

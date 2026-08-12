@@ -3,7 +3,7 @@
 Generated from `src/components/typography` — do not edit by hand, run `npm run docs`.
 
 - [PageHeader](#pageheader) — The view title block (replaces the 8×-copy-pasted heading).
-- [SectionHeading](#sectionheading)
+- [SectionHeading](#sectionheading) — The title row for a section inside a page: a heading and an optional actions slot on the same line.
 
 ## Components
 
@@ -37,7 +37,13 @@ Also accepts every prop of `Omit<HTMLAttributes<HTMLElement>, "title">` — they
 
 ### SectionHeading
 
+The title row for a section inside a page: a heading and an optional actions slot on the same line.
+
 `SectionHeading` · props `SectionHeadingProps` · [`packages/ledger/src/components/typography/SectionHeading.tsx`](../../packages/ledger/src/components/typography/SectionHeading.tsx)
+
+The level is fixed at h2 rather than exposed as a prop. PageHeader owns the
+h1, so everything under it is an h2 and the document outline holds up
+without every caller having to work out where it sits.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |

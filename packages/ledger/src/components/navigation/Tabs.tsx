@@ -3,16 +3,6 @@
 import { useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
 import { cx } from "../../internal/cx.js";
 
-/**
- * Tabs — rounded chips, no underline rail: inactive tabs are bare, the active
- * one lifts to text-strong on a --surface-active cell. Arrow keys move
- * selection (automatic activation). Controlled via `value`/`onChange`,
- * uncontrolled via `defaultValue`.
- *
- * Same cell as SegmentedControl, ungrouped. Reach for Tabs to move between
- * views, SegmentedControl to pick a value inside one.
- */
-
 export interface TabItem {
   value: string;
   label: ReactNode;
@@ -29,6 +19,15 @@ export interface TabsProps {
   style?: CSSProperties;
 }
 
+/**
+ * Tabs — rounded chips, no underline rail: inactive tabs are bare, the active
+ * one lifts to text-strong on a --surface-active cell. Arrow keys move
+ * selection (automatic activation). Controlled via `value`/`onChange`,
+ * uncontrolled via `defaultValue`.
+ *
+ * Same cell as SegmentedControl, ungrouped. Reach for Tabs to move between
+ * views, SegmentedControl to pick a value inside one.
+ */
 export function Tabs({
   items,
   value,

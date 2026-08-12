@@ -5,14 +5,14 @@ Generated from `src/components/core` — do not edit by hand, run `npm run docs`
 - [Icon](#icon) — The styling wrapper around a lucide-react glyph (ISC licensed, the system's one sanctioned runtime dependency).
 - [Button](#button) — Single size on purpose — the kit ships one button height, no `size` prop.
 - [IconButton](#iconbutton) — The icon-only control.
-- [Badge](#badge)
+- [Badge](#badge) — A label on a thing: "Pending", "prod", "Over budget".
 - [StatusPill](#statuspill) — Single size on purpose — the kit ships one pill height, no `size` prop.
-- [StatusDot](#statusdot)
-- [CountBadge](#countbadge)
-- [Avatar](#avatar)
-- [Kbd](#kbd)
-- [Divider](#divider)
-- [Link](#link)
+- [StatusDot](#statusdot) — The bare dot, for when the thing already has a name beside it.
+- [CountBadge](#countbadge) — A number and nothing else: nav counts, tab counts, queue depth in a cell.
+- [Avatar](#avatar) — Image with an initials fallback and an optional corner indicator.
+- [Kbd](#kbd) — One key cap: hairline box, mono, tabular figures, and a min-width equal to its height so "K" and "⌘" are the same square.
+- [Divider](#divider) — The kit's hairline as an element, since separation here is a 1px border rather than a shadow.
+- [Link](#link) — The anchor: ink-coloured text under a hairline underline that fills in to currentColor on hover, so a link inside a paragraph is legible without being a coloured interruption in it.
 
 ## Components
 
@@ -82,7 +82,14 @@ Also accepts every prop of `ButtonHTMLAttributes<HTMLButtonElement>` — they ar
 
 ### Badge
 
+A label on a thing: "Pending", "prod", "Over budget". It says what something IS. StatusPill says how something is DOING, and CountBadge is a number on its own.
+
 `Badge` · props `BadgeProps` · [`packages/ledger/src/components/core/Badge.tsx`](../../packages/ledger/src/components/core/Badge.tsx)
+
+`tone` is a claim about the data, not a colour picker: `tone="danger"` says
+the thing is bad, not that you wanted it red. That is also why status is
+StatusPill's job — mapping domain states onto tones badge by badge ends with
+two pages disagreeing about whether "paused" is warning or neutral.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -116,7 +123,13 @@ Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread
 
 ### StatusDot
 
+The bare dot, for when the thing already has a name beside it. When it doesn't, reach for StatusPill: same four states, but it carries the label itself.
+
 `StatusDot` · props `StatusDotProps` · [`packages/ledger/src/components/core/StatusDot.tsx`](../../packages/ledger/src/components/core/StatusDot.tsx)
+
+No glow ring and no pulse. A halo animating forever on a rail of ten healthy
+things turns a status readout into a nightclub, and the thing it is attached
+to is usually reporting "fine". The colour is the whole signal.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -131,7 +144,14 @@ Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread
 
 ### CountBadge
 
+A number and nothing else: nav counts, tab counts, queue depth in a cell. Anything with a word in it is a Badge.
+
 `CountBadge` · props `CountBadgeProps` · [`packages/ledger/src/components/core/CountBadge.tsx`](../../packages/ledger/src/components/core/CountBadge.tsx)
+
+Mono and tabular (--num-features), because it usually sits inside something
+else and a proportional count shoves that thing about as the digits change.
+`max` rolls over to "99+" for the same reason: an unbounded count is an
+unbounded width.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -147,7 +167,16 @@ Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread
 
 ### Avatar
 
+Image with an initials fallback and an optional corner indicator.
+
 `Avatar` · props `AvatarProps` · [`packages/ledger/src/components/core/Avatar.tsx`](../../packages/ledger/src/components/core/Avatar.tsx)
+
+`size` is a free number rather than a step on a scale: it is the dimension
+of a box, not a control height, and the initials and the indicator are both
+derived from it (with floors, so neither disappears on a small one). A
+missing or broken `src` falls back to initials rather than to a hole in the
+row, and the image is held at zero opacity until it loads, so a slow one
+fades up instead of snapping in half-drawn.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -166,7 +195,13 @@ Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread
 
 ### Kbd
 
+One key cap: hairline box, mono, tabular figures, and a min-width equal to its height so "K" and "⌘" are the same square.
+
 `Kbd` · props `KbdProps` · [`packages/ledger/src/components/core/Kbd.tsx`](../../packages/ledger/src/components/core/Kbd.tsx)
+
+The sanctioned use is a shortcut inside a tooltip on the control it belongs
+to. Printed down the right-hand side of a menu it is the interface narrating
+itself, which is the same reason the kit has no hint microcopy.
 
 _No props of its own._
 
@@ -177,6 +212,8 @@ Press <Kbd>⌘</Kbd> <Kbd>K</Kbd> to search
 ```
 
 ### Divider
+
+The kit's hairline as an element, since separation here is a 1px border rather than a shadow. The vertical one takes its height from the row it is in (`align-self: stretch`), so it needs a flex parent to have any.
 
 `Divider` · props `DividerProps` · [`packages/ledger/src/components/core/Divider.tsx`](../../packages/ledger/src/components/core/Divider.tsx)
 
@@ -193,7 +230,12 @@ Also accepts every prop of `HTMLAttributes<HTMLDivElement>` — they are spread 
 
 ### Link
 
+The anchor: ink-coloured text under a hairline underline that fills in to currentColor on hover, so a link inside a paragraph is legible without being a coloured interruption in it.
+
 `Link` · props `LinkProps` · [`packages/ledger/src/components/core/Link.tsx`](../../packages/ledger/src/components/core/Link.tsx)
+
+It has to exist because the kit ships no preflight — left alone, an &lt;a> is
+whatever blue the browser fancies.
 
 _No props of its own._
 

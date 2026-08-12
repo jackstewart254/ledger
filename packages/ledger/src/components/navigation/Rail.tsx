@@ -4,13 +4,6 @@ import type { CSSProperties, ReactNode } from "react";
 import { Icon, type LucideIcon } from "../core/Icon.js";
 import { cx } from "../../internal/cx.js";
 
-/**
- * Rail — icon-only 56px vertical rail. Items are glyphs; the label lives in a
- * flyout chip that pops from the side on hover/focus (translucent surface +
- * backdrop blur, the sanctioned shadow). Never inline labels, never letter
- * tiles. Active item reads as a surface tint, not a color.
- */
-
 export interface RailProps {
   children: ReactNode;
   /** Pushed-to-bottom cluster (theme toggle, sign out). */
@@ -20,6 +13,12 @@ export interface RailProps {
   style?: CSSProperties;
 }
 
+/**
+ * Rail — icon-only 56px vertical rail. Items are glyphs; the label lives in a
+ * flyout chip that pops from the side on hover/focus (translucent surface +
+ * backdrop blur, the sanctioned shadow). Never inline labels, never letter
+ * tiles. Active item reads as a surface tint, not a color.
+ */
 export function Rail({ children, footer, "aria-label": ariaLabel = "Primary", className, style }: RailProps) {
   return (
     <nav aria-label={ariaLabel} className={cx("lg-rail", className)} style={style}>
@@ -41,6 +40,16 @@ export interface RailItemProps {
   style?: CSSProperties;
 }
 
+/**
+ * RailItem — one glyph in the Rail. `label` never renders inline: it is the
+ * item's accessible name and the text of the flyout chip, so the rail stays
+ * one icon wide whatever the labels say.
+ *
+ * Renders an anchor when `href` is set and a button otherwise — a destination
+ * should be a real link, openable in a new tab, and an action should not be.
+ * `active` follows that split too: aria-current="page" on the link,
+ * aria-pressed on the button.
+ */
 export function RailItem({ icon, label, active = false, href, onClick, className, style }: RailItemProps) {
   const inner = (
     <>

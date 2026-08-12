@@ -22,6 +22,16 @@ function initialsOf(name: string): string {
   return initials || "?";
 }
 
+/**
+ * Avatar — image with an initials fallback and an optional corner indicator.
+ *
+ * `size` is a free number rather than a step on a scale: it is the dimension
+ * of a box, not a control height, and the initials and the indicator are both
+ * derived from it (with floors, so neither disappears on a small one). A
+ * missing or broken `src` falls back to initials rather than to a hole in the
+ * row, and the image is held at zero opacity until it loads, so a slow one
+ * fades up instead of snapping in half-drawn.
+ */
 export function Avatar({
   src,
   name = "",

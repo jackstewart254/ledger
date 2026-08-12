@@ -259,15 +259,11 @@ duration unknown". If you can't measure it, don't draw a bar.
 
 ### ToastTone
 
-Toast — transient notification for the bottom-right stack. Semantic tone colors the leading icon only; auto-dismisses via `duration` when `onClose` is provided. Render inside a ToastViewport, which owns the live region.
-
 ```ts
 type ToastTone = "neutral" | "success" | "danger";
 ```
 
 ### TooltipSide
-
-Tooltip — hover/focus label. Wraps a single child; shows on delay. Portaled to &lt;body> with fixed positioning, so no ancestor (overflow clip, transform, stacking context) can cut it off or re-base its coordinates. Pops from the anchor side on enter, fades on exit — CSS transitions only, which keeps the library zero-dep. Reduced motion lands the same end states instantly. The unmount is on a timer rather than transitionend, because a hidden tab may never fire one.
 
 ```ts
 type TooltipSide = "top" | "bottom" | "left" | "right";
@@ -282,8 +278,6 @@ type InlineAlertTone = "accent" | "neutral" | "success" | "warning" | "danger";
 ```
 
 ### SkeletonShape
-
-Skeleton — shimmer loading placeholder. Shapes: text (one line), rect (block), circle. Size overrides are dynamic values, fed as custom properties.
 
 ```ts
 type SkeletonShape = "text" | "rect" | "circle";

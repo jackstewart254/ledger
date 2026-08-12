@@ -237,7 +237,6 @@ export default function SettingsPage() {
             <div className="pg-set-grid">
               <FormField label="Appearance">
                 <SegmentedControl
-                  aria-label="Appearance"
                   options={["System", "Light", "Dark"].map((label) => ({
                     value: label.toLowerCase(),
                     label,
@@ -257,7 +256,6 @@ export default function SettingsPage() {
 
               <FormField label="Weeks start on">
                 <RadioGroup
-                  aria-label="Weeks start on"
                   orientation="horizontal"
                   options={[
                     { value: "mon", label: "Monday" },
@@ -283,7 +281,6 @@ export default function SettingsPage() {
             <div className="pg-set-grid">
               <FormField label="Tell me about">
                 <MultiSelect
-                  aria-label="Tell me about"
                   options={EVENTS}
                   value={events}
                   onChange={setEvents}
@@ -294,7 +291,6 @@ export default function SettingsPage() {
 
               <FormField label="Summary email">
                 <SegmentedControl
-                  aria-label="Summary email"
                   options={[
                     { value: "daily", label: "Daily" },
                     { value: "weekly", label: "Weekly" },
@@ -306,7 +302,7 @@ export default function SettingsPage() {
                 />
               </FormField>
 
-              <FormField label="Send to" className="pg-set-span">
+              <FormField label="Send to" group className="pg-set-span">
                 <div className="pg-set-checks">
                   <Checkbox
                     label="Email"
@@ -395,7 +391,8 @@ export default function SettingsPage() {
           <SectionHeading title="API access" />
           <Card>
             <div className="pg-set-grid">
-              <FormField label="Live secret key" className="pg-set-span">
+              {/* field + its copy button is a set, not one control */}
+              <FormField label="Live secret key" group className="pg-set-span">
                 <div className="pg-set-key">
                   <Input readOnly value="lk_live_9f2c4a71d0e83bb6" />
                   <IconButton
@@ -412,7 +409,6 @@ export default function SettingsPage() {
 
               <FormField label="Scopes">
                 <MultiSelect
-                  aria-label="Scopes"
                   options={SCOPES}
                   value={scopes}
                   onChange={setScopes}
@@ -423,7 +419,6 @@ export default function SettingsPage() {
 
               <FormField label="Key expires on">
                 <DatePicker
-                  aria-label="Key expires on"
                   value={expiry}
                   onChange={setExpiry}
                   min="2026-08-12"

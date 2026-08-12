@@ -2,16 +2,6 @@ import type { CSSProperties } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cx } from "../../internal/cx.js";
 
-/**
- * Icon — the styling wrapper around a lucide-react glyph (ISC licensed, the
- * system's one sanctioned runtime dependency). Every icon in the kit renders
- * at the same default box, stroke and currentColor; consumers pass the
- * component, not a name string:
- *
- *   import { Search } from "lucide-react";
- *   <Icon as={Search} />
- */
-
 export type { LucideIcon } from "lucide-react";
 
 export interface IconProps {
@@ -24,6 +14,15 @@ export interface IconProps {
   style?: CSSProperties;
 }
 
+/**
+ * Icon — the styling wrapper around a lucide-react glyph (ISC licensed, the
+ * system's one sanctioned runtime dependency). Every icon in the kit renders
+ * at the same default box, stroke and currentColor; consumers pass the
+ * component, not a name string:
+ *
+ *   import { Search } from "lucide-react";
+ *   <Icon as={Search} />
+ */
 /* 17px at stroke 2 is the kit's standard icon. Lucide's own 24px default is
    too big beside 14px text, and 16/1.75 rendered thin and slightly undersized
    next to it. Components should take this default rather than passing sizes. */

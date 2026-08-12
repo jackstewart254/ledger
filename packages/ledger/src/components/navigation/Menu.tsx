@@ -15,13 +15,6 @@ import {
 import { Icon, type LucideIcon } from "../core/Icon.js";
 import { cx } from "../../internal/cx.js";
 
-/**
- * Menu — anchored action menu (kebab/dropdown). Trigger + positioned panel
- * (surface-raised, hairline, the sanctioned shadow). Arrow keys move focus,
- * Enter/Space commit, Escape and click-outside close. Danger item variant for
- * destructive actions.
- */
-
 export interface MenuItem {
   /** Stable key — only needed when two items share a label. */
   id?: string;
@@ -42,6 +35,12 @@ export interface MenuProps {
   style?: CSSProperties;
 }
 
+/**
+ * Menu — anchored action menu (kebab/dropdown). Trigger + positioned panel
+ * (surface-raised, hairline, the sanctioned shadow). Arrow keys move focus,
+ * Enter/Space commit, Escape and click-outside close. Danger item variant for
+ * destructive actions.
+ */
 export function Menu({ trigger, items, align = "start", className, style }: MenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLSpanElement>(null);

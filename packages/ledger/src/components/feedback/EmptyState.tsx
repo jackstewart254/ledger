@@ -4,16 +4,6 @@ import { Icon, type LucideIcon } from "../core/Icon.js";
 
 const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
 
-/**
- * EmptyState — a muted glyph, one line, and an action if there is one to take.
- *
- * No description slot on purpose. A paragraph of explanation is hint microcopy
- * (the kit bans it elsewhere for the same reason) and it lands where the reader
- * is least interested: a panel with nothing in it. Whatever the paragraph said
- * belongs in the title if it matters, or a tooltip on the panel's own control
- * if it doesn't.
- */
-
 export interface EmptyStateProps {
   icon?: LucideIcon;
   title: ReactNode;
@@ -23,6 +13,15 @@ export interface EmptyStateProps {
   style?: CSSProperties;
 }
 
+/**
+ * EmptyState — a muted glyph, one line, and an action if there is one to take.
+ *
+ * No description slot on purpose. A paragraph of explanation is hint microcopy
+ * (the kit bans it elsewhere for the same reason) and it lands where the reader
+ * is least interested: a panel with nothing in it. Whatever the paragraph said
+ * belongs in the title if it matters, or a tooltip on the panel's own control
+ * if it doesn't.
+ */
 export function EmptyState({
   icon = Inbox,
   title,

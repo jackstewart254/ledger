@@ -1,14 +1,6 @@
 import type { CSSProperties } from "react";
 import { cx } from "../../internal/cx.js";
 
-/**
- * Progress — hairline track + accent fill, 0 to max.
- *
- * Determinate only. An indeterminate variant was tried and cut: a chunk
- * sliding back and forth reports nothing, and Spinner already covers "working,
- * duration unknown". If you can't measure it, don't draw a bar.
- */
-
 export interface ProgressProps {
   /** 0–max. */
   value?: number;
@@ -18,6 +10,13 @@ export interface ProgressProps {
   style?: CSSProperties;
 }
 
+/**
+ * Progress — hairline track + accent fill, 0 to max.
+ *
+ * Determinate only. An indeterminate variant was tried and cut: a chunk
+ * sliding back and forth reports nothing, and Spinner already covers "working,
+ * duration unknown". If you can't measure it, don't draw a bar.
+ */
 export function Progress({
   value = 0,
   max = 100,
