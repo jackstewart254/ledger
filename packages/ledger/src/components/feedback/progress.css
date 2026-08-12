@@ -1,4 +1,4 @@
-/* Progress — hairline track, ink fill. */
+/* Progress — hairline track, ink fill. Determinate only (see Progress.tsx). */
 .lg-progress {
   position: relative;
   width: 100%;
@@ -14,25 +14,4 @@
   border-radius: var(--radius-pill);
   background: var(--accent);
   transition: width var(--dur-base) var(--ease-standard);
-}
-
-.lg-progress--indeterminate .lg-progress-fill {
-  width: 40%;
-  animation: lg-progress-slide 1.2s var(--ease-standard) infinite;
-}
-
-@keyframes lg-progress-slide {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(250%);
-  }
-}
-/* Transform animation guarded — show a full static bar instead. */
-@media (prefers-reduced-motion: reduce) {
-  .lg-progress--indeterminate .lg-progress-fill {
-    animation: none;
-    width: 100%;
-  }
 }

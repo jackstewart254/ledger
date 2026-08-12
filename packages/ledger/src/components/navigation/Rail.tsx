@@ -1,9 +1,8 @@
 "use client";
 
 import type { CSSProperties, ReactNode } from "react";
-import { Icon, type IconName } from "../core/Icon.js";
-
-const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
+import { Icon, type LucideIcon } from "../core/Icon.js";
+import { cx } from "../../internal/cx.js";
 
 /**
  * Rail — icon-only 56px vertical rail. Items are glyphs; the label lives in a
@@ -31,7 +30,7 @@ export function Rail({ children, footer, "aria-label": ariaLabel = "Primary", cl
 }
 
 export interface RailItemProps {
-  icon: IconName;
+  icon: LucideIcon;
   /** Flyout chip text — the item's only label. */
   label: string;
   active?: boolean;
@@ -45,7 +44,7 @@ export interface RailItemProps {
 export function RailItem({ icon, label, active = false, href, onClick, className, style }: RailItemProps) {
   const inner = (
     <>
-      <Icon name={icon} size={18} />
+      <Icon as={icon} size={18} />
       <span className="lg-rail-flyout" aria-hidden="true">
         {label}
       </span>

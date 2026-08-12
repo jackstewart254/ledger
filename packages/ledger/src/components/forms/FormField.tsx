@@ -8,7 +8,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
-import { cx } from "./cx.js";
+import { cx } from "../../internal/cx.js";
 
 /** Props FormField injects into a single element child for a11y wiring. */
 interface WirableProps {

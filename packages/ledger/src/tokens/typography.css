@@ -13,12 +13,25 @@
      one line here. */
   --font-mono: var(--font-sans);
 
-  /* weights */
+  /* weights — the raw scale. Components never reference these directly; they
+     use the three ROLES below, so the whole kit retunes from one place. */
   --fw-light:    300;
   --fw-regular:  400;
   --fw-medium:   500;
   --fw-semibold: 600;
   --fw-bold:     700;
+
+  /* weight roles — components reference ONLY these, never the raw scale, so
+     the whole kit retunes from three lines. The steps between them are the
+     hierarchy; 300 was tried for body and reads too thin on control labels.
+       body     — every control and cell: buttons, inputs, table rows, badges
+       emphasis — column headers, dialog titles, card headers, KPI values
+       title    — page title only (20px+)
+     Placeholder text sits a step below body at --fw-light; it is the one thing
+     that should look lighter than the value it is standing in for. */
+  --fw-body:     var(--fw-regular);
+  --fw-emphasis: var(--fw-medium);
+  --fw-title:    var(--fw-semibold);
 
   /* type scale — mapped to the spec roles
      3xs 10(dense micro) · 2xs 11 · xs-dense 12(dense body) · xs 13(caption)
@@ -26,10 +39,15 @@
      xl 20(view title) · 2xl 26(price) · 3xl 28(display)
      sm/base and lg/xl used to be duplicate values — two names for one size.
      They are distinct now; do not "tidy" them back into each other. */
-  --text-3xs:  0.625rem;    /* 10px — dense micro: chips, table meta         */
-  --text-2xs:  0.6875rem;   /* 11px — micro labels                          */
-  --text-xs-dense: 0.75rem; /* 12px — dense body / table row                */
-  --text-xs:   0.8125rem;   /* 13px — caption / date (tertiary)             */
+  /* 13px is the FLOOR for anything with words in it. The 10/11/12px steps are
+     kept for consuming apps but no ledger component uses them: sub-13px type
+     is what made this kit unreadable at a glance, and it meant the same value
+     rendered at three sizes depending on which component it landed in. */
+  --text-3xs:  0.625rem;    /* 10px — non-component use only                */
+  --text-2xs:  0.6875rem;   /* 11px — non-component use only                */
+  --text-xs-dense: 0.75rem; /* 12px — non-component use only                */
+  --text-xs:   0.8125rem;   /* 13px — smallest text in the kit: labels,     */
+                            /*        captions, hints, badges, chips        */
   --text-sm:   0.875rem;    /* 14px — default UI text, key-value, table     */
   --text-base: 0.9375rem;   /* 15px — body / description (lh 1.5)           */
   --text-md:   1rem;        /* 16px — roomy tab nav; dense terminal views use --text-xs (13px) */
@@ -47,8 +65,9 @@
   /* letter spacing — display -0.02em, price -0.01em */
   --tracking-tight:  -0.02em;    /* display */
   --tracking-price:  -0.01em;    /* price   */
-  --tracking-normal: 0;
   --tracking-wide:   0.01em;
+  /* reserved: the doctrine's sanctioned caps mechanism — if a caps treatment is
+     ever approved it tracks at 0.04em, nowhere else. */
   --tracking-caps:   0.04em;
 
   /* tabular figures for all metrics */

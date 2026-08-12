@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState, type ChangeEvent, type ComponentProps } from "react";
+import { Search, X } from "lucide-react";
 import { Icon } from "../core/Icon.js";
-import { cx } from "./cx.js";
+import { cx } from "../../internal/cx.js";
 import type { FieldSize } from "./Textarea.js";
 
 export interface SearchFieldProps extends Omit<ComponentProps<"input">, "size" | "type" | "ref"> {
@@ -34,9 +35,16 @@ export function SearchField({
   };
 
   const clear = () => {
+    const el = inputRef.current;
+    if (el) {
+      // native setter + input event: bypasses React's value tracker so a
+      // controlled consumer's onChange actually fires with ""
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(el, "");
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+    }
     if (!controlled) setInternal("");
     onClear?.();
-    inputRef.current?.focus();
+    el?.focus();
   };
 
   return (
@@ -50,7 +58,7 @@ export function SearchField({
       )}
       style={style}
     >
-      <Icon name="search" size={size === "sm" ? 14 : 15} className="lg-control__icon" />
+      <Icon as={Search} size={size === "sm" ? 14 : 15} className="lg-control__icon" />
       <input
         ref={inputRef}
         type="search"
@@ -62,7 +70,7 @@ export function SearchField({
       />
       {val !== "" && !disabled && (
         <button type="button" aria-label="Clear search" className="lg-search__clear" onClick={clear}>
-          <Icon name="x" size={14} />
+          <Icon as={X} size={14} />
         </button>
       )}
     </span>

@@ -1,4 +1,6 @@
-import type { CSSProperties } from "react";
+"use client";
+
+import { useId, type CSSProperties } from "react";
 
 export interface TrendChartProps {
   data: number[];
@@ -12,10 +14,11 @@ export interface TrendChartProps {
   style?: CSSProperties;
 }
 
-// left gutter for the min/max labels, breathing room elsewhere
-const PAD_L = 44;
+/* Left gutter must clear the widest formatted label — 44px clipped "£12,480"
+   to ".2,480". Sized for a currency figure at the label size. */
+const PAD_L = 76;
 const PAD = 8;
-const GRID_LINES = 4; // intervals — 5 hairlines from min to max
+const GRID_LINES = 2; // intervals — 3 hairlines (min, mid, max). Five was a cage.
 
 /**
  * TrendChart — SVG line/area chart: hairline grid (--chart-grid), min/max
@@ -30,6 +33,9 @@ export function TrendChart({
   className,
   style,
 }: TrendChartProps) {
+  // per-instance id — see Sparkline: a shared id makes every chart paint with
+  // the first def's theme colours
+  const fillId = useId();
   const cls = ["lg-trendchart", className].filter(Boolean).join(" ");
   if (data.length === 0) {
     return <svg className={cls} width={width} height={height} style={style} aria-hidden="true" />;
@@ -75,16 +81,16 @@ export function TrendChart({
       {area && (
         <>
           <defs>
-            {/* ponytail: static gradient id — duplicates are identical by construction */}
-            <linearGradient id="lg-trendchart-fill" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
               <stop className="lg-trendchart-stop-top" offset="0%" />
               <stop className="lg-trendchart-stop-bottom" offset="100%" />
             </linearGradient>
           </defs>
-          <polygon className="lg-trendchart-area" points={areaPts} />
+          {/* inline: the id is per-instance, so the paint reference can't live in CSS */}
+          <polygon className="lg-trendchart-area" points={areaPts} style={{ fill: `url(#${fillId})` }} />
         </>
       )}
-      <polyline className="lg-trendchart-line" points={pts} strokeWidth={2} />
+      <polyline className="lg-trendchart-line" points={pts} strokeWidth={1.5} />
     </svg>
   );
 }

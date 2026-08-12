@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Download } from "lucide-react";
 import { Button, PageHeader, SectionHeading } from "@mcleanstewart/ledger";
 
 function Specimen({ title, children }: { title: string; children: ReactNode }) {
@@ -44,7 +45,7 @@ export default function TypographySection() {
                 <Button size="sm" variant="tertiary">
                   Filter
                 </Button>
-                <Button size="sm" icon="download">
+                <Button size="sm" icon={Download}>
                   Export CSV
                 </Button>
               </>

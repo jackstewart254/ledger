@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, type CSSProperties, type ReactNode } from "react";
-import { cx } from "./cx.js";
+import { cx } from "../../internal/cx.js";
 
 export interface RadioOption {
   value: string;

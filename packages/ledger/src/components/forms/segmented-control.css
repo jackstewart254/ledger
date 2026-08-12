@@ -1,15 +1,17 @@
-/* SegmentedControl — recessed hairline group; the active segment is a raised
-   surface, not an accent fill. Tabular figures so count-carrying labels never
+/* SegmentedControl — a hairline segment group, NOT the macOS "pill in a
+   trough": a filled tray with a floating raised pill reads as consumer OS
+   chrome and breaks the hairline doctrine. Here the group is one outlined
+   block, segments are divided by hairlines, and the active segment is a filled
+   cell rather than a raft. Tabular figures so count-carrying labels never
    resize the segment. */
 .lg-seg {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-0_5);
   height: var(--_h);
-  padding: var(--space-0_5);
-  background: var(--bg-subtle);
-  border: var(--space-px) solid var(--border-subtle);
-  border-radius: var(--radius-sm);
+  background: transparent;
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-control);
+  overflow: hidden;
 }
 .lg-seg--sm { --_h: var(--control-h-sm); --_fs: var(--text-xs); }
 .lg-seg--md { --_h: var(--control-h-md); --_fs: var(--text-sm); }
@@ -19,23 +21,25 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 0 var(--control-pad-x-sm);
+  padding: 0 var(--control-pad-x-md);
   border: none;
-  border-radius: calc(var(--radius-sm) - var(--space-0_5));
+  border-left: var(--space-px) solid var(--border);
+  border-radius: 0;
   background: transparent;
   color: var(--text-muted);
   font-family: var(--font-sans);
   font-size: var(--_fs);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-body);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   cursor: pointer;
   transition: var(--transition-colors);
 }
-.lg-seg__btn:hover { color: var(--text); }
+.lg-seg__btn:first-child { border-left: none; }
+.lg-seg__btn:hover { color: var(--text); background: var(--surface-hover); }
 .lg-seg__btn[aria-checked="true"] {
-  background: var(--surface-raised);
-  color: var(--text);
+  background: var(--surface-active);
+  color: var(--text-strong);
 }
 .lg-seg__btn:disabled {
   opacity: 0.55;

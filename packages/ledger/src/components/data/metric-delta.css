@@ -1,14 +1,26 @@
-/* MetricDelta — up sage / down red / flat muted, tabular figures. */
+/* MetricDelta — a tinted badge: green up, red down, grey flat.
+   This is the one place a tinted fill is right: the badge IS the signal, it is
+   small, and it never stacks in a column the way InlineAlert did. */
 .lg-delta {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-0_5);
-  font-family: var(--font-mono);
+  height: var(--pill-h-sm);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-control);
   font-size: var(--text-xs);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-body);
   font-feature-settings: var(--num-features);
-  color: var(--text-subtle); /* flat */
+  white-space: nowrap;
+  /* flat */
+  color: var(--neutral-status-text);
+  background: var(--neutral-status-subtle);
 }
 
-.lg-delta--positive { color: var(--success-text); }
-.lg-delta--negative { color: var(--danger-text); }
+.lg-delta--positive {
+  color: var(--success-text);
+  background: var(--success-subtle);
+}
+.lg-delta--negative {
+  color: var(--danger-text);
+  background: var(--danger-subtle);
+}

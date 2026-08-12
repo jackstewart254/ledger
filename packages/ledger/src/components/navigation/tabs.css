@@ -1,43 +1,39 @@
-/* Tabs — hairline bottom border on the group; active tab = text-strong + ink
-   underline overlapping the group hairline. */
+/* Tabs — rounded chips, not an underline rail. The kit's language is rounded
+   (buttons 8px, cards 12px); a hairline underline is the one flat, sharp
+   gesture in it and reads as a different design. Inactive chips are bare, the
+   active chip is a filled cell — same idea as SegmentedControl, but ungrouped:
+   Tabs switch views, SegmentedControl picks a value inside one. */
 .lg-tabs {
   display: flex;
-  gap: var(--space-4);
-  border-bottom: var(--space-px) solid var(--border);
+  align-items: center;
+  gap: var(--space-1);
 }
 
 .lg-tab {
   position: relative;
   appearance: none;
   height: var(--control-h-md);
-  margin-bottom: calc(-1 * var(--space-px));
-  padding: 0 var(--space-1);
+  padding: 0 var(--control-pad-x-md);
   border: none;
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-control);
   background: transparent;
   color: var(--text-muted);
   font-family: var(--font-sans);
-  font-size: var(--text-md);
-  font-weight: var(--fw-medium);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-body);
   cursor: pointer;
   transition: var(--transition-colors);
 }
 .lg-tab:hover {
   color: var(--text);
+  background: var(--surface-hover);
 }
 .lg-tab:disabled {
   color: var(--text-subtle);
+  background: transparent;
   cursor: default;
 }
 .lg-tab[aria-selected="true"] {
   color: var(--text-strong);
-}
-.lg-tab[aria-selected="true"]::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: var(--space-0_5);
-  background: var(--accent);
+  background: var(--surface-active);
 }

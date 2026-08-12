@@ -1,8 +1,8 @@
 import type { ButtonHTMLAttributes } from "react";
-import { Icon, type IconName } from "./Icon.js";
+import { Icon, type LucideIcon } from "./Icon.js";
 
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  icon: IconName;
+  icon: LucideIcon;
   /** Accessible name — becomes aria-label and title. */
   label: string;
   /** Persistent pressed look (toolbar toggles). */
@@ -13,7 +13,7 @@ export function IconButton({ icon, label, active = false, type = "button", class
   const classes = ["lg-icon-btn", active && "lg-icon-btn--active", className].filter(Boolean).join(" ");
   return (
     <button type={type} aria-label={label} title={label} aria-pressed={active || undefined} className={classes} {...rest}>
-      <Icon name={icon} />
+      <Icon as={icon} />
     </button>
   );
 }

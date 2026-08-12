@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Inbox } from "lucide-react";
 import {
   Button,
   Drawer,
@@ -12,7 +13,7 @@ import {
   Toast,
   ToastViewport,
   Tooltip,
-  type ToastVariant,
+  type ToastTone,
 } from "@mcleanstewart/ledger";
 
 const H3: React.CSSProperties = { fontSize: "var(--text-md)", fontWeight: "var(--fw-semibold)" };
@@ -26,7 +27,7 @@ const ROW: React.CSSProperties = {
 
 interface ToastEntry {
   id: number;
-  variant: ToastVariant;
+  tone: ToastTone;
   title: string;
   description?: string;
 }
@@ -39,8 +40,8 @@ export default function FeedbackSection() {
   const [toasts, setToasts] = useState<ToastEntry[]>([]);
   const [progress, setProgress] = useState(64);
 
-  const pushToast = (variant: ToastVariant, title: string, description?: string) =>
-    setToasts((t) => [...t, { id: ++toastId, variant, title, description }]);
+  const pushToast = (tone: ToastTone, title: string, description?: string) =>
+    setToasts((t) => [...t, { id: ++toastId, tone, title, description }]);
   const dismissToast = (id: number) => setToasts((t) => t.filter((x) => x.id !== id));
 
   return (
@@ -106,7 +107,7 @@ export default function FeedbackSection() {
         {toasts.map((t) => (
           <Toast
             key={t.id}
-            variant={t.variant}
+            tone={t.tone}
             title={t.title}
             description={t.description}
             onClose={() => dismissToast(t.id)}
@@ -139,7 +140,7 @@ export default function FeedbackSection() {
 
       <h3 style={H3}>Inline alert</h3>
       <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)", marginBottom: "var(--space-8)" }}>
-        <InlineAlert tone="info" title="Prices are delayed">
+        <InlineAlert tone="accent" title="Prices are delayed">
           Quotes refresh every fifteen minutes on the free data plan.
         </InlineAlert>
         <InlineAlert tone="success" title="Bank connected">
@@ -157,7 +158,7 @@ export default function FeedbackSection() {
       <h3 style={H3}>Empty state</h3>
       <div style={{ marginBottom: "var(--space-8)" }}>
         <EmptyState
-          icon="inbox"
+          icon={Inbox}
           title="No transactions yet"
           description="Connect an account and activity will appear here."
           action={<Button variant="primary">Connect account</Button>}
@@ -187,7 +188,6 @@ export default function FeedbackSection() {
       <h3 style={H3}>Progress</h3>
       <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)", maxWidth: "24rem" }}>
         <Progress value={progress} aria-label="Upload progress" />
-        <Progress indeterminate aria-label="Syncing" />
         <div style={{ display: "flex", gap: "var(--space-2)" }}>
           <Button size="sm" onClick={() => setProgress((p) => Math.max(0, p - 10))}>
             Less

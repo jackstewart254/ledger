@@ -3,7 +3,7 @@ export type { ModalProps } from "./Modal.js";
 export { Drawer } from "./Drawer.js";
 export type { DrawerProps } from "./Drawer.js";
 export { Toast, ToastViewport } from "./Toast.js";
-export type { ToastProps, ToastViewportProps, ToastVariant } from "./Toast.js";
+export type { ToastProps, ToastViewportProps, ToastTone } from "./Toast.js";
 export { Tooltip } from "./Tooltip.js";
 export type { TooltipProps, TooltipSide } from "./Tooltip.js";
 export { InlineAlert } from "./InlineAlert.js";

@@ -1,10 +1,12 @@
-/* Card — hairline surface, inner top-highlight, border-only hover (no lift).
-   No dedicated --card-highlight token — --border-subtle is the nearest. */
+/* Card — hairline surface, border-only hover (no lift).
+   No inset top-highlight: it only works as a LIGHT line on a near-black
+   surface. Under [data-theme="light"] the same token inverts to a dark inset
+   line along the top edge, which reads as a drop shadow — the one thing this
+   doctrine forbids. The hairline border carries the edge in both themes. */
 .lg-card {
   background: var(--surface);
   border: var(--space-px) solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: inset 0 var(--space-px) 0 0 var(--border-subtle);
+  border-radius: var(--radius-surface);
   transition: border-color var(--dur-fast) var(--ease-standard);
 }
 
@@ -20,7 +22,9 @@
   min-height: var(--row-h);
   padding: 0 var(--space-4);
   border-bottom: var(--space-px) solid var(--border-subtle);
-  font-weight: var(--fw-medium);
+  /* No weight here: the header is a flex ROW and the consumer owns its content,
+     so any weight set on the container also fattens trailing meta labels. The
+     hairline and row height carry the hierarchy; emphasise the title itself. */
 }
 
 .lg-card-body {

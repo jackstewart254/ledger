@@ -7,24 +7,25 @@ import {
   type CSSProperties,
   type KeyboardEvent,
 } from "react";
-import { Icon, type IconName } from "../core/Icon.js";
+import { createPortal } from "react-dom";
+import { Icon, type LucideIcon } from "../core/Icon.js";
+import { cx } from "../../internal/cx.js";
 import { useFocusTrap } from "../../utils/focusTrap.js";
 import { lockBodyScroll, unlockBodyScroll } from "../../utils/scrollLock.js";
-
-const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
 
 /**
  * CommandMenu — the ⌘K palette. Scrim + centered panel, borderless search
  * input, filterable flat list with group labels. Arrow keys move selection,
  * Enter commits, Escape closes. Focus trapped; scroll locked. Controlled:
- * the consumer owns `open` and the item list.
+ * the consumer owns `open` and the item list. Portaled to <body> so a
+ * transformed or filtered ancestor can never re-base its fixed positioning.
  */
 
 export interface CommandMenuItem {
   id: string;
   label: string;
   group?: string;
-  icon?: IconName;
+  icon?: LucideIcon;
   /** Extra match terms beyond the label. */
   keywords?: string;
   onSelect?: () => void;
@@ -41,7 +42,11 @@ export interface CommandMenuProps {
 export function CommandMenu({ open, onClose, items, className, style }: CommandMenuProps) {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
-  const trapRef = useFocusTrap<HTMLDivElement>(open);
+  /* document.body only exists after mount — render nothing on the server */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const active = open && mounted;
+  const trapRef = useFocusTrap<HTMLDivElement>(active);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -67,10 +72,11 @@ export function CommandMenu({ open, onClose, items, className, style }: CommandM
   /* keep the active row in view while arrowing */
   useEffect(() => {
     if (!open) return;
-    document.getElementById(optionId(filtered[activeIndex]?.id))?.scrollIntoView({ block: "nearest" });
+    const id = optionId(filtered[activeIndex]?.id);
+    if (id) document.getElementById(id)?.scrollIntoView({ block: "nearest" });
   }, [open, activeIndex, filtered]);
 
-  if (!open) return null;
+  if (!active) return null;
 
   const commit = (item: CommandMenuItem | undefined) => {
     if (!item) return;
@@ -89,14 +95,16 @@ export function CommandMenu({ open, onClose, items, className, style }: CommandM
       e.preventDefault();
       commit(filtered[activeIndex]);
     } else if (e.key === "Escape") {
+      /* marked handled so a dialog behind the palette does not close with it */
       e.preventDefault();
+      e.stopPropagation();
       onClose();
     }
   };
 
   let lastGroup: string | undefined;
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
@@ -127,7 +135,7 @@ export function CommandMenu({ open, onClose, items, className, style }: CommandM
             const showGroup = item.group !== undefined && item.group !== lastGroup;
             lastGroup = item.group ?? lastGroup;
             return (
-              <div key={item.id}>
+              <div key={item.id} role="presentation">
                 {showGroup && <div className="lg-cmd-group">{item.group}</div>}
                 <button
                   type="button"
@@ -139,7 +147,7 @@ export function CommandMenu({ open, onClose, items, className, style }: CommandM
                   onMouseEnter={() => setActiveIndex(i)}
                   onClick={() => commit(item)}
                 >
-                  {item.icon && <Icon name={item.icon} size={15} />}
+                  {item.icon && <Icon as={item.icon} size={15} />}
                   {item.label}
                 </button>
               </div>
@@ -147,10 +155,12 @@ export function CommandMenu({ open, onClose, items, className, style }: CommandM
           })}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
-function optionId(id: string | undefined): string {
-  return id === undefined ? "" : `lg-cmd-opt-${id}`;
+/* undefined, never "" — an empty aria-activedescendant is an invalid IDREF */
+function optionId(id: string | undefined): string | undefined {
+  return id === undefined ? undefined : `lg-cmd-opt-${id}`;
 }

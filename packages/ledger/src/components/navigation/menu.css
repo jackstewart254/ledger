@@ -13,14 +13,14 @@
   top: calc(100% + var(--space-1));
   left: 0;
   z-index: var(--z-overlay);
-  min-width: 10rem;
+  min-width: var(--overlay-w-menu);
   display: flex;
   flex-direction: column;
   gap: var(--space-0_5);
   padding: var(--space-1);
   background: var(--surface-raised);
   border: var(--space-px) solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-overlay);
   box-shadow: var(--shadow-md);
   animation: lg-menu-pop var(--dur-fast) var(--ease-out);
 }
@@ -41,6 +41,7 @@
   background: transparent;
   color: var(--text);
   font-family: var(--font-sans);
+  font-weight: var(--fw-body);
   font-size: var(--text-sm);
   text-align: left;
   white-space: nowrap;

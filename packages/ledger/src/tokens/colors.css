@@ -99,9 +99,12 @@
   --neutral-status-text:   var(--text-secondary);
 
   /* data-viz (Sparkline / TrendChart) */
-  --chart-line:    var(--negative-line);
+  /* Charts draw in INK, not in a status colour. A series is only red when the
+     thing it plots is bad; a balance chart that is always red says nothing.
+     Override --chart-line per chart when direction genuinely matters. */
+  --chart-line:    var(--text);
   --chart-grid:    var(--border-subtle);
-  --chart-fill:    rgba(217, 106, 108, 0.25);   /* area gradient top, fades to 0 */
+  --chart-fill:    color-mix(in srgb, var(--text) 10%, transparent);
 
   --scrim:         rgba(0, 0, 0, 0.6);          /* modal / drawer backdrop */
 }
@@ -180,9 +183,9 @@
   --neutral-status-subtle: rgba(0, 0, 0, 0.05);
   --neutral-status-text:   var(--text-secondary);
 
-  --chart-line:    var(--negative-line);
+  --chart-line:    var(--text);
   --chart-grid:    var(--border-subtle);
-  --chart-fill:    rgba(162, 60, 63, 0.18);
+  --chart-fill:    color-mix(in srgb, var(--text) 8%, transparent);
 
   --scrim:         rgba(20, 20, 22, 0.4);
 }

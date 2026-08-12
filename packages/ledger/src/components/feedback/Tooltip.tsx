@@ -1,7 +1,10 @@
 "use client";
 
 import {
+  cloneElement,
+  isValidElement,
   useEffect,
+  useId,
   useLayoutEffect,
   useRef,
   useState,
@@ -50,6 +53,7 @@ export function Tooltip({
   wrapperClassName,
   wrapperStyle,
 }: TooltipProps) {
+  const tipId = useId();
   const [open, setOpen] = useState(false); // hover intent
   const [shown, setShown] = useState(false); // mounted — lags open so the exit can play
   const openRef = useRef(false);
@@ -133,21 +137,37 @@ export function Tooltip({
     return () => clearTimeout(t);
   }, [open, shown, side]);
 
-  /* a fixed-position tooltip detaches from its anchor on scroll/resize — hide */
+  /* a fixed-position tooltip detaches from its anchor on scroll/resize — hide.
+     Escape dismisses it too, leaving hovered content readable (WCAG 1.4.13).
+     Escape is left un-prevented: a tooltip is not a layer worth swallowing the
+     key a dialog behind it is waiting for. */
   useEffect(() => {
     if (!shown) return;
-    const onMove = () => {
+    const dismiss = () => {
       clearTimeout(timer.current);
       openRef.current = false;
       setOpen(false);
     };
-    window.addEventListener("scroll", onMove, true);
-    window.addEventListener("resize", onMove);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") dismiss();
+    };
+    window.addEventListener("scroll", dismiss, true);
+    window.addEventListener("resize", dismiss);
+    document.addEventListener("keydown", onKey);
     return () => {
-      window.removeEventListener("scroll", onMove, true);
-      window.removeEventListener("resize", onMove);
+      window.removeEventListener("scroll", dismiss, true);
+      window.removeEventListener("resize", dismiss);
+      document.removeEventListener("keydown", onKey);
     };
   }, [shown]);
+
+  /* the tip describes the trigger, not the wrapper — aria-describedby is not
+     inherited, so it goes on the child element that actually takes focus */
+  const described = shown && label != null;
+  const child =
+    described && isValidElement<{ "aria-describedby"?: string }>(children)
+      ? cloneElement(children, { "aria-describedby": tipId })
+      : children;
 
   return (
     <span
@@ -159,11 +179,11 @@ export function Tooltip({
       onFocus={show}
       onBlur={hide}
     >
-      {children}
-      {shown &&
-        label != null &&
+      {child}
+      {described &&
         createPortal(
           <span
+            id={tipId}
             role="tooltip"
             ref={tipRef}
             className={cx("lg-tooltip", `lg-tooltip--${side}`, className)}

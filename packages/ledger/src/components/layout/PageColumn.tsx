@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { cx } from "../../internal/cx.js";
 
 export interface PageColumnProps {
   /** Opt out of max-width + gutters — kills the negative-margin hack. */
@@ -13,9 +14,7 @@ export interface PageColumnProps {
  * Reads --page-max-width / --page-gutter.
  */
 export function PageColumn({ fullBleed = false, children, className, style }: PageColumnProps) {
-  const cls = ["lg-page-column", fullBleed && "lg-page-column--full-bleed", className]
-    .filter(Boolean)
-    .join(" ");
+  const cls = cx("lg-page-column", fullBleed && "lg-page-column--full-bleed", className);
   return (
     <div className={cls} style={style}>
       {children}

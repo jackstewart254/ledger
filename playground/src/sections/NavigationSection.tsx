@@ -1,5 +1,18 @@
 import { useEffect, useState } from "react";
 import {
+  ChartLine,
+  Check,
+  Download,
+  Ellipsis,
+  Inbox,
+  LayoutGrid,
+  LogOut,
+  Plus,
+  PoundSterling,
+  RefreshCw,
+  X,
+} from "lucide-react";
+import {
   Button,
   CommandMenu,
   IconButton,
@@ -11,12 +24,12 @@ import {
 } from "@mcleanstewart/ledger";
 
 const COMMANDS: CommandMenuItem[] = [
-  { id: "overview", label: "Go to overview", group: "Navigate", icon: "layout-grid" },
-  { id: "money", label: "Go to money", group: "Navigate", icon: "pound-sterling" },
-  { id: "charts", label: "Go to charts", group: "Navigate", icon: "line-chart" },
-  { id: "refresh", label: "Refresh data", group: "Actions", icon: "refresh-cw" },
-  { id: "download", label: "Download report", group: "Actions", icon: "download" },
-  { id: "sign-out", label: "Sign out", group: "Actions", icon: "log-out" },
+  { id: "overview", label: "Go to overview", group: "Navigate", icon: LayoutGrid },
+  { id: "money", label: "Go to money", group: "Navigate", icon: PoundSterling },
+  { id: "charts", label: "Go to charts", group: "Navigate", icon: ChartLine },
+  { id: "refresh", label: "Refresh data", group: "Actions", icon: RefreshCw },
+  { id: "download", label: "Download report", group: "Actions", icon: Download },
+  { id: "sign-out", label: "Sign out", group: "Actions", icon: LogOut },
 ];
 
 export default function NavigationSection() {
@@ -51,28 +64,28 @@ export default function NavigationSection() {
         }}
       >
         <Rail
-          footer={<RailItem icon="log-out" label="Sign out" onClick={() => undefined} />}
+          footer={<RailItem icon={LogOut} label="Sign out" onClick={() => undefined} />}
         >
           <RailItem
-            icon="layout-grid"
+            icon={LayoutGrid}
             label="Overview"
             active={railActive === "overview"}
             onClick={() => setRailActive("overview")}
           />
           <RailItem
-            icon="line-chart"
+            icon={ChartLine}
             label="Charts"
             active={railActive === "charts"}
             onClick={() => setRailActive("charts")}
           />
           <RailItem
-            icon="pound-sterling"
+            icon={PoundSterling}
             label="Money"
             active={railActive === "money"}
             onClick={() => setRailActive("money")}
           />
           <RailItem
-            icon="inbox"
+            icon={Inbox}
             label="Inbox"
             active={railActive === "inbox"}
             onClick={() => setRailActive("inbox")}
@@ -96,9 +109,6 @@ export default function NavigationSection() {
             { value: "settled", label: "Settled", disabled: true },
           ]}
         />
-        <p style={{ color: "var(--text-muted)", marginTop: "var(--space-3)" }}>
-          Selected: {tab}
-        </p>
       </div>
 
       <h3 style={{ fontSize: "var(--text-md)", fontWeight: "var(--fw-semibold)" }}>Menu</h3>
@@ -106,15 +116,15 @@ export default function NavigationSection() {
         <Menu
           trigger={<Button>Actions</Button>}
           items={[
-            { label: "Rename", icon: "check" },
-            { label: "Duplicate", icon: "plus" },
-            { label: "Download", icon: "download", disabled: true },
-            { label: "Delete", icon: "x", danger: true },
+            { label: "Rename", icon: Check },
+            { label: "Duplicate", icon: Plus },
+            { label: "Download", icon: Download, disabled: true },
+            { label: "Delete", icon: X, danger: true },
           ]}
         />
         <Menu
           align="end"
-          trigger={<IconButton icon="more-horizontal" label="More" />}
+          trigger={<IconButton icon={Ellipsis} label="More" />}
           items={[
             { label: "Refresh" },
             { label: "Sign out", danger: true },

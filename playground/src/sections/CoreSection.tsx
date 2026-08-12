@@ -1,5 +1,25 @@
 import type { CSSProperties, ReactNode } from "react";
 import {
+  Calendar,
+  ChartLine,
+  Check,
+  ChevronDown,
+  ChevronRight,
+  Download,
+  Ellipsis,
+  ExternalLink,
+  Funnel,
+  Maximize,
+  Plus,
+  PoundSterling,
+  RefreshCw,
+  Search,
+  SlidersHorizontal,
+  TriangleAlert,
+  X,
+  type LucideIcon,
+} from "lucide-react";
+import {
   Avatar,
   Badge,
   Button,
@@ -7,13 +27,28 @@ import {
   Divider,
   Icon,
   IconButton,
-  ICONS,
   Kbd,
   Link,
   StatusDot,
   StatusPill,
-  type IconName,
 } from "@mcleanstewart/ledger";
+
+/* the dozen a dashboard actually reaches for — any of Lucide's ~1,600 works */
+const DASHBOARD_ICONS: LucideIcon[] = [
+  Search,
+  Funnel,
+  Download,
+  RefreshCw,
+  ChevronDown,
+  ChevronRight,
+  ExternalLink,
+  TriangleAlert,
+  Check,
+  X,
+  Ellipsis,
+  Calendar,
+  PoundSterling,
+];
 
 const row: CSSProperties = {
   display: "flex",
@@ -46,18 +81,19 @@ export default function CoreSection() {
       <h2 className="pg-section-title">Core</h2>
 
       <Specimen title="Icon">
-        <div style={{ ...row, gap: "var(--space-2_5)", color: "var(--text-muted)" }}>
-          {(Object.keys(ICONS) as IconName[]).map((name) => (
-            <span key={name} title={name} style={{ display: "inline-flex" }}>
-              <Icon name={name} />
-            </span>
+        <div style={{ ...row, gap: "var(--space-3)", color: "var(--text-muted)" }}>
+          {DASHBOARD_ICONS.map((Glyph, i) => (
+            <Icon key={i} as={Glyph} />
           ))}
         </div>
+        <p style={{ color: "var(--text-muted)", marginTop: "var(--space-3)" }}>
+          Any lucide-react icon works — import the component and pass it as <code>as</code>.
+        </p>
         <div style={{ ...row, marginTop: "var(--space-3)" }}>
-          <Icon name="line-chart" size={12} />
-          <Icon name="line-chart" />
-          <Icon name="line-chart" size={20} />
-          <Icon name="line-chart" size={28} />
+          <Icon as={ChartLine} size={12} />
+          <Icon as={ChartLine} />
+          <Icon as={ChartLine} size={20} />
+          <Icon as={ChartLine} size={28} />
         </div>
       </Specimen>
 
@@ -75,11 +111,11 @@ export default function CoreSection() {
           <Button size="lg">Export CSV</Button>
         </div>
         <div style={{ ...row, marginTop: "var(--space-3)" }}>
-          <Button variant="primary" icon="plus">
+          <Button variant="primary" icon={Plus}>
             Add position
           </Button>
-          <Button icon="download">Download report</Button>
-          <Button variant="tertiary" icon="refresh-cw">
+          <Button icon={Download}>Download report</Button>
+          <Button variant="tertiary" icon={RefreshCw}>
             Refresh
           </Button>
           <Button disabled>Sync accounts</Button>
@@ -91,11 +127,11 @@ export default function CoreSection() {
 
       <Specimen title="Icon button">
         <div style={row}>
-          <IconButton icon="refresh-cw" label="Refresh" />
-          <IconButton icon="download" label="Download" />
-          <IconButton icon="sliders-horizontal" label="Adjust" />
-          <IconButton icon="line-chart" label="Chart view" active />
-          <IconButton icon="maximize" label="Expand" disabled />
+          <IconButton icon={RefreshCw} label="Refresh" />
+          <IconButton icon={Download} label="Download" />
+          <IconButton icon={SlidersHorizontal} label="Adjust" />
+          <IconButton icon={ChartLine} label="Chart view" active />
+          <IconButton icon={Maximize} label="Expand" disabled />
         </div>
       </Specimen>
 

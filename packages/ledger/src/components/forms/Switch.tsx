@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, type ComponentProps, type ReactNode } from "react";
-import { cx } from "./cx.js";
+import { cx } from "../../internal/cx.js";
 
-export interface SwitchProps extends Omit<ComponentProps<"button">, "onChange" | "value"> {
+export interface SwitchProps extends Omit<ComponentProps<"button">, "onChange" | "value" | "ref"> {
   checked?: boolean;
   defaultChecked?: boolean;
   onChange?: (checked: boolean) => void;
@@ -21,6 +21,7 @@ export function Switch({
   className,
   style,
   disabled,
+  onClick,
   ...rest
 }: SwitchProps) {
   const [internal, setInternal] = useState(defaultChecked);
@@ -38,13 +39,16 @@ export function Switch({
       style={style}
     >
       <button
+        {...rest}
         type="button"
         role="switch"
         aria-checked={on}
         className="lg-switch__track"
         disabled={disabled}
-        onClick={toggle}
-        {...rest}
+        onClick={(e) => {
+          onClick?.(e);
+          toggle();
+        }}
       >
         <span className="lg-switch__thumb" />
       </button>

@@ -1,23 +1,39 @@
-/* AppShell — rail + header + scrollable main grid.
-   No --rail-w / --header-h tokens exist yet:
-   rail 56px = var(--row-h-comfy) (exact), header 52px = --row-h + --space-1. */
+/* AppShell — Linear-shaped chrome: the rail and header sit bare on the page
+   background, and the CONTENT is a rounded pane floating on it.
+   Nothing is a "sidebar panel" or a "header bar" with its own fill: giving each
+   region its own background and divider builds three boxes fighting for edges.
+   One pane holds the content; everything outside it is just page.
+   Geometry from --rail-w / --header-h (tokens/spacing.css); the rail column
+   must stay in step with .lg-rail's own width. */
 .lg-app-shell {
   display: grid;
-  grid-template-columns: var(--row-h-comfy) minmax(0, 1fr);
-  grid-template-rows: calc(var(--row-h) + var(--space-1)) minmax(0, 1fr);
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   height: 100dvh;
+  padding: var(--space-2) var(--space-2) var(--space-2) 0;
   background: var(--bg);
   color: var(--text);
 }
 
 .lg-app-shell-rail {
-  grid-row: 1 / -1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-3) 0;
-  border-right: var(--space-px) solid var(--border);
+  /* no fill, no divider — it is page, not panel */
+  overflow: hidden;
+}
+
+/* The floating pane: header and main share one surface, one hairline, one
+   radius, and clip together. */
+.lg-app-shell-pane {
+  display: grid;
+  grid-template-rows: var(--header-h) minmax(0, 1fr);
+  min-width: 0;
+  background: var(--surface);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-overlay);
   overflow: hidden;
 }
 
@@ -28,6 +44,13 @@
   min-width: 0;
   padding: 0 var(--space-4);
   border-bottom: var(--space-px) solid var(--border);
+}
+/* No header content — no divider line hanging across the pane. */
+.lg-app-shell-pane:not(:has(.lg-app-shell-header > *)) .lg-app-shell-header {
+  display: none;
+}
+.lg-app-shell-pane:not(:has(.lg-app-shell-header > *)) {
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .lg-app-shell-main {

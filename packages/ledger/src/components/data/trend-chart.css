@@ -18,7 +18,8 @@
 
 .lg-trendchart-label {
   font-family: var(--font-mono);
-  font-size: var(--text-3xs);
+  font-weight: var(--fw-body);
+  font-size: var(--text-xs);
   font-feature-settings: var(--num-features);
   fill: var(--text-subtle);
 }

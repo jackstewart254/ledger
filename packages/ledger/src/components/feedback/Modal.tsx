@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useId, useState, type CSSProperties, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import { X } from "lucide-react";
 import { Icon } from "../core/Icon.js";
+import { cx } from "../../internal/cx.js";
 import { useFocusTrap } from "../../utils/focusTrap.js";
 import { lockBodyScroll, unlockBodyScroll } from "../../utils/scrollLock.js";
-
-const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
 
 /**
  * Modal — centered dialog on the scrim. Surface-raised panel, hairline border,
  * the sanctioned shadow. Focus trapped, body scroll locked, Escape and
- * overlay-click close. Title + footer slots.
+ * overlay-click close. Title + footer slots. Portaled to <body> so a
+ * transformed or filtered ancestor can never re-base its fixed positioning.
  */
 
 export interface ModalProps {
@@ -38,12 +40,22 @@ export function Modal({
   className,
   style,
 }: ModalProps) {
-  const trapRef = useFocusTrap<HTMLDivElement>(open);
+  /* document.body only exists after mount — render nothing on the server */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const active = open && mounted;
+
+  const id = useId();
+  const titleId = `${id}-title`;
+  const descId = `${id}-desc`;
+  const trapRef = useFocusTrap<HTMLDivElement>(active);
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      /* an inner surface (menu, popover, palette) that handled Escape marks it
+         handled — only the innermost open thing closes per keypress */
+      if (e.key === "Escape" && !e.defaultPrevented) onClose();
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
@@ -55,12 +67,14 @@ export function Modal({
     return unlockBodyScroll;
   }, [open]);
 
-  if (!open) return null;
+  if (!active) return null;
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
+      aria-labelledby={title == null ? undefined : titleId}
+      aria-describedby={description == null ? undefined : descId}
       ref={trapRef}
       className="lg-modal"
       onMouseDown={(e) => {
@@ -73,16 +87,25 @@ export function Modal({
       >
         <div className="lg-modal-head">
           <div className="lg-modal-heading">
-            {title && <h2 className="lg-modal-title">{title}</h2>}
-            {description && <p className="lg-modal-desc">{description}</p>}
+            {title && (
+              <h2 id={titleId} className="lg-modal-title">
+                {title}
+              </h2>
+            )}
+            {description && (
+              <p id={descId} className="lg-modal-desc">
+                {description}
+              </p>
+            )}
           </div>
           <button type="button" aria-label="Close" className="lg-modal-close" onClick={onClose}>
-            <Icon name="x" size={16} />
+            <Icon as={X} size={16} />
           </button>
         </div>
         {children && <div className="lg-modal-body">{children}</div>}
         {footer && <div className="lg-modal-footer">{footer}</div>}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

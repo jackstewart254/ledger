@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
+import { cx } from "../../internal/cx.js";
+import { ChevronDown, ChevronUp, ChevronsUpDown } from "lucide-react";
 import { Icon } from "../core/Icon.js";
 
 export type TableAlign = "left" | "center" | "right";
@@ -29,12 +31,10 @@ export interface TableProps<Row> {
   columns: TableColumn<Row>[];
   rows: Row[];
   rowKey?: (row: Row, index: number) => string | number;
-  /** Controlled sort — omit for uncontrolled (indicator only; sort rows via onSort). */
+  /** Controlled sort — the consumer reorders `rows`. Omit both this and `onSort` to let the table sort itself. */
   sort?: TableSort | null;
   onSort?: (sort: TableSort) => void;
   onRowClick?: (row: Row) => void;
-  /** 30px rows (--control-h-sm) + dense body type. */
-  dense?: boolean;
   /** Row-height override — sets the --lg-table-row-h custom prop. */
   rowHeight?: string;
   /** Scroll height for the body (sticky header stays put). */
@@ -45,9 +45,31 @@ export interface TableProps<Row> {
 }
 
 /**
- * Table — dense sortable data table. Render-prop columns, sticky header,
- * row hover, --row-h rows. Sorting is a client callback: the consumer
- * reorders `rows`.
+ * Uncontrolled reorder. Numeric columns compare as numbers ("7.8%" → 7.8),
+ * everything else by locale. Array#sort is stable (ES2019), so equal keys keep
+ * their source order.
+ */
+function sortRows<Row>(rows: Row[], sort: TableSort, columns: TableColumn<Row>[]): Row[] {
+  const { key } = sort;
+  const numeric = columns.find((c) => c.key === key)?.numeric;
+  const sign = sort.dir === "asc" ? 1 : -1;
+  return [...rows].sort((a, b) => {
+    const va = (a as Record<string, unknown>)[key];
+    const vb = (b as Record<string, unknown>)[key];
+    if (numeric) {
+      const na = Number.parseFloat(String(va));
+      const nb = Number.parseFloat(String(vb));
+      if (!Number.isNaN(na) && !Number.isNaN(nb)) return sign * (na - nb);
+    }
+    return sign * String(va ?? "").localeCompare(String(vb ?? ""));
+  });
+}
+
+/**
+ * Table — sortable data table. Render-prop columns, sticky header,
+ * row hover, --row-h rows. Sorting is a client callback when `sort`/`onSort`
+ * are given (the consumer reorders `rows`); with neither, the table sorts
+ * its own rows.
  */
 export function Table<Row>({
   columns,
@@ -56,7 +78,6 @@ export function Table<Row>({
   sort,
   onSort,
   onRowClick,
-  dense = false,
   rowHeight,
   maxHeight,
   empty,
@@ -73,9 +94,16 @@ export function Table<Row>({
     onSort?.(next);
   };
 
-  const cls = ["lg-table", dense && "lg-table--dense", onRowClick && "lg-table--clickable", className]
-    .filter(Boolean)
-    .join(" ");
+  // nobody else is reordering, so do it here — otherwise the indicator and
+  // aria-sort assert a sort that never happened
+  const selfSort = sort === undefined && onSort === undefined ? internalSort : null;
+  const body = selfSort ? sortRows(rows, selfSort, columns) : rows;
+
+  const cls = cx(
+    "lg-table",
+    onRowClick && "lg-table--clickable",
+    className,
+  );
   const vars = {
     ...(rowHeight ? { "--lg-table-row-h": rowHeight } : undefined),
     ...(maxHeight ? { "--lg-table-max-h": maxHeight } : undefined),
@@ -90,31 +118,22 @@ export function Table<Row>({
             <tr>
               {columns.map((c) => {
                 const isActive = activeSort?.key === c.key;
-                const thCls = [
+                const thCls = cx(
                   c.align === "right" && "lg-table-th--right",
                   c.align === "center" && "lg-table-th--center",
                   isActive && "lg-table-th--active",
-                ]
-                  .filter(Boolean)
-                  .join(" ");
+                );
                 const label = c.sortable ? (
                   <button type="button" className="lg-table-sort" onClick={() => doSort(c.key)}>
                     {c.header}
-                    <span
-                      className={[
-                        "lg-table-sortmark",
-                        isActive && "lg-table-sortmark--active",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
+                    <span className={cx("lg-table-sortmark", isActive && "lg-table-sortmark--active")}>
                       <Icon
-                        name={
+                        as={
                           isActive
                             ? activeSort?.dir === "asc"
-                              ? "chevron-up"
-                              : "chevron-down"
-                            : "chevrons-up-down"
+                              ? ChevronUp
+                              : ChevronDown
+                            : ChevronsUpDown
                         }
                         size={12}
                       />
@@ -139,26 +158,24 @@ export function Table<Row>({
             </tr>
           </thead>
           <tbody>
-            {rows.length === 0 && (
+            {body.length === 0 && (
               <tr>
                 <td className="lg-table-empty" colSpan={columns.length}>
                   {empty ?? "No results"}
                 </td>
               </tr>
             )}
-            {rows.map((row, i) => (
+            {body.map((row, i) => (
               <tr
                 key={rowKey ? rowKey(row, i) : i}
                 onClick={onRowClick ? () => onRowClick(row) : undefined}
               >
                 {columns.map((c) => {
-                  const tdCls = [
+                  const tdCls = cx(
                     c.numeric && "lg-table-cell--num",
                     c.align === "right" && "lg-table-cell--right",
                     c.align === "center" && "lg-table-cell--center",
-                  ]
-                    .filter(Boolean)
-                    .join(" ");
+                  );
                   return (
                     <td key={c.key} className={tdCls || undefined}>
                       {c.render ? c.render(row) : ((row as Record<string, unknown>)[c.key] as ReactNode)}

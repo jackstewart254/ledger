@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
-
-const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
+import { cx } from "../../internal/cx.js";
 
 /**
  * Tabs — hairline bottom-border group; the active tab lifts to text-strong and

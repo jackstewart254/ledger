@@ -1,8 +1,9 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import { ChevronDown } from "lucide-react";
 import { Icon } from "../core/Icon.js";
-import { cx } from "./cx.js";
+import { cx } from "../../internal/cx.js";
 import type { FieldSize } from "./Textarea.js";
 
 export interface SelectOption {
@@ -11,7 +12,7 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
-export interface SelectProps extends Omit<ComponentProps<"select">, "size"> {
+export interface SelectProps extends Omit<ComponentProps<"select">, "size" | "ref"> {
   size?: FieldSize;
   invalid?: boolean;
   /** Option list — or pass <option> children instead. */
@@ -64,7 +65,7 @@ export function Select({
             </option>
           ))}
       </select>
-      <Icon name="chevron-down" size={15} className="lg-select__chevron" />
+      <Icon as={ChevronDown} size={15} className="lg-select__chevron" />
     </span>
   );
 }

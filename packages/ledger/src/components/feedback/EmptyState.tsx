@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Icon, type IconName } from "../core/Icon.js";
+import { Inbox } from "lucide-react";
+import { Icon, type LucideIcon } from "../core/Icon.js";
 
 const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
 
@@ -9,7 +10,7 @@ const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join("
  */
 
 export interface EmptyStateProps {
-  icon?: IconName;
+  icon?: LucideIcon;
   title: ReactNode;
   description?: ReactNode;
   action?: ReactNode;
@@ -19,7 +20,7 @@ export interface EmptyStateProps {
 }
 
 export function EmptyState({
-  icon = "inbox",
+  icon = Inbox,
   title,
   description,
   action,
@@ -30,7 +31,7 @@ export function EmptyState({
   return (
     <div className={cx("lg-empty", compact && "lg-empty--compact", className)} style={style}>
       <span className="lg-empty-icon">
-        <Icon name={icon} size={20} />
+        <Icon as={icon} size={20} />
       </span>
       <div className="lg-empty-title">{title}</div>
       {description && <div className="lg-empty-desc">{description}</div>}

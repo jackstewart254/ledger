@@ -1,23 +1,25 @@
 "use client";
 
 import { useState, type ComponentProps, type ReactNode } from "react";
-import { Icon } from "../core/Icon.js";
-import { cx } from "./cx.js";
+import { cx } from "../../internal/cx.js";
 
-export interface FilterChipProps extends Omit<ComponentProps<"button">, "onChange" | "value"> {
+export interface FilterChipProps
+  extends Omit<ComponentProps<"button">, "onChange" | "value" | "ref"> {
   /** Controlled active state. */
   active?: boolean;
   defaultActive?: boolean;
   onChange?: (active: boolean) => void;
   count?: number;
-  /** Called when the chip is toggled off (its × affordance). */
+  /** Called when the chip is toggled off. */
   onClear?: () => void;
   children: ReactNode;
 }
 
 /**
- * FilterChip — toggleable chip. Active shows the subtle accent fill, a border
- * shift and an × — clicking again clears it.
+ * FilterChip — toggleable chip. Active is carried by the fill and border shift
+ * alone: the chip IS the toggle, so an × inside it is a second control for the
+ * thing the whole chip already does, and it makes the active chip a different
+ * width from the inactive one.
  */
 export function FilterChip({
   active,
@@ -27,6 +29,7 @@ export function FilterChip({
   onClear,
   children,
   className,
+  onClick,
   ...rest
 }: FilterChipProps) {
   const [internal, setInternal] = useState(defaultActive);
@@ -42,15 +45,17 @@ export function FilterChip({
 
   return (
     <button
+      {...rest}
       type="button"
       aria-pressed={on}
       className={cx("lg-chip", className)}
-      onClick={toggle}
-      {...rest}
+      onClick={(e) => {
+        onClick?.(e);
+        toggle();
+      }}
     >
       <span className="lg-chip__label">{children}</span>
       {count != null && <span className="lg-chip__count">{count}</span>}
-      {on && <Icon name="x" size={12} className="lg-chip__clear" />}
     </button>
   );
 }

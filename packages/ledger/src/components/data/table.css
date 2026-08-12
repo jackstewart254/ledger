@@ -1,16 +1,14 @@
-/* Table — dense sortable data table: sticky header, hover rows, hairline
+/* Table — sortable data table: sticky header, hover rows, hairline
    separators. Row height flows through --lg-table-row-h (prop-driven). */
 .lg-table {
   --lg-table-row-h: var(--row-h);
+  font-weight: var(--fw-body);
   background: var(--surface);
   border: var(--space-px) solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-surface);
   overflow: hidden;
 }
 
-.lg-table--dense {
-  --lg-table-row-h: var(--control-h-sm);
-}
 
 .lg-table-scroll {
   overflow: auto;
@@ -26,22 +24,30 @@
   position: sticky;
   top: 0;
   z-index: 2; /* in-flow micro-stacking — exempt from the page z scale */
-  height: var(--control-h-sm);
+  height: var(--control-h-md);
   padding: 0 var(--space-3);
-  background: var(--bg-subtle);
+  /* No filled header band: a grey bar across the top of every table is the
+     loudest thing on the page and it is doing a job a hairline already does.
+     The background matches the table surface purely so sticky rows scroll
+     under it rather than through it. */
+  background: var(--surface);
   border-bottom: var(--space-px) solid var(--border);
-  font-size: var(--text-2xs);
-  font-weight: var(--fw-semibold);
-  letter-spacing: var(--tracking-wide);
-  color: var(--text-muted);
+  /* Header text sits in the same size and weight as the data it labels, one
+     shade lighter. It is a label, not a heading. */
+  font-size: var(--text-sm);
+  font-weight: var(--fw-body);
+  color: var(--text-subtle);
   text-align: left;
   white-space: nowrap;
   user-select: none;
 }
 
-.lg-table-th--right { text-align: right; }
-.lg-table-th--center { text-align: center; }
-.lg-table-th--active { color: var(--text); }
+/* Scoped under .lg-table so these beat the `.lg-table th` base rule on
+   specificity — unscoped they lost to it, so a "right" header sat left while
+   its numeric column sat right and no column lined up with its own label. */
+.lg-table th.lg-table-th--right { text-align: right; }
+.lg-table th.lg-table-th--center { text-align: center; }
+.lg-table-th--active { color: var(--text-muted); }
 
 .lg-table-sort {
   display: inline-flex;
@@ -75,7 +81,9 @@
   white-space: nowrap;
 }
 
-.lg-table--dense td { font-size: var(--text-xs-dense); }
+/* One table size, deliberately: no `dense` variant. Two row heights meant two
+   tables on one page never lined up, and the smaller one shrank its type until
+   it was unreadable. Uniformity beats the knob. */
 
 /* hairline between rows only — header owns the first line */
 .lg-table tbody tr + tr td {
@@ -92,8 +100,8 @@
   font-family: var(--font-mono);
   font-feature-settings: var(--num-features);
 }
-.lg-table-cell--right { text-align: right; }
-.lg-table-cell--center { text-align: center; }
+.lg-table td.lg-table-cell--right { text-align: right; }
+.lg-table td.lg-table-cell--center { text-align: center; }
 
 .lg-table td.lg-table-empty {
   height: auto;

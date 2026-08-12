@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
+import { cx } from "../../internal/cx.js";
 
 export type StatusPillStatus = "good" | "watch" | "risk" | "unknown";
 
@@ -19,9 +20,12 @@ export function StatusPill({
   className,
   ...rest
 }: StatusPillProps) {
-  const classes = ["lg-status-pill", `lg-status-pill--${status}`, `lg-status-pill--${size}`, className]
-    .filter(Boolean)
-    .join(" ");
+  const classes = cx(
+    "lg-status-pill",
+    `lg-status-pill--${status}`,
+    `lg-status-pill--${size}`,
+    className,
+  );
   return (
     <span className={classes} {...rest}>
       <span className="lg-status-pill-dot" />

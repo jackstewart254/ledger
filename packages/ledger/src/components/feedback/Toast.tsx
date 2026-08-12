@@ -1,26 +1,27 @@
 "use client";
 
-import { useEffect, type CSSProperties, type ReactNode } from "react";
-import { Icon, type IconName } from "../core/Icon.js";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
+import { CircleAlert, CircleCheck, Info, X } from "lucide-react";
+import { Icon, type LucideIcon } from "../core/Icon.js";
 
 const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
 
 /**
- * Toast — transient notification for the bottom-right stack. Semantic variant
+ * Toast — transient notification for the bottom-right stack. Semantic tone
  * colors the leading icon only; auto-dismisses via `duration` when `onClose`
- * is provided. Render inside a ToastViewport.
+ * is provided. Render inside a ToastViewport, which owns the live region.
  */
 
-export type ToastVariant = "neutral" | "success" | "danger";
+export type ToastTone = "neutral" | "success" | "danger";
 
-const VARIANT_ICON: Record<ToastVariant, IconName> = {
-  neutral: "info",
-  success: "check-circle",
-  danger: "alert-circle",
+const TONE_ICON: Record<ToastTone, LucideIcon> = {
+  neutral: Info,
+  success: CircleCheck,
+  danger: CircleAlert,
 };
 
 export interface ToastProps {
-  variant?: ToastVariant;
+  tone?: ToastTone;
   title: ReactNode;
   description?: ReactNode;
   /** Action slot (e.g. an undo button). */
@@ -33,7 +34,7 @@ export interface ToastProps {
 }
 
 export function Toast({
-  variant = "neutral",
+  tone = "neutral",
   title,
   description,
   action,
@@ -42,16 +43,23 @@ export function Toast({
   className,
   style,
 }: ToastProps) {
+  /* held in a ref so an inline arrow `onClose` — the normal way to pass one —
+     cannot restart the dismiss timer on every parent render */
+  const onCloseRef = useRef(onClose);
   useEffect(() => {
-    if (!onClose || duration === 0) return;
-    const t = setTimeout(onClose, duration);
+    onCloseRef.current = onClose;
+  });
+
+  useEffect(() => {
+    if (!onCloseRef.current || duration === 0) return;
+    const t = setTimeout(() => onCloseRef.current?.(), duration);
     return () => clearTimeout(t);
-  }, [onClose, duration]);
+  }, [duration]);
 
   return (
-    <div role="status" className={cx("lg-toast", `lg-toast--${variant}`, className)} style={style}>
+    <div className={cx("lg-toast", `lg-toast--${tone}`, className)} style={style}>
       <span className="lg-toast-icon">
-        <Icon name={VARIANT_ICON[variant]} size={16} />
+        <Icon as={TONE_ICON[tone]} size={16} />
       </span>
       <div className="lg-toast-body">
         <div className="lg-toast-title">{title}</div>
@@ -60,7 +68,7 @@ export function Toast({
       </div>
       {onClose && (
         <button type="button" aria-label="Dismiss" className="lg-toast-close" onClick={onClose}>
-          <Icon name="x" size={14} />
+          <Icon as={X} size={14} />
         </button>
       )}
     </div>
@@ -73,10 +81,20 @@ export interface ToastViewportProps {
   style?: CSSProperties;
 }
 
-/** Fixed bottom-right stack for toasts — outranks every interactive layer. */
+/**
+ * Fixed bottom-right stack for toasts — outranks every interactive layer.
+ * Carries the live region: it is mounted for the life of the page, so toasts
+ * appearing inside it are announced. A region inserted together with its own
+ * content routinely is not.
+ */
 export function ToastViewport({ children, className, style }: ToastViewportProps) {
   return (
-    <div className={cx("lg-toast-viewport", className)} style={style}>
+    <div
+      role="status"
+      aria-live="polite"
+      className={cx("lg-toast-viewport", className)}
+      style={style}
+    >
       {children}
     </div>
   );

@@ -1,17 +1,18 @@
 import type { CSSProperties } from "react";
-
-const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
+import { cx } from "../../internal/cx.js";
 
 /**
- * Progress — hairline track + ink fill bar. `indeterminate` slides a fill
- * segment instead of reporting a value.
+ * Progress — hairline track + ink fill, 0 to max.
+ *
+ * Determinate only. An indeterminate variant was tried and cut: a chunk
+ * sliding back and forth reports nothing, and Spinner already covers "working,
+ * duration unknown". If you can't measure it, don't draw a bar.
  */
 
 export interface ProgressProps {
-  /** 0–max. Ignored when indeterminate. */
+  /** 0–max. */
   value?: number;
   max?: number;
-  indeterminate?: boolean;
   "aria-label"?: string;
   className?: string;
   style?: CSSProperties;
@@ -20,7 +21,6 @@ export interface ProgressProps {
 export function Progress({
   value = 0,
   max = 100,
-  indeterminate = false,
   "aria-label": ariaLabel,
   className,
   style,
@@ -33,13 +33,13 @@ export function Progress({
       aria-label={ariaLabel}
       aria-valuemin={0}
       aria-valuemax={max}
-      aria-valuenow={indeterminate ? undefined : clamped}
-      className={cx("lg-progress", indeterminate && "lg-progress--indeterminate", className)}
+      aria-valuenow={clamped}
+      className={cx("lg-progress", className)}
       style={style}
     >
       <div
         className="lg-progress-fill"
-        style={indeterminate ? undefined : ({ "--lg-progress": `${percent}%` } as CSSProperties)}
+        style={{ "--lg-progress": `${percent}%` } as CSSProperties}
       />
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { Input, type InputProps } from "./Input.js";
-import { cx } from "./cx.js";
+import { cx } from "../../internal/cx.js";
 
 export type DateInputProps = Omit<InputProps, "type" | "icon">;
 

@@ -9,7 +9,7 @@ packages/<system>/   one npm package per design system
 playground/          Vite + React app rendering every component of every system (dev-only, never published)
 ```
 
-npm workspaces. TypeScript everywhere. Zero runtime dependencies per system.
+npm workspaces. TypeScript everywhere. One sanctioned runtime dependency per system — `lucide-react`, for icons (ESM, per-icon tree-shakeable, ISC). Nothing else.
 
 ## Package anatomy (per system)
 
@@ -55,13 +55,13 @@ Changes vs the dashboard port:
 
 Everything required to build a dashboard, by category:
 
-- **core**: Icon (typed name union — unknown icon is a compile error, not a silent circle fallback), Button (variants: primary / secondary / tertiary / danger — in this doctrine primary = ink-inverse fill, secondary = surface + hairline border, tertiary = ghost text), IconButton, Badge, StatusPill, StatusDot (bare dot + soft glow + slow breathe — the daemon-dot signature), CountBadge, Avatar, Kbd (shortcut cap — tooltip use only per the no-hint-microcopy rule), Divider, Link (styled anchor — Preflight-off means bare `<a>` is UA blue otherwise)
+- **core**: Icon (styling wrapper over a lucide-react component passed as `as` — size/stroke/currentColor from tokens; no name strings, an unknown icon is a compile error), Button (variants: primary / secondary / tertiary / danger — in this doctrine primary = ink-inverse fill, secondary = surface + hairline border, tertiary = ghost text), IconButton, Badge, StatusPill, StatusDot (bare dot + soft glow + slow breathe — the daemon-dot signature), CountBadge, Avatar, Kbd (shortcut cap — tooltip use only per the no-hint-microcopy rule), Divider, Link (styled anchor — Preflight-off means bare `<a>` is UA blue otherwise)
 - **typography**: PageHeader (title + subtitle — kills the 8×-copy-pasted heading block), SectionHeading
 - **layout**: AppShell (fixed rail slot + header slot + scrollable content — kills per-app Shell rebuilds), PageColumn (tokenised max-width + gutters, full-bleed opt-out — kills the negative-margin hack), Card (the dashboard hand-rolls a CARD literal today)
 - **navigation**: Rail (icon-only 56px, hover/focus flyout labels), Tabs, Menu (anchored action/kebab menu), CommandMenu (Cmd+K palette — filterable list, keyboard nav)
 - **forms**: FormField (label + hint + error wrapper), Input, Textarea, Select, MultiSelect, SearchField, Checkbox, RadioGroup, Switch, SegmentedControl, FilterChip, RangeInput, DateInput (styled native `<input type="date">` — no picker lib)
 - **data**: Table (render-prop columns, sticky header, sortable), KpiTile, MetricDelta, Sparkline, TrendChart, KeyValue (label/value meta rows on `--row-h` with hairline separators), Pagination
-- **feedback**: Modal, Drawer, Toast, Tooltip (CSS transitions — no gsap, keeps the library zero-dep), InlineAlert, EmptyState, Skeleton, Spinner, Progress
+- **feedback**: Modal, Drawer, Toast, Tooltip (CSS transitions — no gsap, no animation dep), InlineAlert, EmptyState, Skeleton, Spinner, Progress
 - **utils**: focusTrap, scrollLock, format helpers (`compactNumber`/`pct`)
 
 ~47 components. Later waves: whatever the next dashboard actually needs — nothing speculative beyond this kit.
@@ -82,4 +82,4 @@ npm, semver per package, published from the public GitHub repo. Playground deplo
 
 ## Non-goals
 
-No Tailwind. No CSS-in-JS. No runtime dependencies. No app-specific components (logos, domain badges, platform tags).
+No Tailwind. No CSS-in-JS. No runtime dependencies beyond the one sanctioned icon dep, `lucide-react`. No app-specific components (logos, domain badges, platform tags).

@@ -13,10 +13,11 @@
   height: var(--control-h-sm);
   min-width: var(--control-h-sm);
   padding: 0 var(--space-1_5);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-control);
   background: var(--control-ghost-bg);
   color: var(--text-muted);
   font-family: var(--font-mono);
+  font-weight: var(--fw-body);
   font-size: var(--text-xs);
   font-feature-settings: var(--num-features);
   cursor: pointer;

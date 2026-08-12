@@ -9,7 +9,7 @@
     var(--bg-subtle) 100%
   );
   background-size: 200% 100%;
-  animation: lg-shimmer 1.4s ease-in-out infinite;
+  animation: lg-shimmer var(--dur-shimmer) var(--ease-standard) infinite;
 }
 
 .lg-skeleton--text {

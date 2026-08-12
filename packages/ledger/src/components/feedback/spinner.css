@@ -2,7 +2,7 @@
    interaction band on purpose. */
 .lg-spinner {
   display: inline-flex;
-  animation: lg-spin 0.8s linear infinite;
+  animation: lg-spin var(--dur-spin) linear infinite;
 }
 .lg-spinner svg {
   width: 100%;

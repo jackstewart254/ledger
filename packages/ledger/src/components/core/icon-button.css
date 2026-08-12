@@ -7,7 +7,7 @@
   height: var(--icon-btn);
   flex-shrink: 0;
   border: var(--space-px) solid transparent;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-control);
   background: var(--control-ghost-bg);
   color: var(--text-muted);
   cursor: pointer;

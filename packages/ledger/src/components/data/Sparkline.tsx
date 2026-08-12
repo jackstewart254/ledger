@@ -1,4 +1,6 @@
-import type { CSSProperties } from "react";
+"use client";
+
+import { useId, type CSSProperties } from "react";
 
 export interface SparklineProps {
   data: number[];
@@ -24,6 +26,10 @@ export function Sparkline({
   className,
   style,
 }: SparklineProps) {
+  // per-instance id: url(#…) resolves to the FIRST matching def in the document,
+  // whose stop colours are those of ITS theme subtree — a shared id repaints
+  // every chart in the first instance's theme
+  const fillId = useId();
   const cls = ["lg-sparkline", className].filter(Boolean).join(" ");
   if (data.length === 0) {
     return <svg className={cls} width={width} height={height} style={style} aria-hidden="true" />;
@@ -53,14 +59,13 @@ export function Sparkline({
       {fill && (
         <>
           <defs>
-            {/* ponytail: static gradient id — duplicate defs across instances are
-                identical by construction (token-driven), so collisions are harmless */}
-            <linearGradient id="lg-sparkline-fill" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
               <stop className="lg-sparkline-stop-top" offset="0%" />
               <stop className="lg-sparkline-stop-bottom" offset="100%" />
             </linearGradient>
           </defs>
-          <polygon className="lg-sparkline-area" points={areaPts} />
+          {/* inline: the id is per-instance, so the paint reference can't live in CSS */}
+          <polygon className="lg-sparkline-area" points={areaPts} style={{ fill: `url(#${fillId})` }} />
         </>
       )}
       <polyline className="lg-sparkline-line" points={pts} strokeWidth={strokeWidth} />

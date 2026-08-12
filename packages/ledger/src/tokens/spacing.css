@@ -50,4 +50,19 @@
   /* page geometry — PageColumn reads these (kills the negative-margin hack) */
   --page-max-width: 1288px;
   --page-gutter:    var(--space-6);   /* 24px */
+
+  /* app chrome — AppShell grid and Rail read these */
+  --rail-w:   56px;
+  --header-h: 52px;
+
+  /* status dot — the daemon-dot signature (StatusDot + StatusPill share it) */
+  --dot-size: 7px;
+  --dot-glow: 3px;
+
+  /* overlay widths — one place for every floating panel's measure */
+  --overlay-w-menu:    10rem;      /* 160px — Menu panel min-width  */
+  --overlay-w-tooltip: 17.5rem;    /* 280px — Tooltip max-width     */
+  --overlay-w-toast:   21.25rem;   /* 340px — Toast width           */
+  --overlay-w-command: 37.5rem;    /* 600px — CommandMenu panel     */
+  --measure-empty:     20rem;      /* 320px — EmptyState copy measure */
 }

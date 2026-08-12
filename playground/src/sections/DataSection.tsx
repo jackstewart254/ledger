@@ -126,7 +126,7 @@ export default function DataSection() {
         }}
       >
         <KpiTile label="Net position" value="£12,480.22" delta={<MetricDelta value={3.2} />} />
-        <KpiTile label="Spend this week" value="£642.10" delta={<MetricDelta value={-8.4} invert />} />
+        <KpiTile label="Spend this week" value="£642.10" delta={<MetricDelta value={-8.4} />} />
         <KpiTile label="Daemons live" value="7" delta={<MetricDelta value={0} />} />
         <KpiTile
           label="Runs today"
@@ -140,7 +140,7 @@ export default function DataSection() {
         <MetricDelta value={3.2} />
         <MetricDelta value={-1.8} />
         <MetricDelta value={0} />
-        <MetricDelta value={-8.4} invert />
+        <MetricDelta value={-8.4} />
         <MetricDelta value={-90} format={gbp} />
       </div>
 
@@ -154,8 +154,8 @@ export default function DataSection() {
         maxHeight="280px"
       />
 
-      <h3 style={sub}>Table — daemons (dense, 30px rows)</h3>
-      <Table columns={DAEMON_COLUMNS} rows={DAEMONS} rowKey={(r) => r.id} dense />
+      <h3 style={sub}>Table — daemons</h3>
+      <Table columns={DAEMON_COLUMNS} rows={DAEMONS} rowKey={(r) => r.id} />
 
       <h3 style={sub}>Sparkline</h3>
       <div style={{ display: "flex", gap: "var(--space-8)", alignItems: "center" }}>

@@ -38,8 +38,8 @@
   background: var(--bg-subtle);
   color: var(--text-muted);
   font-family: var(--font-sans);
-  font-weight: var(--fw-semibold);
-  font-size: max(var(--text-3xs), calc(var(--lg-avatar-size) * 0.38));
+  font-weight: var(--fw-emphasis);
+  font-size: max(var(--text-xs), calc(var(--lg-avatar-size) * 0.38));
   letter-spacing: var(--tracking-wide);
   user-select: none;
 }

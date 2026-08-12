@@ -10,6 +10,12 @@
   --dur-base:    160ms;
   --dur-slow:    220ms;
 
+  /* ambient loops — deliberately outside the 120–180ms interaction band */
+  --dur-spin:    800ms;
+  --dur-sweep:   1200ms;
+  --dur-shimmer: 1400ms;
+  --dur-breathe: 2600ms;
+
   --ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
   --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in:       cubic-bezier(0.4, 0, 1, 1);

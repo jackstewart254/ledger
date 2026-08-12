@@ -1,11 +1,11 @@
 "use client";
 
 import type { ComponentProps, CSSProperties } from "react";
-import { cx } from "./cx.js";
+import { cx } from "../../internal/cx.js";
 
 export type FieldSize = "sm" | "md" | "lg";
 
-export interface TextareaProps extends Omit<ComponentProps<"textarea">, "rows"> {
+export interface TextareaProps extends Omit<ComponentProps<"textarea">, "rows" | "ref"> {
   size?: FieldSize;
   invalid?: boolean;
   /** Minimum height in --row-h multiples (not native rows). */

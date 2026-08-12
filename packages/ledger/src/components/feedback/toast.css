@@ -14,11 +14,11 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-2_5);
-  width: min(21.25rem, calc(100vw - var(--space-8)));
+  width: min(var(--overlay-w-toast), calc(100vw - var(--space-8)));
   padding: var(--space-3);
   background: var(--surface-raised);
   border: var(--space-px) solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-surface);
   box-shadow: var(--shadow-md);
   animation: lg-toast-in var(--dur-slow) var(--ease-out);
 }
@@ -43,7 +43,7 @@
 .lg-toast-title {
   color: var(--text);
   font-size: var(--text-sm);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-emphasis);
 }
 .lg-toast-desc {
   margin-top: var(--space-0_5);

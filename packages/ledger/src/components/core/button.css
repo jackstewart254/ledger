@@ -4,11 +4,10 @@
   align-items: center;
   justify-content: center;
   border: var(--space-px) solid transparent;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-control);
   font-family: var(--font-sans);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-body);
   line-height: var(--leading-none);
-  letter-spacing: var(--tracking-wide);
   white-space: nowrap;
   cursor: pointer;
   user-select: none;

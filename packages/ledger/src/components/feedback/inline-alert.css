@@ -1,38 +1,23 @@
-/* InlineAlert — subtle semantic background + hairline-weight tone border.
-   Tones tint the row and icon; text stays on the grey ramp. */
+/* InlineAlert — a bare row, not a tinted panel.
+   Tinting the background AND the border AND the icon says the same thing three
+   times, and five tinted panels stacked in a column turn a quiet surface into
+   a set of traffic lights. Here the ONLY colour is the icon, which is exactly
+   the "colour is semantic, never decoration" rule; the row itself is chrome-
+   less so alerts sit inside cards and tables without nesting boxes. */
 .lg-alert {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-2_5);
-  padding: var(--space-2_5) var(--space-3);
-  border: var(--space-px) solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--bg-subtle);
-}
-.lg-alert--info {
-  background: var(--accent-subtle);
-  border-color: var(--accent-border);
-}
-.lg-alert--success {
-  background: var(--success-subtle);
-  border-color: color-mix(in srgb, var(--success), transparent 65%);
-}
-.lg-alert--warning {
-  background: var(--warning-subtle);
-  border-color: color-mix(in srgb, var(--warning), transparent 65%);
-}
-.lg-alert--danger {
-  background: var(--danger-subtle);
-  border-color: color-mix(in srgb, var(--danger), transparent 65%);
+  padding: var(--space-2) 0;
+  background: transparent;
 }
 
 .lg-alert-icon {
   display: inline-flex;
   flex-shrink: 0;
-  margin-top: var(--space-px);
   color: var(--text-muted);
 }
-.lg-alert--info .lg-alert-icon {
+.lg-alert--accent .lg-alert-icon {
   color: var(--accent);
 }
 .lg-alert--success .lg-alert-icon {
@@ -50,18 +35,19 @@
   min-width: 0;
 }
 .lg-alert-title {
-  color: var(--text);
+  color: var(--text-strong);
   font-size: var(--text-sm);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-body);
 }
 .lg-alert-text {
-  margin-top: var(--space-0_5);
   color: var(--text-muted);
-  font-size: var(--text-xs);
-  line-height: var(--leading-normal);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
 }
-.lg-alert-text--solo {
-  margin-top: 0;
+/* Title + body on one row read as one sentence; the body only drops to its own
+   line when it is long enough to need it. */
+.lg-alert-title + .lg-alert-text {
+  margin-top: var(--space-0_5);
 }
 
 .lg-alert-close {
@@ -69,7 +55,7 @@
   flex-shrink: 0;
   padding: var(--space-0_5);
   border: none;
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-control);
   background: transparent;
   color: var(--text-subtle);
   cursor: pointer;
@@ -77,4 +63,5 @@
 }
 .lg-alert-close:hover {
   color: var(--text);
+  background: var(--surface-hover);
 }

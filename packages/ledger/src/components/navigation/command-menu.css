@@ -13,14 +13,14 @@
 }
 
 .lg-cmd-panel {
-  width: min(37.5rem, 100%);
+  width: min(var(--overlay-w-command), 100%);
   max-height: 60vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background: var(--surface-raised);
   border: var(--space-px) solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-overlay);
   box-shadow: var(--shadow-lg);
   animation: lg-cmd-pop var(--dur-base) var(--ease-out);
 }
@@ -50,9 +50,8 @@
 .lg-cmd-group {
   padding: var(--space-2) var(--space-2) var(--space-1);
   color: var(--text-subtle);
-  font-size: var(--text-2xs);
-  font-weight: var(--fw-medium);
-  letter-spacing: var(--tracking-wide);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-body);
 }
 
 .lg-cmd-item {

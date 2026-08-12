@@ -13,6 +13,24 @@
   --radius-xl:   20px;   /* large feature cards          */
   --radius-pill: 999px;
   --radius-full: 9999px;
+
+  /* radius roles — components reference these, not the raw scale, so the kit
+     reshapes from two lines.
+       control — anything you click or type into: buttons, fields, chips, tabs,
+                 segment groups, rail items. Fully round, Apple-search-bar.
+       surface — anything content sits inside: cards, tables, tiles, textareas.
+                 Stays a rounded rectangle; a pill panel is a lozenge.
+       overlay — things that pop out of a control: dropdowns, menus, dialogs.
+                 Rounder than a surface so a popover reads as belonging to the
+                 pill-shaped trigger it came from. */
+  --radius-control: var(--radius-pill);
+  --radius-surface: var(--radius-md);
+  --radius-overlay: var(--radius-lg);
+
+  /* backdrop blur — chrome = translucent panels (tooltip, rail flyout),
+     scrim = the barely-there defocus behind a modal */
+  --blur-chrome: 16px;
+  --blur-scrim:  2px;
 }
 
 /* No ambient shadows — content is separated by hairlines. --shadow-md/lg map

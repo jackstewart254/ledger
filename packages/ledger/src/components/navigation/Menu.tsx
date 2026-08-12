@@ -1,16 +1,19 @@
 "use client";
 
 import {
+  cloneElement,
+  isValidElement,
   useEffect,
   useRef,
   useState,
+  type AriaAttributes,
   type CSSProperties,
+  type FocusEvent,
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { Icon, type IconName } from "../core/Icon.js";
-
-const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
+import { Icon, type LucideIcon } from "../core/Icon.js";
+import { cx } from "../../internal/cx.js";
 
 /**
  * Menu — anchored action menu (kebab/dropdown). Trigger + positioned panel
@@ -20,8 +23,10 @@ const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join("
  */
 
 export interface MenuItem {
+  /** Stable key — only needed when two items share a label. */
+  id?: string;
   label: string;
-  icon?: IconName;
+  icon?: LucideIcon;
   danger?: boolean;
   disabled?: boolean;
   onSelect?: () => void;
@@ -52,22 +57,14 @@ export function Menu({ trigger, items, align = "start", className, style }: Menu
     if (refocus) focusTrigger();
   };
 
-  /* click-outside + Escape live on document while open */
+  /* click-outside lives on document while open */
   useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
     };
-    const onKey = (e: globalThis.KeyboardEvent) => {
-      if (e.key === "Escape") close(true);
-    };
     document.addEventListener("mousedown", onDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDown);
-      document.removeEventListener("keydown", onKey);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => document.removeEventListener("mousedown", onDown);
   }, [open]);
 
   /* focus the first item on open */
@@ -102,14 +99,40 @@ export function Menu({ trigger, items, align = "start", className, style }: Menu
     }
   };
 
+  /* Escape is handled here, not on document: this runs while the event is still
+     below any dialog's document listener, and marking it handled stops that
+     dialog closing too. */
+  const onRootKeyDown = (e: KeyboardEvent<HTMLSpanElement>) => {
+    if (!open || e.key !== "Escape") return;
+    e.preventDefault();
+    e.stopPropagation();
+    close(true);
+  };
+
+  /* Tab out of the menu (or any other focus exit) closes it — an open panel
+     the user has walked away from is a trap for the next keypress. */
+  const onRootBlur = (e: FocusEvent<HTMLSpanElement>) => {
+    if (open && !e.currentTarget.contains(e.relatedTarget)) setOpen(false);
+  };
+
+  const triggerNode = isValidElement<AriaAttributes>(trigger)
+    ? cloneElement(trigger, { "aria-haspopup": "menu", "aria-expanded": open })
+    : trigger;
+
   return (
-    <span ref={rootRef} className={cx("lg-menu", className)} style={style}>
+    <span
+      ref={rootRef}
+      className={cx("lg-menu", className)}
+      style={style}
+      onKeyDown={onRootKeyDown}
+      onBlur={onRootBlur}
+    >
       <span
         className="lg-menu-trigger"
         onClick={() => setOpen((o) => !o)}
         onKeyDown={onTriggerKeyDown}
       >
-        {trigger}
+        {triggerNode}
       </span>
       {open && (
         <div
@@ -118,9 +141,9 @@ export function Menu({ trigger, items, align = "start", className, style }: Menu
           className={cx("lg-menu-panel", align === "end" && "lg-menu-panel--end")}
           onKeyDown={onPanelKeyDown}
         >
-          {items.map((item) => (
+          {items.map((item, i) => (
             <button
-              key={item.label}
+              key={item.id ?? i}
               type="button"
               role="menuitem"
               disabled={item.disabled}
@@ -130,7 +153,7 @@ export function Menu({ trigger, items, align = "start", className, style }: Menu
                 close(true);
               }}
             >
-              {item.icon && <Icon name={item.icon} size={15} />}
+              {item.icon && <Icon as={item.icon} size={15} />}
               {item.label}
             </button>
           ))}

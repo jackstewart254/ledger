@@ -1,4 +1,4 @@
-/* EmptyState — quiet solid border, 40px icon tile on bg-subtle. */
+/* EmptyState — quiet solid border; the icon is bare, not tiled. */
 .lg-empty {
   display: flex;
   flex-direction: column;
@@ -7,7 +7,7 @@
   gap: var(--space-1);
   padding: var(--space-12) var(--space-6);
   border: var(--space-px) solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-overlay);
   text-align: center;
 }
 .lg-empty--compact {
@@ -30,10 +30,10 @@
 .lg-empty-title {
   color: var(--text);
   font-size: var(--text-md);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-emphasis);
 }
 .lg-empty-desc {
-  max-width: 20rem;
+  max-width: var(--measure-empty);
   color: var(--text-muted);
   font-size: var(--text-sm);
   line-height: var(--leading-normal);

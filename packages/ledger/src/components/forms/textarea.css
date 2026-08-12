@@ -4,10 +4,20 @@
   display: block;
   width: 100%;
   height: auto;
+  /* Overrides the pill radius every other control inherits from .lg-control.
+     A pill is a shape for one line of text at a fixed height; on a box that
+     grows to several lines it becomes a lozenge and the corners eat the copy. */
+  border-radius: var(--radius-surface);
   min-height: calc(var(--lg-rows, 2) * var(--row-h));
   padding: var(--space-2) var(--_pad);
-  resize: vertical;
+  /* No resize grabber: the native handle is a UA-drawn diagonal glyph we cannot
+     restyle, and it is the only piece of chrome in the kit we do not draw.
+     field-sizing grows the box with its content instead (Chromium/Safari); the
+     min-height floor is the fallback everywhere else. */
+  resize: none;
+  field-sizing: content;
+  max-height: calc(var(--lg-rows-max, 10) * var(--row-h));
   line-height: var(--leading-snug);
   outline: none;
 }
-.lg-textarea::placeholder { color: var(--text-subtle); }
+.lg-textarea::placeholder { color: var(--text-subtle); font-weight: var(--fw-light); }

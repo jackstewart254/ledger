@@ -1,6 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Icon } from "../core/Icon.js";
 
 export interface PaginationProps {
@@ -12,22 +13,25 @@ export interface PaginationProps {
   style?: CSSProperties;
 }
 
-type PageItem = number | "gap";
+const WINDOW = 3;
 
-// first + last + a window around the current page; "gap" marks an ellipsis
-function pageItems(page: number, pageCount: number): PageItem[] {
-  if (pageCount <= 7) return Array.from({ length: pageCount }, (_, i) => i + 1);
-  const around = [page - 1, page, page + 1].filter((p) => p > 1 && p < pageCount);
-  const items: PageItem[] = [1];
-  if (around.length > 0 && around[0] > 2) items.push("gap");
-  items.push(...around);
-  if (around.length === 0 || around[around.length - 1] < pageCount - 1) items.push("gap");
-  items.push(pageCount);
-  return items;
+/**
+ * Always exactly WINDOW pages (fewer only when the set is smaller), sliding to
+ * keep the current page centred. No first/last anchors and no ellipsis: those
+ * make the control change width as you page, so the Next button moves out from
+ * under the cursor mid-sequence.
+ */
+function pageWindow(page: number, pageCount: number): number[] {
+  const size = Math.min(WINDOW, Math.max(pageCount, 0));
+  if (size <= 0) return [];
+  const half = Math.floor(size / 2);
+  const start = Math.min(Math.max(1, page - half), pageCount - size + 1);
+  return Array.from({ length: size }, (_, i) => start + i);
 }
 
 /**
- * Pagination — controlled: hairline chevron buttons + mono page numerals.
+ * Pagination — controlled: hairline chevron buttons + a fixed-width run of
+ * page numerals.
  */
 export function Pagination({ page, pageCount, onPageChange, className, style }: PaginationProps) {
   const cls = ["lg-pagination", className].filter(Boolean).join(" ");
@@ -40,25 +44,23 @@ export function Pagination({ page, pageCount, onPageChange, className, style }: 
         disabled={page <= 1}
         onClick={() => onPageChange(page - 1)}
       >
-        <Icon name="chevron-left" size={14} />
+        <Icon as={ChevronLeft} size={14} />
       </button>
-      {pageItems(page, pageCount).map((item, i) =>
-        item === "gap" ? (
-          <span key={`gap-${i}`} className="lg-pagination-gap" aria-hidden="true">
-            …
-          </span>
-        ) : (
-          <button
-            key={item}
-            type="button"
-            className="lg-pagination-page"
-            aria-current={item === page ? "page" : undefined}
-            onClick={() => onPageChange(item)}
-          >
-            {item}
-          </button>
-        ),
-      )}
+      {pageWindow(page, pageCount).map((item, slot) => (
+        /* Keyed by SLOT, not page number. Keying by the number makes React
+           carry each button to its new position as the window slides, so the
+           active highlight visibly travels sideways and snaps back. Keyed by
+           slot, the buttons stay put and only their labels change. */
+        <button
+          key={slot}
+          type="button"
+          className="lg-pagination-page"
+          aria-current={item === page ? "page" : undefined}
+          onClick={() => onPageChange(item)}
+        >
+          {item}
+        </button>
+      ))}
       <button
         type="button"
         className="lg-pagination-btn"
@@ -66,7 +68,7 @@ export function Pagination({ page, pageCount, onPageChange, className, style }: 
         disabled={page >= pageCount}
         onClick={() => onPageChange(page + 1)}
       >
-        <Icon name="chevron-right" size={14} />
+        <Icon as={ChevronRight} size={14} />
       </button>
     </nav>
   );

@@ -9,7 +9,7 @@
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--text-lg);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-emphasis);
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
   color: var(--text);

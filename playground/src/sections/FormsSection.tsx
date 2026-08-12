@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
+import { PoundSterling } from "lucide-react";
 import {
   Checkbox,
   DateInput,
@@ -40,6 +41,19 @@ function Spec({ title, children }: { title: string; children: ReactNode }) {
 
 const fieldW: CSSProperties = { width: 260 };
 
+// long enough to earn the filter row (8+)
+const ACCOUNTS = [
+  { value: "current", label: "Current", count: 214 },
+  { value: "savings", label: "Savings", count: 18 },
+  { value: "escrow", label: "Escrow", count: 0 },
+  { value: "tax-reserve", label: "Tax reserve", count: 6 },
+  { value: "payroll", label: "Payroll", count: 42 },
+  { value: "cards", label: "Company cards", count: 97 },
+  { value: "fx-eur", label: "FX — EUR", count: 11 },
+  { value: "fx-usd", label: "FX — USD", count: 9 },
+  { value: "petty-cash", label: "Petty cash", count: 3 },
+];
+
 export default function FormsSection() {
   const [daemons, setDaemons] = useState<string[]>(["reconcile"]);
 
@@ -60,7 +74,7 @@ export default function FormsSection() {
             error="Exceeds the daily transfer limit"
             style={fieldW}
           >
-            <Input invalid defaultValue="£12,400.00" icon="pound-sterling" />
+            <Input invalid defaultValue="£12,400.00" icon={PoundSterling} />
           </FormField>
           <FormField
             label="Daemon notes"
@@ -75,7 +89,7 @@ export default function FormsSection() {
           <Input size="sm" placeholder="Small — 30px" style={fieldW} />
           <Input size="md" placeholder="Medium — 36px" style={fieldW} />
           <Input size="lg" placeholder="Large — 42px" style={fieldW} />
-          <Input icon="pound-sterling" placeholder="0.00" style={fieldW} />
+          <Input icon={PoundSterling} placeholder="0.00" style={fieldW} />
           <Input invalid defaultValue="£-52.10" style={fieldW} />
           <Input disabled defaultValue="Settled 2026-08-09" style={fieldW} />
         </Spec>
@@ -124,11 +138,17 @@ export default function FormsSection() {
             ]}
           />
           <MultiSelect
+            aria-label="Accounts"
+            placeholder="Any account"
+            defaultValue={["current"]}
+            width={240}
+            options={ACCOUNTS}
+          />
+          <MultiSelect
             aria-label="No daemons"
             placeholder="Any daemon"
             value={[]}
             onChange={() => {}}
-            searchable={false}
             options={[{ value: "ingestd", label: "ingestd" }]}
             disabled
           />
@@ -206,9 +226,9 @@ export default function FormsSection() {
         </Spec>
 
         <Spec title="Range input">
-          <RangeInput aria-label="Alert threshold" defaultValue={40} style={fieldW} />
-          <RangeInput aria-label="Position size" min={0} max={100} step={5} defaultValue={65} style={fieldW} />
-          <RangeInput aria-label="Locked threshold" defaultValue={20} disabled style={fieldW} />
+          <RangeInput aria-label="Alert threshold" defaultValue={40} wrapperStyle={fieldW} />
+          <RangeInput aria-label="Position size" min={0} max={100} step={5} defaultValue={65} wrapperStyle={fieldW} />
+          <RangeInput aria-label="Locked threshold" defaultValue={20} disabled wrapperStyle={fieldW} />
         </Spec>
 
         <Spec title="Date input">

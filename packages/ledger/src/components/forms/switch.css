@@ -6,6 +6,7 @@
   align-items: center;
   gap: var(--space-2);
   font-family: var(--font-sans);
+  font-weight: var(--fw-body);
   font-size: var(--text-sm);
   color: var(--text);
   cursor: pointer;
@@ -24,7 +25,10 @@
   height: var(--_track-h);
   padding: 0;
   border-radius: var(--radius-pill);
-  background: var(--neutral-status);
+  /* Off is quiet chrome, not a filled grey pill: --neutral-status is the grey
+     of a STATUS dot and reads as a mid-grey blob when stretched over a track.
+     Off = outlined surface + muted thumb; on = ink fill + light thumb. */
+  background: var(--surface);
   border: var(--space-px) solid var(--border-strong);
   cursor: inherit;
   transition: var(--transition-colors);
@@ -43,9 +47,15 @@
   width: var(--_thumb);
   height: var(--_thumb);
   border-radius: var(--radius-full);
-  background: var(--accent-fg);
-  transition: left var(--dur-fast) var(--ease-standard);
+  /* The thumb inverts with the track: ink on the light off-track, light on the
+     ink on-track. A single light thumb disappears against the off state, and a
+     grey one reads as disabled rather than off. */
+  background: var(--accent);
+  transition:
+    left var(--dur-fast) var(--ease-standard),
+    var(--transition-colors);
 }
 .lg-switch__track[aria-checked="true"] .lg-switch__thumb {
   left: calc(100% - var(--_thumb) - var(--space-0_5));
+  background: var(--accent-fg);
 }

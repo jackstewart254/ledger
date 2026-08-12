@@ -14,11 +14,13 @@
 @import "./components/feedback/index.css" layer(lg);
 
 @layer lg {
-  /* ---- Keyboard focus — the sanctioned monochrome ring, both themes ------ */
+  /* ---- Keyboard focus — the sanctioned monochrome ring, both themes.
+     No `border-radius: inherit` here: it would overwrite the focused element's
+     OWN radius with its parent's (a --radius-md button goes square inside a
+     square card). box-shadow already traces the element's border-radius. ---- */
   *:focus-visible {
     box-shadow: var(--focus-ring);
     outline: none;
-    border-radius: inherit;
   }
   /* Text-entry fields already show a caret when focused; the boxed ring
      doubles the field's own pill/border chrome and reads as clutter. Keep the
@@ -47,8 +49,8 @@
   }
 
   /* ---- Text selection — warm monochrome tint, never the default blue ----- */
-  ::selection { background: rgba(245, 244, 242, 0.18); color: var(--text-bright); }
-  [data-theme="light"] ::selection { background: rgba(26, 26, 26, 0.12); color: var(--text-bright); }
+  ::selection { background: color-mix(in srgb, var(--text-bright) 18%, transparent); color: var(--text-bright); }
+  [data-theme="light"] ::selection { background: color-mix(in srgb, var(--text-primary) 12%, transparent); color: var(--text-bright); }
 
   /* ---- Reduced motion — zero DURATIONS, never transforms -----------------
      Killing `transform` globally would break positioning transforms

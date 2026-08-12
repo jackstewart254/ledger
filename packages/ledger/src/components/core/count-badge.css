@@ -9,8 +9,8 @@
   border: var(--space-px) solid transparent;
   border-radius: var(--radius-pill);
   font-family: var(--font-mono);
-  font-size: var(--text-3xs);
-  font-weight: var(--fw-semibold);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-body);
   font-feature-settings: var(--num-features);
   line-height: var(--leading-none);
 }

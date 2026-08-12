@@ -1,6 +1,14 @@
-/* RangeInput — native range, token track/thumb. Webkit and Gecko pseudo
-   selectors cannot share a rule (an unknown selector voids the whole block),
-   so the pairs are duplicated. Range keeps the global focus ring. */
+/* RangeInput — native range inside the shared .lg-control frame. The frame
+   carries the border and height (see input.css); the track is just the line
+   inside it, so a slider reads as a field, not a bare rule with a dot on it.
+   Webkit and Gecko pseudo selectors cannot share a rule (an unknown selector
+   voids the whole block), so the pairs are duplicated. */
+.lg-range-field {
+  display: flex;
+  align-items: center;
+  width: var(--lg-range-w, 100%);
+}
+
 .lg-range {
   --_track: var(--space-1);
   --_thumb: var(--space-4);
@@ -11,11 +19,9 @@
   margin: 0;
   padding: 0;
   background: transparent;
-  border-radius: var(--radius-pill);
   cursor: pointer;
 }
 .lg-range:disabled {
-  opacity: 0.55;
   cursor: not-allowed;
 }
 
@@ -32,18 +38,20 @@
 
 .lg-range::-webkit-slider-thumb {
   -webkit-appearance: none;
+  box-sizing: border-box;
   width: var(--_thumb);
   height: var(--_thumb);
   margin-top: calc((var(--_track) - var(--_thumb)) / 2);
-  border: none;
+  border: var(--space-px) solid var(--surface);
   border-radius: var(--radius-full);
   background: var(--accent);
   transition: var(--transition-colors);
 }
 .lg-range::-moz-range-thumb {
+  box-sizing: border-box;
   width: var(--_thumb);
   height: var(--_thumb);
-  border: none;
+  border: var(--space-px) solid var(--surface);
   border-radius: var(--radius-full);
   background: var(--accent);
   transition: var(--transition-colors);
