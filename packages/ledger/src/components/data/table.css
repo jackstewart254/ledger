@@ -1,0 +1,104 @@
+/* Table — dense sortable data table: sticky header, hover rows, hairline
+   separators. Row height flows through --lg-table-row-h (prop-driven). */
+.lg-table {
+  --lg-table-row-h: var(--row-h);
+  background: var(--surface);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.lg-table--dense {
+  --lg-table-row-h: var(--control-h-sm);
+}
+
+.lg-table-scroll {
+  overflow: auto;
+  max-height: var(--lg-table-max-h, none);
+}
+
+.lg-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lg-table th {
+  position: sticky;
+  top: 0;
+  z-index: 2; /* in-flow micro-stacking — exempt from the page z scale */
+  height: var(--control-h-sm);
+  padding: 0 var(--space-3);
+  background: var(--bg-subtle);
+  border-bottom: var(--space-px) solid var(--border);
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-muted);
+  text-align: left;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.lg-table-th--right { text-align: right; }
+.lg-table-th--center { text-align: center; }
+.lg-table-th--active { color: var(--text); }
+
+.lg-table-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.lg-table-sort:hover { color: var(--text); }
+.lg-table-th--right .lg-table-sort { flex-direction: row-reverse; }
+
+.lg-table-sortmark {
+  display: inline-flex;
+  opacity: 0.4;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+.lg-table-sortmark--active { opacity: 1; }
+
+.lg-table td {
+  height: var(--lg-table-row-h);
+  padding: 0 var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.lg-table--dense td { font-size: var(--text-xs-dense); }
+
+/* hairline between rows only — header owns the first line */
+.lg-table tbody tr + tr td {
+  border-top: var(--space-px) solid var(--border-subtle);
+}
+
+.lg-table tbody tr {
+  transition: background-color var(--dur-fast) var(--ease-standard);
+}
+.lg-table tbody tr:hover { background: var(--surface-hover); }
+.lg-table--clickable tbody tr { cursor: pointer; }
+
+.lg-table-cell--num {
+  font-family: var(--font-mono);
+  font-feature-settings: var(--num-features);
+}
+.lg-table-cell--right { text-align: right; }
+.lg-table-cell--center { text-align: center; }
+
+.lg-table td.lg-table-empty {
+  height: auto;
+  padding: var(--space-10) var(--space-4);
+  text-align: center;
+  color: var(--text-subtle);
+  white-space: normal;
+}

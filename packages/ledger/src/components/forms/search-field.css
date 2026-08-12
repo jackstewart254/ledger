@@ -1,0 +1,24 @@
+/* SearchField — Input frame + magnifier + clear. The DS draws its own clear
+   button, so the native webkit cancel affordance is dropped. */
+.lg-search .lg-control__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  display: none;
+}
+
+.lg-search__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: var(--space-0_5);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--text-subtle);
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-search__clear:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}

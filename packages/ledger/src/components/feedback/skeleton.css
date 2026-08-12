@@ -1,0 +1,38 @@
+/* Skeleton — shimmer between bg-subtle and the surface-active tint.
+   Ambient loop, deliberately slower than the 120–180ms interaction band. */
+.lg-skeleton {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    var(--bg-subtle) 0%,
+    var(--surface-active) 50%,
+    var(--bg-subtle) 100%
+  );
+  background-size: 200% 100%;
+  animation: lg-shimmer 1.4s ease-in-out infinite;
+}
+
+.lg-skeleton--text {
+  width: var(--lg-skeleton-w, 100%);
+  height: var(--lg-skeleton-h, var(--space-3));
+  border-radius: var(--radius-xs);
+}
+.lg-skeleton--rect {
+  width: var(--lg-skeleton-w, 100%);
+  height: var(--lg-skeleton-h, var(--space-16));
+  border-radius: var(--radius-md);
+}
+.lg-skeleton--circle {
+  width: var(--lg-skeleton-w, var(--control-h-md));
+  height: var(--lg-skeleton-h, var(--control-h-md));
+  border-radius: var(--radius-full);
+}
+
+@keyframes lg-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

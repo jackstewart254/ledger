@@ -1,0 +1,15 @@
+/* Divider — the hairline. Vertical needs a flex parent to stretch against. */
+.lg-divider {
+  border: 0;
+  margin: 0;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.lg-divider--horizontal {
+  width: 100%;
+  height: var(--space-px);
+}
+.lg-divider--vertical {
+  width: var(--space-px);
+  align-self: stretch;
+}

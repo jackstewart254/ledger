@@ -1,0 +1,16 @@
+/* Sparkline — --chart-line stroke, --chart-fill area fading to transparent. */
+.lg-sparkline {
+  display: block;
+  overflow: visible;
+}
+
+.lg-sparkline-line {
+  fill: none;
+  stroke: var(--chart-line);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lg-sparkline-area { fill: url(#lg-sparkline-fill); }
+.lg-sparkline-stop-top { stop-color: var(--chart-fill); }
+.lg-sparkline-stop-bottom { stop-color: var(--chart-fill); stop-opacity: 0; }

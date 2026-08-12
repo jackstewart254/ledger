@@ -1,0 +1,188 @@
+/* =============================================================================
+   ledger — Color System  ·  "Financial Terminal" aesthetic
+   Apple Stocks meets Bloomberg: true-dark + warm-off-white modes, hairline
+   dividers instead of shadows, muted/desaturated semantic colors, tabular figures.
+
+   This system is ALMOST MONOCHROME. There is no brand accent — "accent" is wired
+   to the primary text color so selected / active / focus states read as ink, not
+   color. Color is reserved STRICTLY for semantics (positive / negative / warning
+   / neutral status, chart lines).
+
+   Two layers per theme:
+     1. Raw palette (--bg-page, --text-primary, --negative, …) — the measured
+        source values. Components never read these directly.
+     2. Semantic names (--bg, --surface, --text, --danger, …) — what components
+        consume. Retheming touches layer 1 only.
+
+   DARK is the default (:root). Light is first-class via [data-theme="light"].
+   ============================================================================= */
+
+/* =============================================================================
+   DARK MODE  (default)
+   ============================================================================= */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* ---- Raw palette (financial) ------------------------------------------ */
+  --bg-page:           #171615;   /* warm near-black canvas (Apple Stocks)  */
+  --bg-surface:        #1E1D1C;   /* cards / panels, subtle lift            */
+  --bg-surface-raised: #222120;   /* tooltips, hover / active chips         */
+  --border-hairline:   rgba(255, 255, 255, 0.09);
+  --text-primary:      #D6D5D4;   /* soft warm-grey ink, not pure white     */
+  --text-secondary:    #8A8A8E;
+  --text-tertiary:     #5E5E62;
+
+  --negative:          #E0686B;   /* down price, change text                */
+  --negative-line:     #D96A6C;   /* chart line when down                   */
+  --positive:          #4FA15F;   /* up price, "Beat"                       */
+  --positive-line:     #5BA86A;   /* chart line when up                     */
+  --candle-up:         #5B9D68;
+  --candle-down:       #C16A6C;
+  --neutral-dot:       #8A8A8E;   /* "Match"                                */
+
+  /* ---- Semantic surface / layering (consumed by all components) --------- */
+  --bg:            var(--bg-page);
+  --bg-subtle:     #0F0F10;        /* recessed wells, table gutter          */
+  --surface:       var(--bg-surface);
+  --surface-subtle:#101011;        /* nested surface                        */
+  --surface-raised:var(--bg-surface-raised);
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --surface-active:rgba(255, 255, 255, 0.10);
+  --control-ghost-bg: transparent;  /* ghost controls are transparent at rest */
+
+  /* hairline borders — the system separates with these, not shadows */
+  --border:        var(--border-hairline);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-strong: rgba(255, 255, 255, 0.18);
+
+  /* text — the grey ramp: bright > ink > strong > muted > subtle */
+  --text:          var(--text-primary);
+  --text-strong:   color-mix(in srgb, var(--text) 72%, var(--text-muted));  /* focal numerics — sits just below ink */
+  --text-muted:    var(--text-secondary);
+  --text-subtle:   var(--text-tertiary);
+  --text-inverse:  var(--bg-page);
+  --text-bright:   #F5F4F2;         /* warm bright tier — lifts above ink without pure-white glare */
+
+  /* "accent" = ink. Monochrome system: no brand color. */
+  --accent:        var(--text-primary);
+  --accent-hover:  var(--text-primary);
+  --accent-active: var(--text-secondary);
+  --accent-fg:     var(--bg-page);                 /* ink-on-light fill text */
+  --accent-subtle: rgba(255, 255, 255, 0.08);
+  --accent-subtle-fg: var(--text-primary);
+  --accent-border: var(--border-strong);
+
+  /* focus ring — monochrome, subtle */
+  --focus:         var(--text-primary);
+  --focus-ring:    0 0 0 2px var(--bg-page), 0 0 0 4px rgba(214, 213, 212, 0.45);
+
+  /* status — positive / negative are the financial semantics */
+  --success:        var(--positive);
+  --success-fg:     #061109;
+  --success-subtle: rgba(79, 161, 95, 0.16);
+  --success-text:   var(--positive);
+
+  --danger:         var(--negative);
+  --danger-fg:      #1a0708;
+  --danger-subtle:  rgba(224, 104, 107, 0.16);
+  --danger-text:    var(--negative);
+
+  /* warning — restrained, desaturated ochre (not a brand accent) */
+  --warning:        #B89150;
+  --warning-fg:     #14100a;
+  --warning-subtle: rgba(184, 145, 80, 0.16);
+  --warning-text:   #C9A368;
+
+  --neutral-status:        var(--neutral-dot);
+  --neutral-status-subtle: rgba(255, 255, 255, 0.07);
+  --neutral-status-text:   var(--text-secondary);
+
+  /* data-viz (Sparkline / TrendChart) */
+  --chart-line:    var(--negative-line);
+  --chart-grid:    var(--border-subtle);
+  --chart-fill:    rgba(217, 106, 108, 0.25);   /* area gradient top, fades to 0 */
+
+  --scrim:         rgba(0, 0, 0, 0.6);          /* modal / drawer backdrop */
+}
+
+/* =============================================================================
+   LIGHT MODE  (warm off-white)
+   ============================================================================= */
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* ---- Raw palette ------------------------------------------------------- */
+  --bg-page:           #FAF8F5;   /* warm near-white page (measured)        */
+  --bg-surface:        #FDFBFA;   /* cards (measured) — NOT pure white      */
+  --bg-surface-raised: #FDFBFA;   /* elevated surfaces stay near-white — lift comes from shadow + hairline */
+  --border-hairline:   rgba(0, 0, 0, 0.07);   /* ≈ #ECECEA                  */
+  --text-primary:      #1A1A1A;
+  --text-secondary:    #6E6E6E;
+  --text-tertiary:     #9A9A9A;
+
+  --negative:          #B23A3E;   /* deeper crimson for contrast            */
+  --negative-line:     #A23C3F;
+  --positive:          #2F7D44;
+  --positive-line:     #2F7D44;
+  --candle-up:         #6FA67C;   /* muted sage                             */
+  --candle-down:       #C98E90;   /* dusty rose                             */
+  --neutral-dot:       #9A9A9A;
+
+  /* ---- Semantic surface / layering --------------------------------------- */
+  --bg:            var(--bg-page);
+  --bg-subtle:     #EFEFEC;
+  --surface:       var(--bg-surface);
+  --surface-subtle:#FBFBF9;
+  --surface-raised:var(--bg-surface-raised);
+  --surface-hover: rgba(0, 0, 0, 0.04);
+  --surface-active:rgba(0, 0, 0, 0.07);
+  --control-ghost-bg: transparent;
+
+  --border:        var(--border-hairline);
+  --border-subtle: rgba(0, 0, 0, 0.045);
+  --border-strong: rgba(0, 0, 0, 0.14);
+
+  --text:          var(--text-primary);
+  --text-strong:   color-mix(in srgb, var(--text) 72%, var(--text-muted));  /* focal numerics — sits just below ink */
+  --text-muted:    var(--text-secondary);
+  --text-subtle:   var(--text-tertiary);
+  --text-inverse:  #FFFFFF;
+  --text-bright:   #0A0A0B;         /* near-black bright tier */
+
+  --accent:        var(--text-primary);
+  --accent-hover:  #000000;
+  --accent-active: var(--text-secondary);
+  --accent-fg:     #FFFFFF;
+  --accent-subtle: rgba(0, 0, 0, 0.05);
+  --accent-subtle-fg: var(--text-primary);
+  --accent-border: var(--border-strong);
+
+  --focus:         var(--text-primary);
+  --focus-ring:    0 0 0 2px var(--bg-page), 0 0 0 4px rgba(26, 26, 26, 0.40);
+
+  --success:        var(--positive);
+  --success-fg:     #FFFFFF;
+  --success-subtle: rgba(47, 125, 68, 0.12);
+  --success-text:   var(--positive);
+
+  --danger:         var(--negative);
+  --danger-fg:      #FFFFFF;
+  --danger-subtle:  rgba(178, 58, 62, 0.10);
+  --danger-text:    var(--negative);
+
+  --warning:        #9A7430;
+  --warning-fg:     #FFFFFF;
+  --warning-subtle: rgba(154, 116, 48, 0.12);
+  --warning-text:   #8A6824;
+
+  --neutral-status:        var(--neutral-dot);
+  --neutral-status-subtle: rgba(0, 0, 0, 0.05);
+  --neutral-status-text:   var(--text-secondary);
+
+  --chart-line:    var(--negative-line);
+  --chart-grid:    var(--border-subtle);
+  --chart-fill:    rgba(162, 60, 63, 0.18);
+
+  --scrim:         rgba(20, 20, 22, 0.4);
+}

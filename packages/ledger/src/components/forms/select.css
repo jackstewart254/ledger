@@ -1,0 +1,29 @@
+/* Select — native <select> fills the frame; the chevron overlays the padding
+   band (pointer-events: none). While the checked option is the disabled
+   placeholder, the value reads muted. */
+.lg-select {
+  position: relative;
+}
+.lg-select__control {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 var(--space-5) 0 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.lg-select__control:disabled { cursor: not-allowed; }
+.lg-select__control:has(option:checked:disabled) { color: var(--text-subtle); }
+
+.lg-select__chevron {
+  position: absolute;
+  right: var(--_pad);
+  pointer-events: none;
+  color: var(--text-subtle);
+}

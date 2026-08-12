@@ -1,0 +1,194 @@
+import { useState } from "react";
+import type { CSSProperties } from "react";
+import {
+  KeyValue,
+  KpiTile,
+  MetricDelta,
+  Pagination,
+  Sparkline,
+  Table,
+  TrendChart,
+} from "@mcleanstewart/ledger";
+import type { TableColumn, TableSort } from "@mcleanstewart/ledger";
+
+const sub: CSSProperties = {
+  fontSize: "var(--text-md)",
+  fontWeight: "var(--fw-medium)",
+  margin: "var(--space-8) 0 var(--space-3)",
+};
+
+const gbp = (v: number) =>
+  `${v < 0 ? "−" : ""}£${Math.abs(v).toLocaleString("en-GB", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+
+interface Txn {
+  id: string;
+  date: string;
+  description: string;
+  category: string;
+  amount: number;
+}
+
+const TXNS: Txn[] = [
+  { id: "t1", date: "2026-08-12", description: "Sainsbury's", category: "Groceries", amount: -42.17 },
+  { id: "t2", date: "2026-08-11", description: "Client invoice — McLean", category: "Income", amount: 1250.0 },
+  { id: "t3", date: "2026-08-11", description: "TfL travel", category: "Transport", amount: -8.6 },
+  { id: "t4", date: "2026-08-10", description: "Hetzner", category: "Infrastructure", amount: -21.34 },
+  { id: "t5", date: "2026-08-09", description: "Pret a Manger", category: "Eating out", amount: -6.85 },
+  { id: "t6", date: "2026-08-08", description: "Refund — ASOS", category: "Shopping", amount: 34.99 },
+  { id: "t7", date: "2026-08-07", description: "Anthropic", category: "Infrastructure", amount: -90.0 },
+];
+
+const TXN_COLUMNS: TableColumn<Txn>[] = [
+  { key: "date", header: "Date", width: "120px", sortable: true, numeric: true },
+  { key: "description", header: "Description" },
+  { key: "category", header: "Category", render: (r) => <span style={{ color: "var(--text-muted)" }}>{r.category}</span> },
+  {
+    key: "amount",
+    header: "Amount",
+    align: "right",
+    numeric: true,
+    sortable: true,
+    width: "120px",
+    render: (r) => (
+      <span style={{ color: r.amount < 0 ? "var(--danger-text)" : "var(--success-text)" }}>
+        {gbp(r.amount)}
+      </span>
+    ),
+  },
+];
+
+interface Daemon {
+  id: string;
+  name: string;
+  status: string;
+  uptime: string;
+  cpu: string;
+}
+
+const DAEMONS: Daemon[] = [
+  { id: "d1", name: "atoms-sync", status: "live", uptime: "14d 2h", cpu: "0.4%" },
+  { id: "d2", name: "money-ingest", status: "live", uptime: "14d 2h", cpu: "1.1%" },
+  { id: "d3", name: "planner-tick", status: "live", uptime: "3d 11h", cpu: "0.2%" },
+  { id: "d4", name: "soldiers-relay", status: "degraded", uptime: "0d 6h", cpu: "7.8%" },
+  { id: "d5", name: "archive-gc", status: "live", uptime: "14d 2h", cpu: "0.1%" },
+];
+
+const DAEMON_COLUMNS: TableColumn<Daemon>[] = [
+  { key: "name", header: "Daemon", numeric: true },
+  {
+    key: "status",
+    header: "Status",
+    render: (r) => (
+      <span style={{ color: r.status === "live" ? "var(--success-text)" : "var(--warning-text)" }}>
+        {r.status}
+      </span>
+    ),
+  },
+  { key: "uptime", header: "Uptime", align: "right", numeric: true },
+  { key: "cpu", header: "CPU", align: "right", numeric: true, sortable: true },
+];
+
+const BALANCE_SERIES = [
+  12180, 12140, 12210, 12190, 12080, 11960, 12040, 12110, 12100, 12230, 12310, 12280, 12190, 12240,
+  12330, 12410, 12380, 12290, 12350, 12440, 12420, 12360, 12470, 12480,
+];
+
+const SPARK_A = [4, 6, 5, 8, 7, 9, 11, 10, 12, 11, 13, 14];
+const SPARK_B = [14, 12, 13, 11, 12, 9, 10, 8, 9, 7, 8, 6];
+const SPARK_C = [5, 5, 6, 5, 7, 6, 6, 7, 6, 7, 7, 8];
+
+export default function DataSection() {
+  const [txnSort, setTxnSort] = useState<TableSort | null>({ key: "date", dir: "desc" });
+  const [page, setPage] = useState(3);
+
+  const sortedTxns = txnSort
+    ? [...TXNS].sort((a, b) => {
+        const va = a[txnSort.key as keyof Txn];
+        const vb = b[txnSort.key as keyof Txn];
+        const cmp = va < vb ? -1 : va > vb ? 1 : 0;
+        return txnSort.dir === "asc" ? cmp : -cmp;
+      })
+    : TXNS;
+
+  return (
+    <section id="data" className="pg-section">
+      <h2 className="pg-section-title">Data</h2>
+
+      <h3 style={sub}>KpiTile + MetricDelta</h3>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+          gap: "var(--space-4)",
+        }}
+      >
+        <KpiTile label="Net position" value="£12,480.22" delta={<MetricDelta value={3.2} />} />
+        <KpiTile label="Spend this week" value="£642.10" delta={<MetricDelta value={-8.4} invert />} />
+        <KpiTile label="Daemons live" value="7" delta={<MetricDelta value={0} />} />
+        <KpiTile
+          label="Runs today"
+          value="148"
+          delta={<MetricDelta value={-12} format={(v) => `${v} vs yday`} />}
+        />
+      </div>
+
+      <h3 style={sub}>MetricDelta</h3>
+      <div style={{ display: "flex", gap: "var(--space-6)", alignItems: "center" }}>
+        <MetricDelta value={3.2} />
+        <MetricDelta value={-1.8} />
+        <MetricDelta value={0} />
+        <MetricDelta value={-8.4} invert />
+        <MetricDelta value={-90} format={gbp} />
+      </div>
+
+      <h3 style={sub}>Table — transactions (sortable, £ amounts)</h3>
+      <Table
+        columns={TXN_COLUMNS}
+        rows={sortedTxns}
+        rowKey={(r) => r.id}
+        sort={txnSort}
+        onSort={setTxnSort}
+        maxHeight="280px"
+      />
+
+      <h3 style={sub}>Table — daemons (dense, 30px rows)</h3>
+      <Table columns={DAEMON_COLUMNS} rows={DAEMONS} rowKey={(r) => r.id} dense />
+
+      <h3 style={sub}>Sparkline</h3>
+      <div style={{ display: "flex", gap: "var(--space-8)", alignItems: "center" }}>
+        <Sparkline data={SPARK_A} />
+        <Sparkline data={SPARK_B} fill />
+        <Sparkline data={SPARK_C} width={140} height={32} fill />
+      </div>
+
+      <h3 style={sub}>TrendChart — balance, 24 days</h3>
+      <TrendChart
+        data={BALANCE_SERIES}
+        width={720}
+        format={(v) => `£${Math.round(v).toLocaleString("en-GB")}`}
+      />
+
+      <h3 style={sub}>KeyValue</h3>
+      <div style={{ maxWidth: "420px" }}>
+        <KeyValue
+          items={[
+            { label: "Reference", value: "TXN-2026-081142" },
+            { label: "Merchant", value: "Sainsbury's" },
+            { label: "Settled", value: "12 Aug 2026, 09:14" },
+            {
+              label: "Amount",
+              value: <span style={{ color: "var(--danger-text)" }}>{gbp(-42.17)}</span>,
+            },
+            { label: "Balance after", value: "£12,480.22" },
+          ]}
+        />
+      </div>
+
+      <h3 style={sub}>Pagination</h3>
+      <Pagination page={page} pageCount={12} onPageChange={setPage} />
+    </section>
+  );
+}

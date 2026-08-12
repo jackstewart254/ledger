@@ -1,0 +1,29 @@
+/* CountBadge — compact tabular numeric badge (nav counts, tab counts). */
+.lg-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--pill-h-sm);
+  height: var(--pill-h-sm);
+  padding: 0 calc(var(--space-1) + var(--space-px));
+  border: var(--space-px) solid transparent;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: var(--text-3xs);
+  font-weight: var(--fw-semibold);
+  font-feature-settings: var(--num-features);
+  line-height: var(--leading-none);
+}
+.lg-count-badge--neutral {
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  border-color: var(--border-subtle);
+}
+.lg-count-badge--accent {
+  background: var(--accent-subtle);
+  color: var(--accent-subtle-fg);
+}
+.lg-count-badge--danger {
+  background: var(--danger);
+  color: var(--danger-fg);
+}

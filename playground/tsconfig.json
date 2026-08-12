@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "types": ["vite/client"],
+    "paths": {
+      "@mcleanstewart/ledger": ["../packages/ledger/src/index.ts"],
+      "@mcleanstewart/ledger/*": ["../packages/ledger/src/*"]
+    }
+  },
+  "include": ["src", "vite.config.ts"]
+}

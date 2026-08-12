@@ -1,0 +1,3 @@
+/* typography component styles — this category's builder @imports each component css here (string form only). */
+@import "./page-header.css";
+@import "./section-heading.css";

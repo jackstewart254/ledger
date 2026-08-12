@@ -1,0 +1,29 @@
+/* KeyValue — --row-h rows, muted label left, value right, hairline separators. */
+.lg-keyvalue {
+  margin: 0;
+}
+
+.lg-keyvalue-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: var(--row-h);
+}
+
+.lg-keyvalue-row + .lg-keyvalue-row {
+  border-top: var(--space-px) solid var(--border-subtle);
+}
+
+.lg-keyvalue-label {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.lg-keyvalue-value {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text);
+  text-align: right;
+  font-feature-settings: var(--num-features);
+}

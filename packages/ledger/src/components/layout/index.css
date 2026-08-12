@@ -1,0 +1,4 @@
+/* layout component styles — string-form @imports only. */
+@import "./app-shell.css";
+@import "./page-column.css";
+@import "./card.css";

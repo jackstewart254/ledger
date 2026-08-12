@@ -1,0 +1,45 @@
+/* FilterChip — ghost hairline chip at rest; active is the subtle monochrome
+   fill + border shift, never an accent colour. */
+.lg-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  height: var(--control-h-xs);
+  padding: 0 var(--control-pad-x-xs);
+  background: var(--control-ghost-bg);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-chip:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.lg-chip[aria-pressed="true"],
+.lg-chip[aria-pressed="true"]:hover {
+  background: var(--accent-subtle);
+  border-color: var(--accent-border);
+  color: var(--accent-subtle-fg);
+}
+.lg-chip:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.lg-chip__count {
+  font-size: var(--text-3xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-subtle);
+}
+.lg-chip[aria-pressed="true"] .lg-chip__count { color: inherit; }
+
+.lg-chip__clear {
+  flex-shrink: 0;
+  color: var(--text-subtle);
+}
+.lg-chip[aria-pressed="true"] .lg-chip__clear { color: inherit; }

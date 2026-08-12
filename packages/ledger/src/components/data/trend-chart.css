@@ -1,0 +1,24 @@
+/* TrendChart — hairline grid, --chart-line stroke, mono min/max labels. */
+.lg-trendchart {
+  display: block;
+}
+
+.lg-trendchart-grid { stroke: var(--chart-grid); }
+
+.lg-trendchart-line {
+  fill: none;
+  stroke: var(--chart-line);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lg-trendchart-area { fill: url(#lg-trendchart-fill); }
+.lg-trendchart-stop-top { stop-color: var(--chart-fill); }
+.lg-trendchart-stop-bottom { stop-color: var(--chart-fill); stop-opacity: 0; }
+
+.lg-trendchart-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-3xs);
+  font-feature-settings: var(--num-features);
+  fill: var(--text-subtle);
+}

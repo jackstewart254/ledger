@@ -1,0 +1,56 @@
+/* =============================================================================
+   ledger — Typography  ·  Financial Terminal
+   The DS loads NO fonts — the consumer loads Geist (next/font or <link>);
+   this file only declares the stack with system fallbacks.
+   ALL numeric / financial values use tabular figures.
+   Sentence / Title case everywhere — never ALL CAPS.
+   Sizes in rem (root = 16px); the UI default is --text-sm (14px).
+   ============================================================================= */
+:root {
+  --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* one-face rule: mono aliases sans — no second cut shipped. Numeric alignment
+     comes from tabular figures (--num-features). Re-adding a real mono cut is
+     one line here. */
+  --font-mono: var(--font-sans);
+
+  /* weights */
+  --fw-light:    300;
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* type scale — mapped to the spec roles
+     3xs 10(dense micro) · 2xs 11 · xs-dense 12(dense body) · xs 13(caption)
+     sm 14(label/value) · base 15(body) · md 16(tab) · lg 18(section/change)
+     xl 20(view title) · 2xl 26(price) · 3xl 28(display)
+     sm/base and lg/xl used to be duplicate values — two names for one size.
+     They are distinct now; do not "tidy" them back into each other. */
+  --text-3xs:  0.625rem;    /* 10px — dense micro: chips, table meta         */
+  --text-2xs:  0.6875rem;   /* 11px — micro labels                          */
+  --text-xs-dense: 0.75rem; /* 12px — dense body / table row                */
+  --text-xs:   0.8125rem;   /* 13px — caption / date (tertiary)             */
+  --text-sm:   0.875rem;    /* 14px — default UI text, key-value, table     */
+  --text-base: 0.9375rem;   /* 15px — body / description (lh 1.5)           */
+  --text-md:   1rem;        /* 16px — roomy tab nav; dense terminal views use --text-xs (13px) */
+  --text-lg:   1.125rem;    /* 18px — section heading / price change        */
+  --text-xl:   1.25rem;     /* 20px — view titles                           */
+  --text-2xl:  1.625rem;    /* 26px — price                                 */
+  --text-3xl:  1.75rem;     /* 28px — display (company name)                */
+
+  /* line heights */
+  --leading-none:  1;
+  --leading-tight: 1.15;
+  --leading-snug:  1.35;
+  --leading-normal:1.5;     /* body / description */
+
+  /* letter spacing — display -0.02em, price -0.01em */
+  --tracking-tight:  -0.02em;    /* display */
+  --tracking-price:  -0.01em;    /* price   */
+  --tracking-normal: 0;
+  --tracking-wide:   0.01em;
+  --tracking-caps:   0.04em;
+
+  /* tabular figures for all metrics */
+  --num-features: "tnum" 1;
+}

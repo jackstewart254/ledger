@@ -1,0 +1,49 @@
+/* Input — and the shared .lg-control field frame every text-entry component
+   composes (Input, Textarea, Select, MultiSelect trigger, SearchField,
+   DateInput). Focus is a border token shift, not a ring — styles.css drops the
+   focus ring on text-entry fields. Border colour is driven through --_bc so
+   the invalid/disabled overrides win by declaration order, not specificity. */
+
+.lg-control {
+  --_bc: var(--border);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  height: var(--_h);
+  padding: 0 var(--_pad);
+  background: var(--surface);
+  border: var(--space-px) solid var(--_bc);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--_fs);
+  color: var(--text);
+  transition: var(--transition-colors);
+}
+.lg-control--sm { --_h: var(--control-h-sm); --_pad: var(--control-pad-x-sm); --_fs: var(--text-xs); }
+.lg-control--md { --_h: var(--control-h-md); --_pad: var(--control-pad-x-md); --_fs: var(--text-sm); }
+.lg-control--lg { --_h: var(--control-h-lg); --_pad: var(--control-pad-x-lg); --_fs: var(--text-base); }
+
+.lg-control:hover { --_bc: var(--border-strong); }
+.lg-control:focus-within { --_bc: var(--accent); }
+.lg-control--invalid,
+.lg-control--invalid:hover,
+.lg-control--invalid:focus-within { --_bc: var(--danger); }
+.lg-control--disabled,
+.lg-control--disabled:hover { --_bc: var(--border); opacity: 0.55; cursor: not-allowed; }
+
+/* inner bare input — the frame carries all chrome */
+.lg-control__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+}
+.lg-control__input::placeholder { color: var(--text-subtle); }
+.lg-control__input:disabled { cursor: not-allowed; }
+
+.lg-control__icon { flex-shrink: 0; color: var(--text-subtle); }

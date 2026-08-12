@@ -1,0 +1,53 @@
+/* RangeInput — native range, token track/thumb. Webkit and Gecko pseudo
+   selectors cannot share a rule (an unknown selector voids the whole block),
+   so the pairs are duplicated. Range keeps the global focus ring. */
+.lg-range {
+  --_track: var(--space-1);
+  --_thumb: var(--space-4);
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: var(--_thumb);
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+.lg-range:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.lg-range::-webkit-slider-runnable-track {
+  height: var(--_track);
+  border-radius: var(--radius-pill);
+  background: var(--surface-active);
+}
+.lg-range::-moz-range-track {
+  height: var(--_track);
+  border-radius: var(--radius-pill);
+  background: var(--surface-active);
+}
+
+.lg-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: var(--_thumb);
+  height: var(--_thumb);
+  margin-top: calc((var(--_track) - var(--_thumb)) / 2);
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  transition: var(--transition-colors);
+}
+.lg-range::-moz-range-thumb {
+  width: var(--_thumb);
+  height: var(--_thumb);
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  transition: var(--transition-colors);
+}
+
+.lg-range:hover:not(:disabled)::-webkit-slider-thumb { background: var(--accent-hover); }
+.lg-range:hover:not(:disabled)::-moz-range-thumb { background: var(--accent-hover); }

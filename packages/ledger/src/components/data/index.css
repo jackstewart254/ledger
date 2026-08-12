@@ -1,0 +1,8 @@
+/* data component styles — string-form @imports only. */
+@import "./table.css";
+@import "./kpi-tile.css";
+@import "./metric-delta.css";
+@import "./sparkline.css";
+@import "./trend-chart.css";
+@import "./key-value.css";
+@import "./pagination.css";

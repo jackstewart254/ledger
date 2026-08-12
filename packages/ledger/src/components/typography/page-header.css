@@ -1,0 +1,17 @@
+/* PageHeader — the view title block (replaces the 8×-copy-pasted heading). */
+.lg-page-header-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-xl);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--text);
+}
+.lg-page-header-subtitle {
+  margin: var(--space-0_5) 0 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+}

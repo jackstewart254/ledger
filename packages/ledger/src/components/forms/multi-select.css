@@ -1,0 +1,103 @@
+/* MultiSelect — .lg-control trigger + raised popover with a checkbox list.
+   Popover elevation = raised surface + hairline + the one sanctioned shadow.
+   Max height is token-derived (6 × --row-h ≈ the reference's 280px). */
+.lg-ms {
+  position: relative;
+  width: var(--lg-ms-w);
+  font-family: var(--font-sans);
+}
+
+.lg-ms__trigger {
+  width: 100%;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.lg-ms__trigger:disabled { cursor: not-allowed; }
+.lg-ms__trigger--empty { color: var(--text-subtle); }
+
+.lg-ms__summary {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+.lg-ms__badge {
+  flex-shrink: 0;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-xs);
+  background: var(--accent-subtle);
+  color: var(--accent-subtle-fg);
+  font-size: var(--text-3xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-snug);
+}
+
+.lg-ms__pop {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  width: 100%;
+  z-index: var(--z-overlay);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(var(--row-h) * 6);
+  padding: var(--space-1);
+  background: var(--surface-raised);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.lg-ms__search {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--space-1_5) var(--space-2);
+  border-bottom: var(--space-px) solid var(--border-subtle);
+  margin-bottom: var(--space-1);
+}
+.lg-ms__search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+}
+.lg-ms__search-input::placeholder { color: var(--text-subtle); }
+
+.lg-ms__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-px);
+  overflow-y: auto;
+}
+.lg-ms__empty {
+  padding: var(--space-2_5) var(--space-2);
+  color: var(--text-subtle);
+  font-size: var(--text-xs);
+}
+
+.lg-ms__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1_5) var(--space-2);
+  border-radius: var(--radius-xs);
+  color: var(--text);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-ms__option:hover { background: var(--surface-hover); }
+.lg-ms__option-label { flex: 1; min-width: 0; }
+.lg-ms__option-count {
+  font-size: var(--text-3xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-subtle);
+}

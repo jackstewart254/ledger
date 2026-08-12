@@ -1,0 +1,18 @@
+/* Kbd — tiny key cap. Hairline, mono-ish via tabular figures, radius-xs. */
+.lg-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--pill-h-md);
+  height: var(--pill-h-md);
+  padding: 0 var(--space-1);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-medium);
+  font-feature-settings: var(--num-features);
+  line-height: var(--leading-none);
+}

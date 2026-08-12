@@ -1,0 +1,5 @@
+/* navigation component styles — string-form imports only. */
+@import "./rail.css";
+@import "./tabs.css";
+@import "./menu.css";
+@import "./command-menu.css";

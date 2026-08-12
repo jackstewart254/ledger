@@ -1,0 +1,77 @@
+/* Menu — anchored action menu. Panel on surface-raised with hairline border
+   and the sanctioned shadow; pops from the trigger. */
+.lg-menu {
+  position: relative;
+  display: inline-flex;
+}
+.lg-menu-trigger {
+  display: inline-flex;
+}
+
+.lg-menu-panel {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  z-index: var(--z-overlay);
+  min-width: 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0_5);
+  padding: var(--space-1);
+  background: var(--surface-raised);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  animation: lg-menu-pop var(--dur-fast) var(--ease-out);
+}
+.lg-menu-panel--end {
+  left: auto;
+  right: 0;
+}
+
+.lg-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  width: 100%;
+  height: var(--control-h-sm);
+  padding: 0 var(--space-2);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-menu-item:hover,
+.lg-menu-item:focus-visible {
+  background: var(--surface-hover);
+}
+.lg-menu-item:disabled {
+  color: var(--text-subtle);
+  background: transparent;
+  cursor: default;
+}
+.lg-menu-item--danger {
+  color: var(--danger-text);
+}
+.lg-menu-item--danger:hover,
+.lg-menu-item--danger:focus-visible {
+  background: var(--danger-subtle);
+}
+
+@keyframes lg-menu-pop {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--space-1))) scale(0.98);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-menu-panel {
+    animation: none;
+  }
+}

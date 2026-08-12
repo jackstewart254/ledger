@@ -1,0 +1,86 @@
+/* Rail — icon-only vertical rail. 56px column (nearest token: --row-h-comfy).
+   Labels live in the flyout chip only — translucent surface + backdrop blur,
+   pops from the side. Elevation via the one sanctioned shadow. */
+.lg-rail {
+  width: var(--row-h-comfy);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2_5) 0;
+  border-right: var(--space-px) solid var(--border);
+  background: var(--bg);
+}
+
+.lg-rail-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.lg-rail-item {
+  position: relative;
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-subtle);
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-rail-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.lg-rail-item[aria-current="page"],
+.lg-rail-item[aria-pressed="true"] {
+  background: var(--surface-active);
+  color: var(--text);
+}
+
+/* Flyout label chip — hidden at rest, pops from the side on hover/focus. */
+.lg-rail-flyout {
+  position: absolute;
+  left: calc(100% + var(--space-2));
+  top: 50%;
+  z-index: var(--z-tooltip);
+  width: max-content;
+  padding: var(--space-1) var(--space-2);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  -webkit-backdrop-filter: blur(var(--space-4)) saturate(1.4);
+  backdrop-filter: blur(var(--space-4)) saturate(1.4);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  color: var(--text);
+  font-size: var(--text-xs-dense);
+  font-weight: var(--fw-regular);
+  line-height: var(--leading-snug);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(calc(-1 * var(--space-1)), -50%) scale(0.97);
+  transform-origin: center left;
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+.lg-rail-item:hover .lg-rail-flyout,
+.lg-rail-item:focus-visible .lg-rail-flyout {
+  opacity: 1;
+  transform: translate(0, -50%) scale(1);
+}
+
+/* Transform pop guarded; the centering translate stays. */
+@media (prefers-reduced-motion: reduce) {
+  .lg-rail-flyout {
+    transform: translate(0, -50%);
+  }
+}

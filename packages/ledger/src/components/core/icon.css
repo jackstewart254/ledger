@@ -1,0 +1,5 @@
+/* Icon — glyphs never flex-shrink inside control rows. */
+.lg-icon {
+  display: block;
+  flex-shrink: 0;
+}

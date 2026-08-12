@@ -1,0 +1,34 @@
+/* Badge — small status/label token. Tones map to semantic colors only. */
+.lg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  height: var(--pill-h-md);
+  padding: 0 var(--space-2);
+  border: var(--space-px) solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-medium);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+}
+.lg-badge-dot {
+  width: var(--space-1_5);
+  height: var(--space-1_5);
+  border-radius: var(--radius-full);
+  background: var(--lg-badge-dot);
+  flex-shrink: 0;
+}
+
+/* tone custom props: subtle bg / subtle fg / solid bg / solid fg / dot */
+.lg-badge--neutral { --lg-badge-subtle-bg: var(--neutral-status-subtle); --lg-badge-subtle-fg: var(--neutral-status-text); --lg-badge-solid: var(--neutral-status); --lg-badge-solid-fg: var(--text-inverse); --lg-badge-dot: var(--neutral-status); }
+.lg-badge--accent  { --lg-badge-subtle-bg: var(--accent-subtle);  --lg-badge-subtle-fg: var(--accent-subtle-fg); --lg-badge-solid: var(--accent);  --lg-badge-solid-fg: var(--accent-fg);  --lg-badge-dot: var(--accent); }
+.lg-badge--success { --lg-badge-subtle-bg: var(--success-subtle); --lg-badge-subtle-fg: var(--success-text);     --lg-badge-solid: var(--success); --lg-badge-solid-fg: var(--success-fg); --lg-badge-dot: var(--success); }
+.lg-badge--warning { --lg-badge-subtle-bg: var(--warning-subtle); --lg-badge-subtle-fg: var(--warning-text);     --lg-badge-solid: var(--warning); --lg-badge-solid-fg: var(--warning-fg); --lg-badge-dot: var(--warning); }
+.lg-badge--danger  { --lg-badge-subtle-bg: var(--danger-subtle);  --lg-badge-subtle-fg: var(--danger-text);      --lg-badge-solid: var(--danger);  --lg-badge-solid-fg: var(--danger-fg);  --lg-badge-dot: var(--danger); }
+
+.lg-badge--subtle { background: var(--lg-badge-subtle-bg); color: var(--lg-badge-subtle-fg); }
+.lg-badge--solid { background: var(--lg-badge-solid); color: var(--lg-badge-solid-fg); }
+.lg-badge--outline { background: transparent; color: var(--lg-badge-subtle-fg); border-color: var(--border-strong); }

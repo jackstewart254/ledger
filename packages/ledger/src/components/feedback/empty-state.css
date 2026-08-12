@@ -1,0 +1,43 @@
+/* EmptyState — quiet solid border, 40px icon tile on bg-subtle. */
+.lg-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-12) var(--space-6);
+  border: var(--space-px) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+.lg-empty--compact {
+  padding: var(--space-8) var(--space-5);
+}
+
+.lg-empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-10);
+  height: var(--space-10);
+  margin-bottom: var(--space-2);
+  border: var(--space-px) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  color: var(--text-subtle);
+}
+
+.lg-empty-title {
+  color: var(--text);
+  font-size: var(--text-md);
+  font-weight: var(--fw-semibold);
+}
+.lg-empty-desc {
+  max-width: 20rem;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+.lg-empty-action {
+  margin-top: var(--space-3);
+}

@@ -1,0 +1,31 @@
+/* =============================================================================
+   ledger — Radii + Elevation  ·  Financial Terminal
+   r-sm 8 (chips, buttons, tooltip) · r-md 12 (logo tile, small cards)
+   · r-lg 16 (main container cards).
+   Elevation = hairline border + surface background, NOT shadow.
+   The ONLY shadow in the system is the floating crosshair tooltip.
+   ============================================================================= */
+:root {
+  --radius-xs:   4px;
+  --radius-sm:   8px;    /* chips, buttons, tooltip      */
+  --radius-md:   12px;   /* logo tile, small cards       */
+  --radius-lg:   16px;   /* main container cards         */
+  --radius-xl:   20px;   /* large feature cards          */
+  --radius-pill: 999px;
+  --radius-full: 9999px;
+}
+
+/* No ambient shadows — content is separated by hairlines. --shadow-md/lg map
+   to the single permitted shadow (crosshair tooltip) so any component reaching
+   for elevation gets the one sanctioned treatment. */
+:root,
+[data-theme="dark"] {
+  --shadow-sm: none;
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);    /* crosshair tooltip (dark)  */
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+[data-theme="light"] {
+  --shadow-sm: none;
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);   /* crosshair tooltip (light) */
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+}

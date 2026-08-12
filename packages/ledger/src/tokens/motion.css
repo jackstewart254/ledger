@@ -1,0 +1,21 @@
+/* =============================================================================
+   ledger — Motion
+   Fast, subtle micro-interactions (120–180ms).
+   The global prefers-reduced-motion kill lives in styles.css (base layer),
+   not here — token files declare values only.
+   ============================================================================= */
+:root {
+  --dur-instant: 80ms;
+  --dur-fast:    120ms;
+  --dur-base:    160ms;
+  --dur-slow:    220ms;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:       cubic-bezier(0.4, 0, 1, 1);
+
+  --transition-colors: color var(--dur-fast) var(--ease-standard),
+                       background-color var(--dur-fast) var(--ease-standard),
+                       border-color var(--dur-fast) var(--ease-standard),
+                       box-shadow var(--dur-fast) var(--ease-standard);
+}

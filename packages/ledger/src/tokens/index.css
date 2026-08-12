@@ -1,0 +1,14 @@
+/* =============================================================================
+   ledger tokens — barrel. Import THIS file only (styles.css does).
+   Keep it @import lines. Fonts are loaded by the consumer, never here.
+
+   String form, not url(): Tailwind v4 / lightningcss resolvers in consuming
+   apps do not follow @import url(...) — the nested files survive as literal
+   rules and are then silently dropped, so every token vanishes from the build.
+   ============================================================================= */
+@import "./colors.css";
+@import "./typography.css";
+@import "./spacing.css";
+@import "./radii.css";
+@import "./motion.css";
+@import "./z-index.css";

@@ -1,0 +1,13 @@
+/* DateInput — the Input frame; dates are numerics, so tabular figures. The
+   native picker indicator follows color-scheme per theme; just calm it down. */
+.lg-date .lg-control__input {
+  font-feature-settings: var(--num-features);
+}
+.lg-date .lg-control__input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+.lg-date .lg-control__input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}

@@ -1,0 +1,98 @@
+/* Modal — scrim + centered surface-raised panel, radius-lg, sanctioned shadow. */
+.lg-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--scrim);
+  -webkit-backdrop-filter: blur(var(--space-0_5));
+  backdrop-filter: blur(var(--space-0_5));
+  animation: lg-modal-fade var(--dur-base) var(--ease-out);
+}
+
+.lg-modal-panel {
+  width: min(var(--lg-modal-w), 100%);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-raised);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: lg-modal-pop var(--dur-base) var(--ease-out);
+}
+
+.lg-modal-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-4) var(--space-3);
+}
+.lg-modal-heading {
+  flex: 1;
+  min-width: 0;
+}
+.lg-modal-title {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-md);
+  font-weight: var(--fw-semibold);
+}
+.lg-modal-desc {
+  margin: var(--space-1) 0 0;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.lg-modal-close {
+  display: inline-flex;
+  padding: var(--space-1);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-subtle);
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-modal-close:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.lg-modal-body {
+  padding: 0 var(--space-4) var(--space-4);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: var(--text);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.lg-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-top: var(--space-px) solid var(--border-subtle);
+}
+
+@keyframes lg-modal-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes lg-modal-pop {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-1_5)) scale(0.98);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-modal-panel {
+    animation: none;
+  }
+}

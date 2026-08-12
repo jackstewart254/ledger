@@ -1,0 +1,89 @@
+/* Playground chrome — ledger tokens only. Dev-only, never published. */
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth; /* anchor nav; the DS reduced-motion kill resets it */
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.pg-shell {
+  display: flex;
+}
+
+.pg-nav {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  flex-shrink: 0;
+  width: 176px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  padding: var(--space-4);
+  border-right: 1px solid var(--border);
+}
+.pg-nav-brand {
+  font-size: var(--text-lg);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-tight);
+  padding: var(--space-1) var(--space-2);
+  margin-bottom: var(--space-4);
+}
+.pg-nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-xs);
+  transition: var(--transition-colors);
+}
+.pg-nav-link:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.pg-theme-toggle {
+  margin-top: auto;
+  height: var(--control-h-sm);
+  padding: 0 var(--control-pad-x-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--control-ghost-bg);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.pg-theme-toggle:hover {
+  background: var(--surface-hover);
+}
+
+.pg-main {
+  flex: 1;
+  min-width: 0;
+  max-width: var(--page-max-width);
+  padding: var(--space-8) var(--page-gutter) var(--space-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.pg-section {
+  scroll-margin-top: var(--space-8);
+}
+.pg-section-title {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-xl);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}

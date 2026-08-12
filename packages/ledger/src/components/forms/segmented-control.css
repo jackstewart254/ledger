@@ -1,0 +1,43 @@
+/* SegmentedControl — recessed hairline group; the active segment is a raised
+   surface, not an accent fill. Tabular figures so count-carrying labels never
+   resize the segment. */
+.lg-seg {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0_5);
+  height: var(--_h);
+  padding: var(--space-0_5);
+  background: var(--bg-subtle);
+  border: var(--space-px) solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+.lg-seg--sm { --_h: var(--control-h-sm); --_fs: var(--text-xs); }
+.lg-seg--md { --_h: var(--control-h-md); --_fs: var(--text-sm); }
+
+.lg-seg__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 var(--control-pad-x-sm);
+  border: none;
+  border-radius: calc(var(--radius-sm) - var(--space-0_5));
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--_fs);
+  font-weight: var(--fw-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-seg__btn:hover { color: var(--text); }
+.lg-seg__btn[aria-checked="true"] {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+.lg-seg__btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

@@ -1,0 +1,65 @@
+/* =============================================================================
+   @mcleanstewart/ledger — single stylesheet entry. Consumers import this once:
+     import "@mcleanstewart/ledger/styles.css";
+   Everything sits in @layer lg, so ANY unlayered consumer CSS outranks the DS
+   without !important. Component CSS files are @import-ed here as they land.
+   ============================================================================= */
+@import "./tokens/index.css" layer(lg);
+@import "./components/core/index.css" layer(lg);
+@import "./components/typography/index.css" layer(lg);
+@import "./components/layout/index.css" layer(lg);
+@import "./components/navigation/index.css" layer(lg);
+@import "./components/forms/index.css" layer(lg);
+@import "./components/data/index.css" layer(lg);
+@import "./components/feedback/index.css" layer(lg);
+
+@layer lg {
+  /* ---- Keyboard focus — the sanctioned monochrome ring, both themes ------ */
+  *:focus-visible {
+    box-shadow: var(--focus-ring);
+    outline: none;
+    border-radius: inherit;
+  }
+  /* Text-entry fields already show a caret when focused; the boxed ring
+     doubles the field's own pill/border chrome and reads as clutter. Keep the
+     ring for buttons/links/toggles — drop it only where the user types. */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    box-shadow: none;
+  }
+  /* don't show the ring for mouse/touch activation */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* ---- Scrollbars — thin, token-tinted, transparent track. var(--text)
+     flips per theme so the thumb stays warm-ink in both. ------------------- */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--text) 25%, transparent) transparent;
+  }
+  *::-webkit-scrollbar { width: 8px; height: 8px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--text) 25%, transparent);
+    border-radius: var(--radius-full);
+  }
+
+  /* ---- Text selection — warm monochrome tint, never the default blue ----- */
+  ::selection { background: rgba(245, 244, 242, 0.18); color: var(--text-bright); }
+  [data-theme="light"] ::selection { background: rgba(26, 26, 26, 0.12); color: var(--text-bright); }
+
+  /* ---- Reduced motion — zero DURATIONS, never transforms -----------------
+     Killing `transform` globally would break positioning transforms
+     (centering, flyouts). The :active press-scale guards live per-rule in
+     each component's own prefers-reduced-motion block instead. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

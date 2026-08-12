@@ -1,0 +1,51 @@
+/* Switch — pill track derived from the pill-height tokens (track w = h × 2,
+   thumb = h − space-1, inset space-0_5). Thumb travel animates left with the
+   motion tokens; the global reduced-motion kill zeroes it. */
+.lg-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--text);
+  cursor: pointer;
+}
+.lg-switch--sm { --_track-h: var(--pill-h-sm); }
+.lg-switch--md { --_track-h: var(--pill-h-md); }
+.lg-switch--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.lg-switch__track {
+  position: relative;
+  flex-shrink: 0;
+  width: calc(var(--_track-h) * 2);
+  height: var(--_track-h);
+  padding: 0;
+  border-radius: var(--radius-pill);
+  background: var(--neutral-status);
+  border: var(--space-px) solid var(--border-strong);
+  cursor: inherit;
+  transition: var(--transition-colors);
+}
+.lg-switch__track[aria-checked="true"] {
+  background: var(--accent);
+  border-color: transparent;
+}
+
+.lg-switch__thumb {
+  --_thumb: calc(var(--_track-h) - var(--space-1));
+  position: absolute;
+  top: 50%;
+  left: var(--space-0_5);
+  transform: translateY(-50%);
+  width: var(--_thumb);
+  height: var(--_thumb);
+  border-radius: var(--radius-full);
+  background: var(--accent-fg);
+  transition: left var(--dur-fast) var(--ease-standard);
+}
+.lg-switch__track[aria-checked="true"] .lg-switch__thumb {
+  left: calc(100% - var(--_thumb) - var(--space-0_5));
+}

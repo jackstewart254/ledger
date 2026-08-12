@@ -1,0 +1,43 @@
+/* Tabs — hairline bottom border on the group; active tab = text-strong + ink
+   underline overlapping the group hairline. */
+.lg-tabs {
+  display: flex;
+  gap: var(--space-4);
+  border-bottom: var(--space-px) solid var(--border);
+}
+
+.lg-tab {
+  position: relative;
+  appearance: none;
+  height: var(--control-h-md);
+  margin-bottom: calc(-1 * var(--space-px));
+  padding: 0 var(--space-1);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-tab:hover {
+  color: var(--text);
+}
+.lg-tab:disabled {
+  color: var(--text-subtle);
+  cursor: default;
+}
+.lg-tab[aria-selected="true"] {
+  color: var(--text-strong);
+}
+.lg-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--space-0_5);
+  background: var(--accent);
+}

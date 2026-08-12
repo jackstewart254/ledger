@@ -1,0 +1,39 @@
+/* StatusPill — traffic-light chip: subtle bg + 7px dot with a soft glow ring.
+   Off-scale sizes are expressed as token arithmetic (7px = space-2 − px,
+   3px ring = space-1 − px) so no raw px enters the file. */
+.lg-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--lg-pill-bg);
+  color: var(--lg-pill-fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-medium);
+  line-height: var(--leading-none);
+  white-space: nowrap;
+}
+.lg-status-pill--md { height: var(--pill-h-md); }
+.lg-status-pill--sm { height: var(--pill-h-sm); }
+
+.lg-status-pill-dot {
+  width: calc(var(--space-2) - var(--space-px));
+  height: calc(var(--space-2) - var(--space-px));
+  border-radius: var(--radius-full);
+  background: var(--lg-pill-dot);
+  box-shadow: 0 0 0 calc(var(--space-1) - var(--space-px))
+    color-mix(in oklch, var(--lg-pill-dot), transparent 78%);
+  flex-shrink: 0;
+}
+.lg-status-pill-value {
+  font-family: var(--font-mono);
+  font-feature-settings: var(--num-features);
+  opacity: 0.85;
+}
+
+.lg-status-pill--good    { --lg-pill-dot: var(--success);        --lg-pill-bg: var(--success-subtle);        --lg-pill-fg: var(--success-text); }
+.lg-status-pill--watch   { --lg-pill-dot: var(--warning);        --lg-pill-bg: var(--warning-subtle);        --lg-pill-fg: var(--warning-text); }
+.lg-status-pill--risk    { --lg-pill-dot: var(--danger);         --lg-pill-bg: var(--danger-subtle);         --lg-pill-fg: var(--danger-text); }
+.lg-status-pill--unknown { --lg-pill-dot: var(--neutral-status); --lg-pill-bg: var(--neutral-status-subtle); --lg-pill-fg: var(--neutral-status-text); }

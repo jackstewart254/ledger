@@ -1,0 +1,11 @@
+{
+  "name": "ui-designs",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "playground"
+  ],
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

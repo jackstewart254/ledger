@@ -1,0 +1,60 @@
+/* Avatar — circular image with initials fallback; size arrives as a custom
+   property from the component (--lg-avatar-size). */
+.lg-avatar {
+  --lg-avatar-radius: var(--radius-full);
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  width: var(--lg-avatar-size);
+  height: var(--lg-avatar-size);
+}
+.lg-avatar--square {
+  --lg-avatar-radius: var(--radius-md);
+}
+
+.lg-avatar-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--lg-avatar-radius);
+  object-fit: cover;
+  border: var(--space-px) solid var(--border);
+  background: var(--bg-subtle);
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-standard);
+}
+.lg-avatar-img--loaded {
+  opacity: 1;
+}
+
+.lg-avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--lg-avatar-radius);
+  border: var(--space-px) solid var(--border);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-weight: var(--fw-semibold);
+  font-size: max(var(--text-3xs), calc(var(--lg-avatar-size) * 0.38));
+  letter-spacing: var(--tracking-wide);
+  user-select: none;
+}
+
+.lg-avatar-indicator {
+  position: absolute;
+  right: calc(-1 * var(--space-px));
+  bottom: calc(-1 * var(--space-px));
+  width: max(var(--space-2), calc(var(--lg-avatar-size) * 0.28));
+  height: max(var(--space-2), calc(var(--lg-avatar-size) * 0.28));
+  border-radius: var(--radius-full);
+  border: var(--space-0_5) solid var(--surface);
+}
+.lg-avatar-indicator--success { background: var(--success); }
+.lg-avatar-indicator--warning { background: var(--warning); }
+.lg-avatar-indicator--danger  { background: var(--danger); }
+.lg-avatar-indicator--neutral { background: var(--neutral-status); }
+.lg-avatar-indicator--accent  { background: var(--accent); }

@@ -1,0 +1,30 @@
+/* StatusDot — the daemon-dot signature: bare 7px dot, soft glow, slow breathe.
+   The global reduced-motion kill zeroes the animation, leaving a static glow. */
+.lg-status-dot {
+  display: inline-block;
+  width: calc(var(--space-2) - var(--space-px));
+  height: calc(var(--space-2) - var(--space-px));
+  border-radius: var(--radius-full);
+  background: var(--lg-dot);
+  box-shadow: 0 0 0 calc(var(--space-1) - var(--space-px))
+    color-mix(in oklch, var(--lg-dot), transparent 78%);
+  flex-shrink: 0;
+  /* slow ambient beat — deliberately outside the 120–180ms micro-motion band;
+     no ambient-duration token exists, so the literal stays here. */
+  animation: lg-status-dot-breathe 2600ms var(--ease-standard) infinite;
+}
+
+@keyframes lg-status-dot-breathe {
+  0%,
+  100% {
+    box-shadow: 0 0 0 var(--space-0_5) color-mix(in oklch, var(--lg-dot), transparent 84%);
+  }
+  50% {
+    box-shadow: 0 0 0 var(--space-1) color-mix(in oklch, var(--lg-dot), transparent 68%);
+  }
+}
+
+.lg-status-dot--good    { --lg-dot: var(--success); }
+.lg-status-dot--watch   { --lg-dot: var(--warning); }
+.lg-status-dot--risk    { --lg-dot: var(--danger); }
+.lg-status-dot--unknown { --lg-dot: var(--neutral-status); }

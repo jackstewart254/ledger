@@ -1,0 +1,14 @@
+/* Link — styled anchor. Preflight-off means a bare <a> is UA blue otherwise.
+   Ink text with a hairline underline that fills in on hover. */
+.lg-link {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-decoration-thickness: var(--space-px);
+  text-underline-offset: var(--space-0_5);
+  border-radius: var(--radius-xs);
+  transition: var(--transition-colors), text-decoration-color var(--dur-fast) var(--ease-standard);
+}
+.lg-link:hover {
+  text-decoration-color: currentColor;
+}

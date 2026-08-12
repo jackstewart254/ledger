@@ -1,0 +1,83 @@
+/* Toast — surface-raised card in the bottom-right stack; the variant colors
+   the leading icon only (color strictly semantic). */
+.lg-toast-viewport {
+  position: fixed;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.lg-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2_5);
+  width: min(21.25rem, calc(100vw - var(--space-8)));
+  padding: var(--space-3);
+  background: var(--surface-raised);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  animation: lg-toast-in var(--dur-slow) var(--ease-out);
+}
+
+.lg-toast-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-top: var(--space-px);
+  color: var(--text-muted);
+}
+.lg-toast--success .lg-toast-icon {
+  color: var(--success);
+}
+.lg-toast--danger .lg-toast-icon {
+  color: var(--danger);
+}
+
+.lg-toast-body {
+  flex: 1;
+  min-width: 0;
+}
+.lg-toast-title {
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+}
+.lg-toast-desc {
+  margin-top: var(--space-0_5);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+.lg-toast-action {
+  margin-top: var(--space-2);
+}
+
+.lg-toast-close {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: var(--space-0_5);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--text-subtle);
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-toast-close:hover {
+  color: var(--text);
+}
+
+@keyframes lg-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-toast {
+    animation: none;
+  }
+}

@@ -1,0 +1,68 @@
+/* Tooltip — translucent surface + backdrop blur, the one sanctioned shadow.
+   Base state is the hidden/exit state (fade toward the anchor); --open pops
+   from the anchor side. Position is dynamic, fed via --lg-tt-x/--lg-tt-y. */
+.lg-tooltip-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.lg-tooltip {
+  position: fixed;
+  left: var(--lg-tt-x, 0);
+  top: var(--lg-tt-y, 0);
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+  width: max-content;
+  max-width: min(17.5rem, calc(100vw - var(--space-4)));
+  padding: var(--space-1) var(--space-2);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  -webkit-backdrop-filter: blur(var(--space-4)) saturate(1.4);
+  backdrop-filter: blur(var(--space-4)) saturate(1.4);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-regular);
+  line-height: var(--leading-normal);
+  white-space: normal;
+  text-align: left;
+  opacity: 0;
+  transition:
+    opacity var(--dur-fast) var(--ease-in),
+    transform var(--dur-fast) var(--ease-in);
+}
+
+/* away-from-anchor from-states, per side */
+.lg-tooltip--top {
+  transform: translate(0, var(--space-1)) scale(0.97);
+  transform-origin: bottom center;
+}
+.lg-tooltip--bottom {
+  transform: translate(0, calc(-1 * var(--space-1))) scale(0.97);
+  transform-origin: top center;
+}
+.lg-tooltip--left {
+  transform: translate(var(--space-1), 0) scale(0.97);
+  transform-origin: center right;
+}
+.lg-tooltip--right {
+  transform: translate(calc(-1 * var(--space-1)), 0) scale(0.97);
+  transform-origin: center left;
+}
+
+.lg-tooltip--open {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+/* Transform pop guarded; opacity still lands (durations zeroed globally). */
+@media (prefers-reduced-motion: reduce) {
+  .lg-tooltip {
+    transform: none;
+  }
+}

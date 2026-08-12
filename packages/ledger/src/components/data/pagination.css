@@ -1,0 +1,50 @@
+/* Pagination — hairline chevron buttons, ghost mono numerals. */
+.lg-pagination {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.lg-pagination-btn,
+.lg-pagination-page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--control-h-sm);
+  min-width: var(--control-h-sm);
+  padding: 0 var(--space-1_5);
+  border-radius: var(--radius-sm);
+  background: var(--control-ghost-bg);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-feature-settings: var(--num-features);
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+
+.lg-pagination-btn { border: var(--space-px) solid var(--border); }
+.lg-pagination-page { border: 0; }
+
+.lg-pagination-btn:hover:not(:disabled),
+.lg-pagination-page:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.lg-pagination-btn:disabled {
+  color: var(--text-subtle);
+  cursor: default;
+}
+
+.lg-pagination-page[aria-current="page"] {
+  background: var(--accent-subtle);
+  color: var(--text-bright);
+}
+
+.lg-pagination-gap {
+  min-width: var(--control-h-sm);
+  text-align: center;
+  color: var(--text-subtle);
+  user-select: none;
+}

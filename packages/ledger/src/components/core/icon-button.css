@@ -1,0 +1,32 @@
+/* IconButton — ghost square, hover surface (chart-toolbar control). */
+.lg-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-btn);
+  height: var(--icon-btn);
+  flex-shrink: 0;
+  border: var(--space-px) solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--control-ghost-bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-colors), transform var(--dur-fast) var(--ease-standard);
+}
+.lg-icon-btn:not(:disabled):hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.lg-icon-btn--active,
+.lg-icon-btn:not(:disabled):active {
+  background: var(--surface-active);
+  color: var(--text);
+}
+.lg-icon-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.lg-icon-btn:not(:disabled):active { transform: scale(0.98); }
+@media (prefers-reduced-motion: reduce) {
+  .lg-icon-btn:not(:disabled):active { transform: none; }
+}

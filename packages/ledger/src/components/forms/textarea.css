@@ -1,0 +1,13 @@
+/* Textarea — composes the .lg-control frame; height is content-driven with a
+   token floor (--lg-rows × --row-h, set per instance via style). */
+.lg-textarea {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: calc(var(--lg-rows, 2) * var(--row-h));
+  padding: var(--space-2) var(--_pad);
+  resize: vertical;
+  line-height: var(--leading-snug);
+  outline: none;
+}
+.lg-textarea::placeholder { color: var(--text-subtle); }

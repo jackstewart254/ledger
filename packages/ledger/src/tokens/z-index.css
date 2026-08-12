@@ -1,0 +1,23 @@
+/* =============================================================================
+   ledger — Z-index scale: the ONE stacking order for the whole page.
+   Every fixed/sticky layer takes its z from here; never hardcode a competing
+   value. In-flow micro-stacking inside a component (chart dots, row-link
+   overlays: z 0–10) stays local and is exempt.
+
+   Order, bottom to top:  header < rail < overlay < tooltip < toast
+
+   --z-overlay is every modal surface: Modal, Drawer, CommandMenu. They are
+   mutually exclusive by construction (the ⌘K handler won't open under an open
+   [aria-modal] dialog), so they share one value.
+   --z-tooltip sits ABOVE overlays — tooltips inside a modal must show.
+   --z-toast outranks every interactive layer.
+   Consumers of these tokens land in wave 1 (Rail, Modal, Drawer, Tooltip,
+   Toast, CommandMenu); gaps in the numbering leave room for app layers.
+   ============================================================================= */
+:root {
+  --z-header:  40;    /* sticky page headers                */
+  --z-rail:    60;    /* the fixed left icon rail           */
+  --z-overlay: 80;    /* Modal, Drawer, command palette     */
+  --z-tooltip: 85;    /* above overlays                     */
+  --z-toast:  110;    /* outranks every interactive layer   */
+}

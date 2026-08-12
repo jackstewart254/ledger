@@ -1,0 +1,55 @@
+/* Checkbox — custom-drawn box on a real <input type="checkbox">. The box IS
+   the input (appearance: none); the mark overlays it and fades in on
+   :checked / :indeterminate. MultiSelect reuses __box / __input / __mark for
+   its popover option list. */
+.lg-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--text);
+  cursor: pointer;
+}
+.lg-checkbox--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.lg-checkbox__box {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.lg-checkbox__input {
+  appearance: none;
+  margin: 0;
+  width: var(--pill-h-sm);
+  height: var(--pill-h-sm);
+  border-radius: var(--radius-xs);
+  background: var(--surface);
+  border: var(--space-px) solid var(--border-strong);
+  cursor: inherit;
+  transition: var(--transition-colors);
+}
+.lg-checkbox__input:checked,
+.lg-checkbox__input:indeterminate {
+  background: var(--accent);
+  border-color: transparent;
+}
+
+.lg-checkbox__mark {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: var(--space-3);
+  height: var(--space-3);
+  color: var(--accent-fg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+.lg-checkbox__input:checked + .lg-checkbox__mark,
+.lg-checkbox__input:indeterminate + .lg-checkbox__mark {
+  opacity: 1;
+}
