@@ -36,9 +36,9 @@
   border-radius: var(--lg-avatar-radius);
   border: var(--space-px) solid var(--border);
   background: var(--surface);
-  color: var(--text-muted);
+  color: var(--text);
   font-family: var(--font-sans);
-  font-weight: var(--fw-emphasis);
+  font-weight: var(--fw-body);
   font-size: max(var(--text-xs), calc(var(--lg-avatar-size) * 0.38));
   letter-spacing: var(--tracking-wide);
   user-select: none;

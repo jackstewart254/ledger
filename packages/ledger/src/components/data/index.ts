@@ -2,8 +2,6 @@ export {
   Table,
   type TableProps,
   type TableColumn,
-  type TableSort,
-  type TableSortDir,
   type TableAlign,
 } from "./Table.js";
 export { KpiTile, type KpiTileProps } from "./KpiTile.js";

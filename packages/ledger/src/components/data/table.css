@@ -1,7 +1,9 @@
-/* Table — sortable data table: sticky header, hover rows, hairline
-   separators. Row height flows through --lg-table-row-h (prop-driven). */
+/* Table — hover rows, hairline separators, visually hidden header row.
+   Row height flows through --lg-table-row-h (prop-driven). */
 .lg-table {
-  --lg-table-row-h: var(--row-h);
+  /* 44px rows with a generous horizontal inset — the Linear list proportion.
+     48px + 12px read as a spreadsheet. */
+  --lg-table-row-h: var(--control-h-lg);
   font-weight: var(--fw-body);
   background: var(--surface);
   border: var(--space-px) solid var(--border);
@@ -20,62 +22,25 @@
   border-collapse: collapse;
 }
 
-.lg-table th {
-  position: sticky;
-  top: 0;
-  z-index: 2; /* in-flow micro-stacking — exempt from the page z scale */
-  height: var(--control-h-md);
-  padding: 0 var(--space-3);
-  /* No filled header band: a grey bar across the top of every table is the
-     loudest thing on the page and it is doing a job a hairline already does.
-     The background matches the table surface purely so sticky rows scroll
-     under it rather than through it. */
-  background: var(--surface);
-  border-bottom: var(--space-px) solid var(--border);
-  /* Header text sits in the same size and weight as the data it labels, one
-     shade lighter. It is a label, not a heading. */
-  font-size: var(--text-sm);
-  font-weight: var(--fw-body);
-  color: var(--text-subtle);
-  text-align: left;
-  white-space: nowrap;
-  user-select: none;
-}
-
-/* Scoped under .lg-table so these beat the `.lg-table th` base rule on
-   specificity — unscoped they lost to it, so a "right" header sat left while
-   its numeric column sat right and no column lined up with its own label. */
-.lg-table th.lg-table-th--right { text-align: right; }
-.lg-table th.lg-table-th--center { text-align: center; }
-.lg-table-th--active { color: var(--text-muted); }
-
-.lg-table-sort {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  margin: 0;
+/* Header row: present for assistive tech, invisible on screen. Clipped rather
+   than display:none — display:none removes it from the accessibility tree too,
+   which is the one thing it is still here for. */
+.lg-table-head {
+  position: absolute;
+  width: var(--space-px);
+  height: var(--space-px);
+  margin: calc(-1 * var(--space-px));
   padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
   border: 0;
-  background: none;
-  font: inherit;
-  letter-spacing: inherit;
-  color: inherit;
-  cursor: pointer;
-  transition: color var(--dur-fast) var(--ease-standard);
 }
-.lg-table-sort:hover { color: var(--text); }
-.lg-table-th--right .lg-table-sort { flex-direction: row-reverse; }
 
-.lg-table-sortmark {
-  display: inline-flex;
-  opacity: 0.4;
-  transition: opacity var(--dur-fast) var(--ease-standard);
-}
-.lg-table-sortmark--active { opacity: 1; }
 
 .lg-table td {
   height: var(--lg-table-row-h);
-  padding: 0 var(--space-3);
+  padding: 0 var(--space-4);
   font-size: var(--text-sm);
   color: var(--text);
   white-space: nowrap;
@@ -85,7 +50,7 @@
    tables on one page never lined up, and the smaller one shrank its type until
    it was unreadable. Uniformity beats the knob. */
 
-/* hairline between rows only — header owns the first line */
+/* hairline between rows only — nothing above the first row */
 .lg-table tbody tr + tr td {
   border-top: var(--space-px) solid var(--border-subtle);
 }

@@ -1,18 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { cx } from "../../internal/cx.js";
-import { ChevronDown, ChevronUp, ChevronsUpDown } from "lucide-react";
-import { Icon } from "../core/Icon.js";
 
 export type TableAlign = "left" | "center" | "right";
-export type TableSortDir = "asc" | "desc";
-
-export interface TableSort {
-  key: string;
-  dir: TableSortDir;
-}
 
 export interface TableColumn<Row> {
   key: string;
@@ -22,7 +13,6 @@ export interface TableColumn<Row> {
   align?: TableAlign;
   /** Numeric cell — tabular figures via --num-features. */
   numeric?: boolean;
-  sortable?: boolean;
   /** Render-prop cell — falls back to row[key]. */
   render?: (row: Row) => ReactNode;
 }
@@ -31,9 +21,6 @@ export interface TableProps<Row> {
   columns: TableColumn<Row>[];
   rows: Row[];
   rowKey?: (row: Row, index: number) => string | number;
-  /** Controlled sort — the consumer reorders `rows`. Omit both this and `onSort` to let the table sort itself. */
-  sort?: TableSort | null;
-  onSort?: (sort: TableSort) => void;
   onRowClick?: (row: Row) => void;
   /** Row-height override — sets the --lg-table-row-h custom prop. */
   rowHeight?: string;
@@ -45,38 +32,21 @@ export interface TableProps<Row> {
 }
 
 /**
- * Uncontrolled reorder. Numeric columns compare as numbers ("7.8%" → 7.8),
- * everything else by locale. Array#sort is stable (ES2019), so equal keys keep
- * their source order.
- */
-function sortRows<Row>(rows: Row[], sort: TableSort, columns: TableColumn<Row>[]): Row[] {
-  const { key } = sort;
-  const numeric = columns.find((c) => c.key === key)?.numeric;
-  const sign = sort.dir === "asc" ? 1 : -1;
-  return [...rows].sort((a, b) => {
-    const va = (a as Record<string, unknown>)[key];
-    const vb = (b as Record<string, unknown>)[key];
-    if (numeric) {
-      const na = Number.parseFloat(String(va));
-      const nb = Number.parseFloat(String(vb));
-      if (!Number.isNaN(na) && !Number.isNaN(nb)) return sign * (na - nb);
-    }
-    return sign * String(va ?? "").localeCompare(String(vb ?? ""));
-  });
-}
-
-/**
- * Table — sortable data table. Render-prop columns, sticky header,
- * row hover, --row-h rows. Sorting is a client callback when `sort`/`onSort`
- * are given (the consumer reorders `rows`); with neither, the table sorts
- * its own rows.
+ * Table — render-prop columns, row hover, --row-h rows.
+ *
+ * The header row is in the DOM but hidden visually: a column of dates under a
+ * heading that reads "Date" tells the reader what they already worked out, and
+ * on a full-page table those labels are the only chrome left. Screen readers
+ * still get them, so the table stays navigable by column.
+ *
+ * No sorting. It lived entirely in the header, and a sort control with nothing
+ * visible to click is worse than none — when a view needs sorting, put the
+ * control in the page toolbar where it can say what it does.
  */
 export function Table<Row>({
   columns,
   rows,
   rowKey,
-  sort,
-  onSort,
   onRowClick,
   rowHeight,
   maxHeight,
@@ -84,20 +54,6 @@ export function Table<Row>({
   className,
   style,
 }: TableProps<Row>) {
-  const [internalSort, setInternalSort] = useState<TableSort | null>(null);
-  const activeSort = sort !== undefined ? sort : internalSort;
-
-  const doSort = (key: string) => {
-    const dir: TableSortDir = activeSort?.key === key && activeSort.dir === "asc" ? "desc" : "asc";
-    const next = { key, dir };
-    if (sort === undefined) setInternalSort(next);
-    onSort?.(next);
-  };
-
-  // nobody else is reordering, so do it here — otherwise the indicator and
-  // aria-sort assert a sort that never happened
-  const selfSort = sort === undefined && onSort === undefined ? internalSort : null;
-  const body = selfSort ? sortRows(rows, selfSort, columns) : rows;
 
   const cls = cx(
     "lg-table",
@@ -114,58 +70,34 @@ export function Table<Row>({
     <div className={cls} style={vars}>
       <div className="lg-table-scroll">
         <table>
-          <thead>
+          <thead className="lg-table-head">
             <tr>
-              {columns.map((c) => {
-                const isActive = activeSort?.key === c.key;
-                const thCls = cx(
-                  c.align === "right" && "lg-table-th--right",
-                  c.align === "center" && "lg-table-th--center",
-                  isActive && "lg-table-th--active",
-                );
-                const label = c.sortable ? (
-                  <button type="button" className="lg-table-sort" onClick={() => doSort(c.key)}>
-                    {c.header}
-                    <span className={cx("lg-table-sortmark", isActive && "lg-table-sortmark--active")}>
-                      <Icon
-                        as={
-                          isActive
-                            ? activeSort?.dir === "asc"
-                              ? ChevronUp
-                              : ChevronDown
-                            : ChevronsUpDown
-                        }
-                       
-                      />
-                    </span>
-                  </button>
-                ) : (
-                  c.header
-                );
-                return (
-                  <th
-                    key={c.key}
-                    className={thCls || undefined}
-                    style={c.width ? { width: c.width } : undefined}
-                    aria-sort={
-                      isActive ? (activeSort?.dir === "asc" ? "ascending" : "descending") : undefined
-                    }
-                  >
-                    {label}
-                  </th>
-                );
-              })}
+              {columns.map((c) => (
+                <th
+                  key={c.key}
+                  className={
+                    cx(
+                      c.align === "right" && "lg-table-th--right",
+                      c.align === "center" && "lg-table-th--center",
+                    ) || undefined
+                  }
+                  style={c.width ? { width: c.width } : undefined}
+                  scope="col"
+                >
+                  {c.header}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {body.length === 0 && (
+            {rows.length === 0 && (
               <tr>
                 <td className="lg-table-empty" colSpan={columns.length}>
                   {empty ?? "No results"}
                 </td>
               </tr>
             )}
-            {body.map((row, i) => (
+            {rows.map((row, i) => (
               <tr
                 key={rowKey ? rowKey(row, i) : i}
                 onClick={onRowClick ? () => onRowClick(row) : undefined}

@@ -10,7 +10,7 @@ import {
   Table,
   TrendChart,
 } from "@mcleanstewart/ledger";
-import type { TableColumn, TableSort } from "@mcleanstewart/ledger";
+import type { TableColumn } from "@mcleanstewart/ledger";
 
 const sub: CSSProperties = {
   fontSize: "var(--text-md)",
@@ -47,7 +47,6 @@ const TXN_COLUMNS: TableColumn<Txn>[] = [
     key: "date",
     header: "Date",
     width: "120px",
-    sortable: true,
     numeric: true,
     render: (r) => formatDate(r.date),
   },
@@ -58,7 +57,6 @@ const TXN_COLUMNS: TableColumn<Txn>[] = [
     header: "Amount",
     align: "right",
     numeric: true,
-    sortable: true,
     width: "120px",
     render: (r) => (
       <span style={{ color: r.amount < 0 ? "var(--danger-text)" : "var(--success-text)" }}>
@@ -96,7 +94,7 @@ const DAEMON_COLUMNS: TableColumn<Daemon>[] = [
     ),
   },
   { key: "uptime", header: "Uptime", align: "right", numeric: true },
-  { key: "cpu", header: "CPU", align: "right", numeric: true, sortable: true },
+  { key: "cpu", header: "CPU", align: "right", numeric: true },
 ];
 
 const BALANCE_SERIES = [
@@ -109,17 +107,8 @@ const SPARK_B = [14, 12, 13, 11, 12, 9, 10, 8, 9, 7, 8, 6];
 const SPARK_C = [5, 5, 6, 5, 7, 6, 6, 7, 6, 7, 7, 8];
 
 export default function DataSection() {
-  const [txnSort, setTxnSort] = useState<TableSort | null>({ key: "date", dir: "desc" });
   const [page, setPage] = useState(3);
 
-  const sortedTxns = txnSort
-    ? [...TXNS].sort((a, b) => {
-        const va = a[txnSort.key as keyof Txn];
-        const vb = b[txnSort.key as keyof Txn];
-        const cmp = va < vb ? -1 : va > vb ? 1 : 0;
-        return txnSort.dir === "asc" ? cmp : -cmp;
-      })
-    : TXNS;
 
   return (
     <section id="data" className="pg-section">
@@ -152,13 +141,11 @@ export default function DataSection() {
         <MetricDelta value={-90} format={gbp} />
       </div>
 
-      <h3 style={sub}>Table — transactions (sortable, £ amounts)</h3>
+      <h3 style={sub}>Table — transactions ( £ amounts)</h3>
       <Table
         columns={TXN_COLUMNS}
-        rows={sortedTxns}
+        rows={TXNS}
         rowKey={(r) => r.id}
-        sort={txnSort}
-        onSort={setTxnSort}
         maxHeight="280px"
       />
 
