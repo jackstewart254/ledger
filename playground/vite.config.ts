@@ -2,7 +2,10 @@ import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  // Project Pages serves at /ledger/ — without this the build asks the domain
+  // root for its assets and renders blank. Dev server stays at "/".
+  base: command === "build" ? "/ledger/" : "/",
   plugins: [react()],
   resolve: {
     alias: {
@@ -16,4 +19,4 @@ export default defineConfig({
     // Not 5173 — the rugby dev server squats there.
     port: Number(process.env.PORT) || 5273,
   },
-});
+}));
