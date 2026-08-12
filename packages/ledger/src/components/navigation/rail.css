@@ -9,8 +9,8 @@
   align-items: center;
   gap: var(--space-1);
   padding: var(--space-2_5) 0;
-  border-right: var(--space-px) solid var(--border);
-  background: var(--bg);
+  /* No fill, no divider — the rail is page, not panel (see app-shell.css). Its
+     own border-right doubled up against the content pane's left hairline. */
 }
 
 .lg-rail-footer {

@@ -1,29 +1,25 @@
-/* SegmentedControl — a hairline segment group, NOT the macOS "pill in a
-   trough": a filled tray with a floating raised pill reads as consumer OS
-   chrome and breaks the hairline doctrine. Here the group is one outlined
-   block, segments are divided by hairlines, and the active segment is a filled
-   cell rather than a raft. Tabular figures so count-carrying labels never
-   resize the segment. */
+/* SegmentedControl — no tray and no fill. The old shape was a pill-radius
+   container clipping a square-cornered active cell, so the selection lost its
+   own corners against the round edge; the grey fill was also left behind by the
+   hairline pass every other component took. Now the group is plain text and the
+   selected segment is the only outlined cell — one hairline, nothing filled.
+   Tabular figures so count-carrying labels never resize the segment. */
 /* Single size on purpose — matches the one control height the kit ships. */
 .lg-seg {
   display: inline-flex;
   align-items: center;
+  gap: var(--space-1);
   height: var(--control-h-md);
-  background: transparent;
-  border: var(--space-px) solid var(--border);
-  border-radius: var(--radius-control);
-  overflow: hidden;
 }
 
 .lg-seg__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  padding: 0 var(--control-pad-x-md);
-  border: none;
-  border-left: var(--space-px) solid var(--border);
-  border-radius: 0;
+  height: var(--control-h-sm);
+  padding: 0 var(--control-pad-x-sm);
+  border: var(--space-px) solid transparent;
+  border-radius: var(--radius-control);
   background: transparent;
   color: var(--text-muted);
   font-family: var(--font-sans);
@@ -34,10 +30,9 @@
   cursor: pointer;
   transition: var(--transition-colors);
 }
-.lg-seg__btn:first-child { border-left: none; }
-.lg-seg__btn:hover { color: var(--text); background: var(--surface-hover); }
+.lg-seg__btn:hover { color: var(--text); }
 .lg-seg__btn[aria-checked="true"] {
-  background: var(--surface-active);
+  border-color: var(--border);
   color: var(--text-strong);
 }
 .lg-seg__btn:disabled {

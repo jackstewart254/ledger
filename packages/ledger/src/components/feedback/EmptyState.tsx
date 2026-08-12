@@ -5,14 +5,18 @@ import { Icon, type LucideIcon } from "../core/Icon.js";
 const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
 
 /**
- * EmptyState — icon tile + semibold title + muted body inside a quiet solid
- * border. Centered; optional action slot.
+ * EmptyState — a muted glyph, one line, and an action if there is one to take.
+ *
+ * No description slot on purpose. A paragraph of explanation is hint microcopy
+ * (the kit bans it elsewhere for the same reason) and it lands where the reader
+ * is least interested: a panel with nothing in it. Whatever the paragraph said
+ * belongs in the title if it matters, or a tooltip on the panel's own control
+ * if it doesn't.
  */
 
 export interface EmptyStateProps {
   icon?: LucideIcon;
   title: ReactNode;
-  description?: ReactNode;
   action?: ReactNode;
   compact?: boolean;
   className?: string;
@@ -22,7 +26,6 @@ export interface EmptyStateProps {
 export function EmptyState({
   icon = Inbox,
   title,
-  description,
   action,
   compact = false,
   className,
@@ -34,7 +37,6 @@ export function EmptyState({
         <Icon as={icon} />
       </span>
       <div className="lg-empty-title">{title}</div>
-      {description && <div className="lg-empty-desc">{description}</div>}
       {action && <div className="lg-empty-action">{action}</div>}
     </div>
   );

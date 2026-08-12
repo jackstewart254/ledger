@@ -8,7 +8,12 @@ export type TableAlign = "left" | "center" | "right";
 export interface TableColumn<Row> {
   key: string;
   header?: ReactNode;
-  /** Fixed column width (any CSS length). */
+  /**
+   * Column width (any CSS length). The table lays out fixed, so this is honoured
+   * exactly rather than treated as a hint — columns left unset split whatever
+   * space is over. Don't reach for the auto-layout `width: "100%"` idiom to mean
+   * "take the rest": under fixed layout it takes all of it.
+   */
   width?: string;
   align?: TableAlign;
   /** Numeric cell — tabular figures via --num-features. */
@@ -70,6 +75,13 @@ export function Table<Row>({
     <div className={cls} style={vars}>
       <div className="lg-table-scroll">
         <table>
+          {/* Widths live on <col>, not <th>: the header row is pulled out of
+              flow to hide it, so anything sized there never reaches layout. */}
+          <colgroup>
+            {columns.map((c) => (
+              <col key={c.key} style={c.width ? { width: c.width } : undefined} />
+            ))}
+          </colgroup>
           <thead className="lg-table-head">
             <tr>
               {columns.map((c) => (
@@ -81,7 +93,6 @@ export function Table<Row>({
                       c.align === "center" && "lg-table-th--center",
                     ) || undefined
                   }
-                  style={c.width ? { width: c.width } : undefined}
                   scope="col"
                 >
                   {c.header}

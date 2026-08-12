@@ -3,6 +3,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { CircleAlert, CircleCheck, Info, TriangleAlert, X } from "lucide-react";
 import { Icon, type LucideIcon } from "../core/Icon.js";
+import { IconButton } from "../core/IconButton.js";
 
 const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
 
@@ -32,6 +33,7 @@ const TONE_ICON: Record<InlineAlertTone, LucideIcon> = {
 export interface InlineAlertProps {
   tone?: InlineAlertTone;
   title?: ReactNode;
+  /** The detail. Lives behind the info glyph, not on a second line. */
   children?: ReactNode;
   /** Trailing action slot. */
   action?: ReactNode;
@@ -40,6 +42,16 @@ export interface InlineAlertProps {
   style?: CSSProperties;
 }
 
+/**
+ * One line, always: tone glyph, the headline, an info glyph carrying the
+ * detail, then whatever you can do about it.
+ *
+ * The detail used to sit under the headline as a second line of muted prose,
+ * which made every alert a two-line block whose second line most readers skip —
+ * and gave the alert a variable height that shoved the page around. The
+ * headline says what happened; the paragraph explaining it is reference
+ * material, so it goes where reference material goes.
+ */
 export function InlineAlert({
   tone = "accent",
   title,
@@ -54,16 +66,27 @@ export function InlineAlert({
       <span className="lg-alert-icon">
         <Icon as={TONE_ICON[tone]} />
       </span>
-      <div className="lg-alert-body">
-        {title && <div className="lg-alert-title">{title}</div>}
-        {children && <div className={cx("lg-alert-text", !title && "lg-alert-text--solo")}>{children}</div>}
-      </div>
-      {action}
-      {onClose && (
-        <button type="button" aria-label="Dismiss" className="lg-alert-close" onClick={onClose}>
-          <Icon as={X} />
-        </button>
+      <div className="lg-alert-title">{title ?? children}</div>
+      {title != null && children != null && (
+        <IconButton
+          icon={Info}
+          variant="bare"
+          label="Details"
+          tooltip={children}
+          /* below, not above: an alert sits at the top of the thing it is about,
+             so a tip above it points off the top of the pane */
+          tooltipSide="bottom"
+          className="lg-alert-info"
+        />
       )}
+      <div className="lg-alert-actions">
+        {action}
+        {onClose && (
+          <button type="button" aria-label="Dismiss" className="lg-alert-close" onClick={onClose}>
+            <Icon as={X} />
+          </button>
+        )}
+      </div>
     </div>
   );
 }

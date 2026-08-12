@@ -13,6 +13,22 @@
   cursor: pointer;
   transition: var(--transition-colors), transform var(--dur-fast) var(--ease-standard);
 }
+/* bare — glyph only, no target box. Annotations beside a heading or inside a
+   row, where the 36px control box is louder than the thing it marks. */
+.lg-icon-btn--bare {
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  color: var(--text-subtle);
+}
+.lg-icon-btn--bare:not(:disabled):hover,
+.lg-icon-btn--bare.lg-icon-btn--active {
+  background: transparent;
+  color: var(--text);
+}
+
 .lg-icon-btn:not(:disabled):hover {
   background: var(--surface-hover);
   color: var(--text);

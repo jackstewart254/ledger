@@ -1,15 +1,34 @@
-/* InlineAlert — a bare row, not a tinted panel.
-   Tinting the background AND the border AND the icon says the same thing three
-   times, and five tinted panels stacked in a column turn a quiet surface into
-   a set of traffic lights. Here the ONLY colour is the icon, which is exactly
-   the "colour is semantic, never decoration" rule; the row itself is chrome-
-   less so alerts sit inside cards and tables without nesting boxes. */
+/* InlineAlert — a contained panel with a coloured spine.
+   The previous version was a bare transparent row whose only colour was a 17px
+   glyph. It obeyed "colour is semantic, never decoration" so literally that an
+   alert stopped reading as an alert: full page width, no edges, the same weight
+   as the paragraph above it. An alert IS a semantic state, so tone here is not
+   decoration — it is the message. One tint, one spine, one glyph: the spine
+   carries at a glance, the tint separates it from the surface it sits on, and
+   the text keeps a measure instead of running the width of the pane. */
 .lg-alert {
   display: flex;
   align-items: center;
-  gap: var(--space-2_5);
-  padding: var(--space-2) 0;
-  background: transparent;
+  gap: var(--space-2);
+  min-height: var(--control-h-lg);
+  padding: 0 var(--space-2) 0 var(--space-3);
+  background: var(--surface-hover);
+  /* pill, like every other control — an alert is a thing on the page, not a
+     region of it, and the square panel read as a second card */
+  border-radius: var(--radius-control);
+}
+.lg-alert--accent  { background: var(--accent-subtle); }
+.lg-alert--success { background: var(--success-subtle); }
+.lg-alert--warning { background: var(--warning-subtle); }
+.lg-alert--danger  { background: var(--danger-subtle); }
+
+/* headline takes the slack so the actions sit hard right */
+.lg-alert-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .lg-alert-icon {
@@ -30,24 +49,19 @@
   color: var(--danger);
 }
 
-.lg-alert-body {
-  flex: 1;
-  min-width: 0;
-}
 .lg-alert-title {
-  color: var(--text-strong);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
   font-size: var(--text-sm);
-  font-weight: var(--fw-body);
+  /* the one weight step in the component — the headline is the thing being
+     announced, and at body weight it read as ordinary page copy */
+  font-weight: var(--fw-emphasis);
 }
-.lg-alert-text {
-  color: var(--text-muted);
-  font-size: var(--text-sm);
-  line-height: var(--leading-snug);
-}
-/* Title + body on one row read as one sentence; the body only drops to its own
-   line when it is long enough to need it. */
-.lg-alert-title + .lg-alert-text {
-  margin-top: var(--space-0_5);
+.lg-alert-info {
+  flex-shrink: 0;
 }
 
 .lg-alert-close {

@@ -17,8 +17,14 @@
   max-height: var(--lg-table-max-h, none);
 }
 
+/* Fixed layout, always. With auto layout every column is measured from the
+   cells currently rendered, so filtering a list — or one long value arriving —
+   silently re-cuts every column and the whole table jumps sideways. Fixed
+   layout means the columns are decided once, by <colgroup>, and a row that
+   doesn't fit truncates instead of moving its neighbours. */
 .lg-table table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
@@ -39,11 +45,20 @@
 
 
 .lg-table td {
+  /* On a table cell `height` is a MINIMUM, so a row grows to fit its content.
+     With no vertical padding it grew to exactly the text and no further: a
+     two-line cell (title over meta) ended up touching both hairlines and the
+     line above it. The padding is what makes the taller row readable; a
+     single-line row is unaffected, since --lg-table-row-h still floors it. */
   height: var(--lg-table-row-h);
-  padding: 0 var(--space-4);
+  padding: var(--space-2_5) var(--space-4);
   font-size: var(--text-sm);
   color: var(--text);
   white-space: nowrap;
+  /* the other half of fixed layout: overflow ends in an ellipsis, never in a
+     column shoving the ones beside it */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* One table size, deliberately: no `dense` variant. Two row heights meant two

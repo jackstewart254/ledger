@@ -1,12 +1,13 @@
 /* Button — the primary action control. Hairlines, not shadows; press = 0.98.
-   Single size on purpose — one button height (md), no xs/sm/lg modifiers. */
+   Single size on purpose — one button height (md), no xs/sm/lg modifiers.
+   Label only, no glyph slot: icon + text is two readings of one action. The
+   icon-led control is IconButton. */
 .lg-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: var(--control-h-md);
   padding: 0 var(--control-pad-x-md);
-  gap: var(--gap-sm);
   border: var(--space-px) solid transparent;
   border-radius: var(--radius-control);
   font-family: var(--font-sans);

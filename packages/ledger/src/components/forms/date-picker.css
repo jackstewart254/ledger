@@ -38,13 +38,22 @@
   --lg-dp-cell: var(--control-h-lg);
   position: absolute;
   top: calc(100% + var(--space-1));
-  left: 0;
+  /* --lg-dp-shift is set by the component after measuring: 0 when the panel
+     fits, negative when it would run past the right edge of the viewport. */
+  left: var(--lg-dp-shift, 0px);
   z-index: var(--z-overlay);
   padding: var(--space-3);
   background: var(--surface-raised);
   border: var(--space-px) solid var(--border);
   border-radius: var(--radius-overlay);
   box-shadow: var(--shadow-md);
+}
+
+/* flipped when the trigger sits low enough that the panel would fall off the
+   bottom — and only when there is genuinely more room above it */
+.lg-dp__pop--above {
+  top: auto;
+  bottom: calc(100% + var(--space-1));
   animation: lg-dp-pop var(--dur-fast) var(--ease-out);
 }
 

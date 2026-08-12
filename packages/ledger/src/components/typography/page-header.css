@@ -1,5 +1,23 @@
 /* PageHeader — the view title block (replaces the 8×-copy-pasted heading). */
+.lg-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.lg-page-header-lead { min-width: 0; }
+.lg-page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* markers ride with the title text, not in the action row */
 .lg-page-header-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--text-xl);

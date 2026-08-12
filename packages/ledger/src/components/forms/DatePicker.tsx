@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type ComponentProps,
@@ -89,6 +90,10 @@ export function DatePicker({
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const popRef = useRef<HTMLDivElement>(null);
+  /* where the panel actually fits, measured on open — see the layout effect */
+  const [shift, setShift] = useState(0);
+  const [above, setAbove] = useState(false);
   // roving tabindex only chases focus for keyboard moves — a mouse click on the
   // month chevrons must leave focus on the chevron
   const rovingRef = useRef(false);
@@ -120,6 +125,36 @@ export function DatePicker({
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
     };
+  }, [open]);
+
+  /* Keep the panel on screen. It is absolutely positioned against the trigger,
+     which is fine mid-page and runs straight off the edge for a control on the
+     right of a toolbar — a calendar you cannot click is worse than no calendar.
+     Measured before paint so the panel never appears in the wrong place first.
+     ponytail: measured on open only. It doesn't chase scroll or resize, because
+     an outside mousedown closes it anyway; revisit if it ever lives inside a
+     scrolling pane that moves under it. */
+  useLayoutEffect(() => {
+    if (!open) {
+      setShift(0);
+      setAbove(false);
+      return;
+    }
+    const pop = popRef.current;
+    const root = rootRef.current;
+    if (!pop || !root) return;
+    const M = 8; // viewport margin
+    const p = pop.getBoundingClientRect();
+    const r = root.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+
+    const overflowRight = r.left + p.width + M - vw;
+    // pull left only as far as the left margin allows — a panel wider than the
+    // viewport stays pinned to the left edge rather than swinging off the other side
+    const next = overflowRight > 0 ? Math.max(-overflowRight, M - r.left) : 0;
+    setShift(next);
+    setAbove(r.bottom + p.height + M > vh && r.top - p.height - M > 0);
   }, [open]);
 
   /* move DOM focus onto the day the roving tabindex just landed on */
@@ -195,7 +230,13 @@ export function DatePicker({
       </button>
 
       {open && (
-        <div className="lg-dp__pop" role="dialog" aria-label="Choose date">
+        <div
+          ref={popRef}
+          className={cx("lg-dp__pop", above && "lg-dp__pop--above")}
+          style={{ "--lg-dp-shift": `${shift}px` } as CSSProperties}
+          role="dialog"
+          aria-label="Choose date"
+        >
           <div className="lg-dp__head">
             <IconButton
               icon={ChevronLeft}

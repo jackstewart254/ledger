@@ -16,13 +16,16 @@
 }
 
 .lg-app-shell-rail {
+  position: relative;
+  z-index: var(--z-rail);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-3) 0;
   /* no fill, no divider — it is page, not panel */
-  overflow: hidden;
+  /* Must not clip: rail flyout labels pop sideways over the content pane, and
+     the pane's own `overflow: hidden` means only --z-rail keeps them on top. */
 }
 
 /* The floating pane: header and main share one surface, one hairline, one
@@ -37,19 +40,40 @@
   overflow: hidden;
 }
 
+/* Three slots, not a flex row: lead / search / actions. The outer columns are
+   equal fractions so the centre cell lands on the pane's true midpoint no
+   matter how long the breadcrumb or how many actions ride on the right. */
 .lg-app-shell-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: var(--space-3);
   min-width: 0;
   padding: 0 var(--space-4);
   border-bottom: var(--space-px) solid var(--border);
 }
-/* No header content — no divider line hanging across the pane. */
-.lg-app-shell-pane:not(:has(.lg-app-shell-header > *)) .lg-app-shell-header {
-  display: none;
+
+.lg-app-shell-header__lead,
+.lg-app-shell-header__search,
+.lg-app-shell-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
 }
-.lg-app-shell-pane:not(:has(.lg-app-shell-header > *)) {
+.lg-app-shell-header__search { justify-content: center; }
+.lg-app-shell-header__actions { justify-content: flex-end; }
+
+/* The field owns its own width so it doesn't stretch with the viewport;
+   --search-w keeps every app's header search the same size. Only the field is
+   sized — the centre slot takes a cluster (the controls that act on what the
+   search is pointed at sit either side of it), and those keep their own size. */
+.lg-app-shell-header__search .lg-search {
+  width: min(var(--search-w), 100%);
+}
+
+/* Header omitted entirely (no slot filled) — main takes the whole pane. */
+.lg-app-shell-pane:not(:has(.lg-app-shell-header)) {
   grid-template-rows: minmax(0, 1fr);
 }
 
