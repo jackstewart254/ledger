@@ -1,7 +1,7 @@
 {
   "name": "@mcleanstewart/ledger",
   "version": "0.1.0",
-  "description": "Ledger — a dashboard design system: dark-first, almost-monochrome, hairlines instead of shadows, tabular figures. Typed React components and vanilla CSS, no bundler and no runtime dependency beyond icons.",
+  "description": "Ledger \u2014 a dashboard design system: dark-first, almost-monochrome, hairlines instead of shadows, tabular figures. Typed React components and vanilla CSS, no bundler and no runtime dependency beyond icons.",
   "keywords": [
     "design-system",
     "react",
@@ -30,9 +30,18 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles.css": "./dist/styles.css",
-    "./tokens/index.css": "./dist/tokens/index.css",
-    "./tokens/brand.css": "./dist/tokens/brand.css",
+    "./styles.css": {
+      "types": "./dist/css.d.ts",
+      "default": "./dist/styles.css"
+    },
+    "./tokens/index.css": {
+      "types": "./dist/css.d.ts",
+      "default": "./dist/tokens/index.css"
+    },
+    "./tokens/brand.css": {
+      "types": "./dist/css.d.ts",
+      "default": "./dist/tokens/brand.css"
+    },
     "./package.json": "./package.json"
   },
   "//sideEffects": "CSS only. Without this a bundler tree-shakes the stylesheet import away and the consumer gets an unstyled kit in production and a styled one in dev.",
