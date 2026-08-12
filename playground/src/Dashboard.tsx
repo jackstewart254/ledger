@@ -4,7 +4,6 @@ import {
   Bell,
   Boxes,
   Info,
-  Layers,
   MoreHorizontal,
   Pause,
   Play,
@@ -14,7 +13,6 @@ import {
   Settings,
   ShieldCheck,
   Terminal,
-  Timer,
 } from "lucide-react";
 import {
   AppShell,
@@ -31,9 +29,9 @@ import {
   IconButton,
   InlineAlert,
   KeyValue,
-  KpiTile,
   Menu,
   MetricDelta,
+  SummaryCard,
   PageColumn,
   Progress,
   Rail,
@@ -510,29 +508,29 @@ export default function Dashboard({ toolbar }: DashboardProps) {
             )}
 
             <div className="pg-db-kpis">
-              <KpiTile
-                icon={Play}
-                label="Runs today"
+              <SummaryCard
+                title="Runs today"
                 value={runsToday.toLocaleString("en-GB")}
-                delta={<MetricDelta value={8.2} />}
+                caption="vs 415 yesterday"
+                aside={<MetricDelta value={8.2} />}
               />
-              <KpiTile
-                icon={ShieldCheck}
-                label="Success rate"
+              <SummaryCard
+                title="Success rate"
                 value="96.2%"
-                delta={<MetricDelta value={-1.4} />}
+                caption="vs 97.6% yesterday"
+                aside={<MetricDelta value={-1.4} />}
               />
-              <KpiTile
-                icon={Layers}
-                label="Queue depth"
+              <SummaryCard
+                title="Queue depth"
                 value={queued.toLocaleString("en-GB")}
-                delta={<MetricDelta value={31} suffix="" polarity="lower-is-better" />}
+                caption="vs 146 an hour ago"
+                aside={<MetricDelta value={31} suffix="" polarity="lower-is-better" />}
               />
-              <KpiTile
-                icon={Timer}
-                label="p95 latency"
+              <SummaryCard
+                title="p95 latency"
                 value="812ms"
-                delta={<MetricDelta value={12} polarity="lower-is-better" />}
+                caption="vs 725ms yesterday"
+                aside={<MetricDelta value={12} polarity="lower-is-better" />}
               />
             </div>
 

@@ -67,7 +67,7 @@ const LOAD_PREV = { label: "Last month", data: [902, 884, 871, 866] };
 
 export default function KpiLabE() {
   return (
-    <section id="kpi-lab-e" className="pg-section">
+    <section id="summary" className="pg-section">
       <h2 className="pg-section-title">KPI lab E — key performance summary</h2>
       <p style={{ color: "var(--text-muted)", maxWidth: "var(--measure-text)" }}>
         One card shape for the whole board. The big metric, the compact metric

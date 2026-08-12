@@ -1,9 +1,5 @@
 import {
-  CreditCard,
   Info,
-  Landmark,
-  PiggyBank,
-  Wallet,
 } from "lucide-react";
 import {
   Avatar,
@@ -12,9 +8,9 @@ import {
   Divider,
   IconButton,
   KeyValue,
-  KpiTile,
   Link,
   MetricDelta,
+  SummaryCard,
   PageColumn,
   Progress,
   SectionHeading,
@@ -223,29 +219,29 @@ export default function OverviewPage() {
     <PageColumn>
       <div className="pg-ov-stack">
         <div className="pg-ov-kpis">
-          <KpiTile
-            icon={Landmark}
-            label="Net worth"
+          <SummaryCard
+            title="Net worth"
             value={GBP_WHOLE.format(49322)}
-            delta={<MetricDelta value={2.4} />}
+            caption="vs £48,167 last month"
+            aside={<MetricDelta value={2.4} />}
           />
-          <KpiTile
-            icon={Wallet}
-            label="Cash across accounts"
+          <SummaryCard
+            title="Cash across accounts"
             value={money(cash)}
-            delta={<MetricDelta value={-3.8} />}
+            caption="vs £14,594.10 last month"
+            aside={<MetricDelta value={-3.8} />}
           />
-          <KpiTile
-            icon={CreditCard}
-            label="Spent, August"
+          <SummaryCard
+            title="Spent, August"
             value={money(1862.44)}
-            delta={<MetricDelta value={11.4} polarity="lower-is-better" />}
+            caption="vs £1,672.30 to this point in July"
+            aside={<MetricDelta value={11.4} polarity="lower-is-better" />}
           />
-          <KpiTile
-            icon={PiggyBank}
-            label="Savings rate"
+          <SummaryCard
+            title="Savings rate"
             value={pct(18.2)}
-            delta={<MetricDelta value={3.1} />}
+            caption="vs 17.6% last month"
+            aside={<MetricDelta value={3.1} />}
           />
         </div>
 

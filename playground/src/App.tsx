@@ -12,10 +12,6 @@ import FormsSection from "./sections/FormsSection";
 import DataSection from "./sections/DataSection";
 import ChartsSection from "./sections/ChartsSection";
 import FeedbackSection from "./sections/FeedbackSection";
-import KpiLabA from "./sections/KpiLabA";
-import KpiLabB from "./sections/KpiLabB";
-import KpiLabC from "./sections/KpiLabC";
-import KpiLabD from "./sections/KpiLabD";
 import KpiLabE from "./sections/KpiLabE";
 
 // Anchor ids must match the id each section file sets on its <section> root.
@@ -28,11 +24,7 @@ const NAV = [
   { id: "data", label: "Data" },
   { id: "charts", label: "Charts" },
   { id: "feedback", label: "Feedback" },
-  { id: "kpi-lab-a", label: "KPI lab A" },
-  { id: "kpi-lab-b", label: "KPI lab B" },
-  { id: "kpi-lab-c", label: "KPI lab C" },
-  { id: "kpi-lab-d", label: "KPI lab D" },
-  { id: "kpi-lab-e", label: "KPI lab E" },
+  { id: "summary", label: "Summary cards" },
 ] as const;
 
 type Theme = "dark" | "light";
@@ -111,10 +103,6 @@ export default function App() {
         <DataSection />
         <ChartsSection />
         <FeedbackSection />
-        <KpiLabA />
-        <KpiLabB />
-        <KpiLabC />
-        <KpiLabD />
         <KpiLabE />
       </main>
     </div>

@@ -3,8 +3,8 @@ import type { CSSProperties } from "react";
 import {
   formatDate,
   KeyValue,
-  KpiTile,
   MetricDelta,
+  SummaryCard,
   Pagination,
   Sparkline,
   Table,
@@ -122,13 +122,24 @@ export default function DataSection() {
           gap: "var(--space-4)",
         }}
       >
-        <KpiTile label="Net position" value="£12,480.22" delta={<MetricDelta value={3.2} />} />
-        <KpiTile label="Spend this week" value="£642.10" delta={<MetricDelta value={-8.4} />} />
-        <KpiTile label="Daemons live" value="7" delta={<MetricDelta value={0} />} />
-        <KpiTile
-          label="Runs today"
+        <SummaryCard
+          title="Net position"
+          value="£12,480.22"
+          caption="vs £12,093.60 last month"
+          aside={<MetricDelta value={3.2} />}
+        />
+        <SummaryCard
+          title="Spend this week"
+          value="£642.10"
+          caption="vs £701.02 last week"
+          aside={<MetricDelta value={-8.4} />}
+        />
+        <SummaryCard title="Daemons live" value="7" caption="unchanged since Tuesday" aside={<MetricDelta value={0} />} />
+        <SummaryCard
+          title="Runs today"
           value="148"
-          delta={<MetricDelta value={-12} format={(v) => `${v} vs yday`} />}
+          caption="vs 160 yesterday"
+          aside={<MetricDelta value={-12} format={(v) => `${v} vs yday`} />}
         />
       </div>
 
