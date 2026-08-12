@@ -3,10 +3,14 @@
    Apple Stocks meets Bloomberg: true-dark + warm-off-white modes, hairline
    dividers instead of shadows, muted/desaturated semantic colors, tabular figures.
 
-   This system is ALMOST MONOCHROME by default. "accent" ships wired to the
-   primary text color, so selected / active / focus states read as ink rather
-   than as a brand hue, and color stays reserved for semantics (positive /
-   negative / warning / neutral status, chart lines).
+   ONE HUE carries interaction. "accent" ships #0795FF in dark and #0A7BD8 in
+   light, so fills, active items, focus and chart series read as the house blue.
+   Everything around it stays warm neutral — surfaces, borders and the text ramp
+   are unchanged — and the rest of the color in the system is still strictly
+   semantic (positive / negative / warning / neutral status). Color marks what
+   you can DO, not where things are. See the --accent block below for why
+   --accent-fg is near-black in dark and white in light: that pair is a contrast
+   decision, not a stylistic one.
 
    Three layers now:
      0. BRAND INPUTS (--brand-*) — the override surface. Nothing here sets one;

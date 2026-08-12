@@ -50,6 +50,7 @@
   ],
   "scripts": {
     "build": "tsc && node scripts/copy-css.mjs",
+    "docs": "node scripts/gen-api-docs.mjs",
     "prepublishOnly": "npm run build"
   },
   "publishConfig": {

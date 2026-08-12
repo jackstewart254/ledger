@@ -29,7 +29,10 @@ export interface TableProps<Row> {
   onRowClick?: (row: Row) => void;
   /** Row-height override — sets the --lg-table-row-h custom prop. */
   rowHeight?: string;
-  /** Scroll height for the body (sticky header stays put). */
+  /**
+   * Caps the scroll container's height. Nothing is sticky — the header row is
+   * hidden, so there is no column strip to pin and the whole table scrolls.
+   */
   maxHeight?: string;
   empty?: ReactNode;
   className?: string;

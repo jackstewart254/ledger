@@ -14,14 +14,18 @@
    Consumer CSS is unlayered, so it wins over the kit's @layer without effort.
 
    A WARNING WORTH READING FIRST
-   This kit is almost-monochrome on purpose. `--accent` ships as ink, and colour
-   is reserved for meaning: green is "this went up", red is "this is wrong",
-   ochre is "look at this". Set --brand-primary to a hue and every primary
-   Button, active nav item, focus ring and selected segment becomes that hue —
-   which is fine, and it also means colour no longer *only* means something.
-   The semantic tones then have to shout over a page that is already coloured.
-   If you want a brand hue somewhere, the cheapest place is one accent, not all
-   of them.
+   This kit spends exactly ONE hue. `--accent` ships as the house blue (#0795FF
+   dark, #0A7BD8 light) and carries every interactive state; surfaces, borders
+   and the text ramp stay warm neutrals, and the colour that is left is reserved
+   for meaning: green is "this went up", red is "this is wrong", yellow is "look
+   at this". Set --brand-primary and every primary Button, active nav item,
+   focus ring and selected segment becomes your hue — that is the knob doing its
+   job. Two things to watch. Keep clear of the semantic tones: a green primary
+   makes "up" stop reading as a verdict, and a red one makes every page look
+   like an error. And check --brand-primary-fg against your fill — a hue swap
+   breaks the text-on-fill contrast ratio silently, and that is the one the kit
+   was tuned around. Retinting one accent is still cheaper than retinting
+   everything.
 
    ---------------------------------------------------------------------------
    THE FULL KNOB LIST
@@ -29,9 +33,12 @@
    ---------------------------------------------------------------------------
 
    BRAND
-     --brand-primary            fills, active states, focus. Ships as ink.
-     --brand-primary-hover      defaults to --brand-primary
-     --brand-primary-active
+     --brand-primary            fills, active states, focus. Ships as the house
+                                blue — #0795FF dark, #0A7BD8 light.
+     --brand-primary-hover      a lighter step in dark, darker in light. Has its
+     --brand-primary-active     own literal default, NOT one derived from
+                                --brand-primary, so a hue swap has to set all
+                                three or the hover reverts to blue.
      --brand-primary-fg         text/glyph ON a primary fill — check contrast
      --brand-primary-subtle     tinted chip background (FilterChip pressed, etc.)
      --brand-primary-subtle-fg  text on that tint
@@ -74,8 +81,8 @@
      --brand-warning     --brand-warning-fg  --brand-warning-subtle  --brand-warning-text
      --brand-neutral     --brand-neutral-subtle  --brand-neutral-text
 
-   DATA-VIZ  (tint charts without tinting the UI — often the only colour a
-   dashboard actually wants)
+   DATA-VIZ  (charts default to the accent; these give them their own colour
+   without tinting the UI)
      --brand-chart-line         series line, and what bars/fills derive from
      --brand-chart-fill         area gradient under a TrendChart
      --brand-chart-grid         grid lines
@@ -87,7 +94,7 @@
      :root {
        --brand-chart-line: #0E7490;
      }
-   Bars, the area gradient and the hover wash all derive from --chart-line, so
-   that one line retints every chart in the kit and leaves the interface
-   monochrome.
+   Bars, the area gradient and the hover wash all derive from --chart-line
+   (which itself defaults to --accent), so that one line retints every chart in
+   the kit and leaves the interface on the house blue.
    ============================================================================= */

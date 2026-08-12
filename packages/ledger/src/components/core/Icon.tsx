@@ -17,7 +17,7 @@ export type { LucideIcon } from "lucide-react";
 export interface IconProps {
   /** Any lucide-react icon component. */
   as: LucideIcon;
-  /** Rendered box in px. Defaults to 16. */
+  /** Rendered box in px. Defaults to 17 — see the note on the component. */
   size?: number;
   strokeWidth?: number;
   className?: string;

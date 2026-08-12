@@ -14,7 +14,7 @@ npm workspaces. TypeScript everywhere. One sanctioned runtime dependency per sys
 ## Package anatomy (per system)
 
 ```
-src/tokens/          colors.css, typography.css, spacing.css, radii.css, motion.css, z-index.css, index.css barrel
+src/tokens/          brand.css, colors.css, typography.css, spacing.css, radii.css, motion.css, z-index.css, index.css barrel
 src/styles.css       imports tokens + all component CSS, everything inside @layer
 src/components/<category>/<Name>.tsx + <name>.css
 src/index.ts         barrel — the only sanctioned import path
@@ -28,7 +28,9 @@ src/index.ts         barrel — the only sanctioned import path
 
 Package `@mcleanstewart/ledger`, class prefix `.lg-`, CSS layer `@layer lg`.
 
-Doctrine unchanged from the accepted taste: warm near-black `#171615`, hairlines not shadows, almost-monochrome with accent = ink, colour strictly semantic, Geist, tabular figures, sentence case, 120–180ms motion, one sanctioned tooltip shadow. Dark default on `:root`, light first-class via `[data-theme="light"]`, `color-scheme` set per theme.
+Doctrine: warm near-black `#171615`, hairlines not shadows, colour strictly semantic, Geist, tabular figures, sentence case, 120–180ms motion, one sanctioned tooltip shadow. Dark default on `:root`, light first-class via `[data-theme="light"]`, `color-scheme` set per theme.
+
+One hue carries interaction. `--accent` ships `#0795FF` in dark and `#0A7BD8` in light — the same blue a step down in value, because #0795FF only reaches ~3:1 against the warm off-white and text on a filled button is the case that has to pass 4.5:1. It marks what you can DO: primary fills, active items, focus rings, chart series. Everything else stays where it was — surfaces, borders and the text ramp are warm neutrals, and the semantic tones are still the only other colour in the kit (green up, red wrong, yellow look-at-this). The point is unchanged: colour means something rather than decorates. It is now one hue for state plus the semantics, not ink plus the semantics.
 
 Baseline scale: **the ms-dashboard port** (14px type base, 26/30/36/42 control heights, pill-height tokens) — not scout's original 16px scale.
 
@@ -51,26 +53,31 @@ Changes vs the dashboard port:
 - `:active` transform keeps its explicit `prefers-reduced-motion` guard (the global kill zeroes durations, not transforms).
 - Zero raw hex/px in component CSS — tokens only. Lint-enforced (see Enforcement).
 
-### Components — comprehensive dashboard kit (one wave, ~35)
+### Components — comprehensive dashboard kit
 
-Everything required to build a dashboard, by category:
+Everything required to build a dashboard, by category. This list is the barrels (`src/index.ts` → `components/*/index.ts`); if the two disagree, the barrels are right.
 
-- **core**: Icon (styling wrapper over a lucide-react component passed as `as` — size/stroke/currentColor from tokens; no name strings, an unknown icon is a compile error), Button (variants: primary / secondary / tertiary / danger — in this doctrine primary = ink-inverse fill, secondary = surface + hairline border, tertiary = ghost text), IconButton, Badge, StatusPill, StatusDot (bare dot + soft glow + slow breathe — the daemon-dot signature), CountBadge, Avatar, Kbd (shortcut cap — tooltip use only per the no-hint-microcopy rule), Divider, Link (styled anchor — Preflight-off means bare `<a>` is UA blue otherwise)
-- **typography**: PageHeader (title + subtitle — kills the 8×-copy-pasted heading block), SectionHeading
+- **core**: Icon (styling wrapper over a lucide-react component passed as `as` — one default box, 17px at stroke 2, colour from `currentColor`; no name strings, an unknown icon is a compile error), Button (variants: primary / secondary / tertiary / danger — primary = accent fill, secondary = surface + hairline border, tertiary = ghost text, danger = the semantic red), IconButton, Badge, StatusPill, StatusDot (a bare dot — no glow ring, no breathe; the colour is the whole signal), CountBadge, Avatar, Kbd (shortcut cap — tooltip use only per the no-hint-microcopy rule), Divider, Link (styled anchor — Preflight-off means bare `<a>` is UA blue otherwise)
+- **typography**: PageHeader (title + subtitle + actions — kills the 8×-copy-pasted heading block), SectionHeading
 - **layout**: AppShell (fixed rail slot + header slot + scrollable content — kills per-app Shell rebuilds), PageColumn (tokenised max-width + gutters, full-bleed opt-out — kills the negative-margin hack), Card (the dashboard hand-rolls a CARD literal today)
-- **navigation**: Rail (icon-only 56px, hover/focus flyout labels), Tabs, Menu (anchored action/kebab menu), CommandMenu (Cmd+K palette — filterable list, keyboard nav)
+- **navigation**: Rail + RailItem (icon-only 56px, hover/focus flyout labels), Tabs, Menu (anchored action/kebab menu), CommandMenu (Cmd+K palette — filterable list, keyboard nav)
 - **forms**: FormField (label + hint + error wrapper), Input, Textarea, Select, MultiSelect, SearchField, Checkbox, RadioGroup, Switch, SegmentedControl, FilterChip, RangeInput, DatePicker (own month-grid popover on the `.lg-control` trigger — the native `<input type="date">` popup is the browser's own chrome, unstylable; still no picker dependency)
-- **data**: Table (render-prop columns, sticky header, sortable), KpiTile, MetricDelta, Sparkline, TrendChart, KeyValue (label/value meta rows on `--row-h` with hairline separators), Pagination
-- **feedback**: Modal, Drawer, Toast, Tooltip (CSS transitions — no gsap, no animation dep), InlineAlert, EmptyState, Skeleton, Spinner, Progress
-- **utils**: focusTrap, scrollLock, format helpers (`compactNumber`/`pct`)
+- **data**: Table (render-prop columns; header row visually hidden but left in the a11y tree, and no sorting — see below), SummaryCard + SummarySplit (one card for the whole summary board: title, verdict, figure, caption, then whatever fills the rest), MetricDelta, Sparkline, TrendChart, BarChart, CompareChart (TrendChart's geometry, two series), KeyValue (label/value meta rows on `--row-h` with hairline separators), Pagination
+- **feedback**: Modal, Drawer, Toast + ToastViewport, Tooltip (CSS transitions — no gsap, no animation dep), InlineAlert, EmptyState, Skeleton, Spinner, Progress
+- **utils**: focusTrap (`trapFocus`/`useFocusTrap`), scrollLock (`lockBodyScroll`/`unlockBodyScroll`), format helpers (`compactNumber`/`pct`/`formatDate`)
 
-~47 components. Later waves: whatever the next dashboard actually needs — nothing speculative beyond this kit.
+54 exported components, counting `RailItem` and `ToastViewport` as their own. `ChartTooltip` and `src/internal/` (`cx`, `month-grid`) are shared internals and stay off the barrel on purpose. Later waves: whatever the next dashboard actually needs — nothing speculative beyond this kit.
+
+Table has no sticky header and no sorting, and both were removed rather than never built. A column of dates under a heading reading "Date" tells the reader what they already worked out, so the header row is clipped out of view and left in the accessibility tree; nothing is left to stick. Sorting lived entirely in that header, and a sort control with nothing visible to click is worse than none — a view that needs sorting puts the control in its page toolbar, where it can say what it does.
 
 ### Component API conventions
 
 - Typed props, no `any`. Variants are union-typed props mapping to modifier classes.
 - `className` + `style` passthrough on every component root.
 - Table keeps render-prop columns (the pattern the dashboard already consumes).
+- One control height, and no `size` prop on a control. Button, IconButton, Tabs, SegmentedControl and every field on the shared `.lg-control` frame (Input, Select, SearchField, MultiSelect, DatePicker) sit at `--control-h-md` = 36px; Textarea composes the same frame but grows with its content. Two heights on one page means a toolbar where nothing shares a baseline, and the smaller variant shrinking its type until it stops being readable — emphasis is what `variant` is for, width is what layout is for.
+- The rule is about control HEIGHTS, not a ban on the word. The deliberate exceptions, so the rule stays checkable: `Avatar` and `Icon` take `size`; `Skeleton` takes `width`/`height`; `Modal`, `Drawer` and `MultiSelect` take `width`; `Table` takes column `width` and `maxHeight`; `Sparkline`/`TrendChart`/`BarChart`/`CompareChart` take chart dimensions. Those are the size of a box, not a step on a control scale.
+- Anything deliberately off the control height is fixed in CSS and never exposed as a prop: Badge and StatusPill 18px, CountBadge 16px, FilterChip 26px, Pagination buttons 30px, Table row 42px, KeyValue row 48px. A marker is read as text, not as a control; when one looks wrong beside a button, the fault is that a marker was put in a row of controls.
 
 ## Enforcement
 

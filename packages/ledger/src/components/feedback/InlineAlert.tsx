@@ -8,8 +8,9 @@ import { IconButton } from "../core/IconButton.js";
 const cx = (...c: Array<string | false | undefined>) => c.filter(Boolean).join(" ");
 
 /**
- * InlineAlert — semantic subtle-bg row with a tone icon. Accent reads as ink
- * (monochrome accent); color appears only for success/warning/danger.
+ * InlineAlert — semantic subtle-bg row with a tone icon. The `accent` tone
+ * carries the house blue; `neutral` is the one that stays out of the way, and
+ * green/yellow/red are reserved for success/warning/danger.
  */
 
 export type InlineAlertTone = "accent" | "neutral" | "success" | "warning" | "danger";
