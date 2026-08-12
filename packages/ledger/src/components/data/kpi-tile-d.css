@@ -1,0 +1,135 @@
+/* KpiTileD — the "stat card": filled tone tile, figure, hairline, detail link.
+   Replicated from a reference Jack liked. Two things were deliberately NOT
+   carried over from it: the drop shadows (this kit separates with hairlines)
+   and the pure-white surfaces (it uses the warm neutrals it already has). */
+.lg-kpi-d {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-surface);
+}
+
+.lg-kpi-d-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* The filled tile. A rounded square, not a pill: at this size a pill reads as a
+   button and invites a click the card doesn't offer. */
+.lg-kpi-d-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--control-h-lg);
+  height: var(--control-h-lg);
+  border-radius: var(--radius-md);
+  background: var(--lg-kpi-d-tone);
+  color: var(--lg-kpi-d-tone-fg);
+}
+
+.lg-kpi-d {
+  --lg-kpi-d-tone: var(--accent);
+  --lg-kpi-d-tone-fg: var(--accent-fg);
+}
+.lg-kpi-d--success { --lg-kpi-d-tone: var(--success); --lg-kpi-d-tone-fg: var(--success-fg); }
+.lg-kpi-d--warning { --lg-kpi-d-tone: var(--warning); --lg-kpi-d-tone-fg: var(--warning-fg); }
+.lg-kpi-d--danger  { --lg-kpi-d-tone: var(--danger);  --lg-kpi-d-tone-fg: var(--danger-fg); }
+
+.lg-kpi-d-figures {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0_5);
+  min-width: 0;
+}
+.lg-kpi-d-value {
+  font-size: var(--text-2xl);
+  font-weight: var(--fw-body);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--text-strong);
+  font-feature-settings: var(--num-features);
+}
+.lg-kpi-d-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The detail row sits on its own hairline and runs the card's full width, so
+   the arrow lands on the right edge rather than trailing the words. */
+.lg-kpi-d-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3) 0 0;
+  border: none;
+  border-top: var(--space-px) solid var(--border);
+  background: none;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-kpi-d-action:hover { color: var(--text); }
+.lg-kpi-d-arrow { flex-shrink: 0; }
+
+/* ---- The larger panel ---------------------------------------------------- */
+.lg-kpi-d-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-surface);
+}
+
+.lg-kpi-d-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.lg-kpi-d-panel-title {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lg-kpi-d-panel-figures {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.lg-kpi-d-panel-value {
+  font-size: var(--text-3xl);
+  font-weight: var(--fw-body);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--text-strong);
+  font-feature-settings: var(--num-features);
+}
+
+/* the chart takes whatever height is left, and the panel never scrolls */
+.lg-kpi-d-panel-chart {
+  min-width: 0;
+  margin-top: var(--space-1);
+}

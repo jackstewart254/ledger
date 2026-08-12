@@ -1,0 +1,234 @@
+/* KpiTileA — label and figure at the top, and at the FLOOR the context that
+   says whether the figure is fine: the series it came from, the threshold it is
+   judged against, or both.
+
+   The context is bottom-aligned (margin-top: auto) on purpose. A row of these
+   is one instrument panel: the trends line up on one baseline and the threshold
+   gates line up on one vertical, whatever height the tiles are stretched to and
+   however many slots each one fills. */
+.lg-kpi-a {
+  /* The four colour roles. A tone modifier below re-points them and the whole
+     tile turns — the bar, the caption, the series and the figure. */
+  --lg-kpi-a-tone: var(--neutral-status); /* the bar fill                  */
+  --lg-kpi-a-tone-text: var(--text-muted); /* the gap caption              */
+  --lg-kpi-a-series: var(--chart-line); /* the trend line + its wash       */
+  --lg-kpi-a-ink: var(--text-strong); /* the figure                        */
+  --lg-kpi-a-trend-h: var(--space-10); /* 40px — a shape, not a chart      */
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-surface);
+  /* the trend bleeds past the padding — clip it back to the tile's corners */
+  overflow: hidden;
+}
+
+/* Tone. `neutral` is the base above: no target, no claim, no colour.
+   Colour lands on the SIGNAL — never on the surface, never on the border. */
+.lg-kpi-a--success {
+  --lg-kpi-a-tone: var(--success);
+  --lg-kpi-a-tone-text: var(--success-text);
+}
+.lg-kpi-a--warning {
+  --lg-kpi-a-tone: var(--warning);
+  --lg-kpi-a-tone-text: var(--warning-text);
+}
+/* A breach takes the figure and the series with it. This is the whole point of
+   the component: at a glance across a KPI row, the red number is the fire.
+   The doctrine's rule holds — a series is only red when the thing it plots is
+   bad, and this one has crossed its own threshold. */
+.lg-kpi-a--danger {
+  --lg-kpi-a-tone: var(--danger);
+  --lg-kpi-a-tone-text: var(--danger-text);
+  --lg-kpi-a-series: var(--danger);
+  --lg-kpi-a-ink: var(--danger-text);
+}
+
+/* ---- Head: glyph + label ------------------------------------------------- */
+/* No hairline square around the icon. The square forced a row layout, and this
+   tile needs its full width for a bled chart. */
+.lg-kpi-a-head {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.lg-kpi-a-icon {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--text-subtle);
+}
+
+/* Sentence case at body weight, not a caps eyebrow. BarChart already walked the
+   caps back for the same reason: shouting the quietest thing on the card fights
+   everything under it, and there is a lot under it now. */
+.lg-kpi-a-label {
+  min-width: 0;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-body);
+  color: var(--text-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Figure: the number, with the delta on its baseline ------------------ */
+.lg-kpi-a-figure {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.lg-kpi-a-value {
+  font-size: var(--text-2xl);
+  /* Body weight: at 26px the size IS the emphasis. */
+  font-weight: var(--fw-body);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--lg-kpi-a-ink);
+  font-feature-settings: var(--num-features);
+}
+
+/* The delta loses its pill INSIDE the tile. As a badge it floated in the dead
+   space beside the label; as tinted tabular text on the figure's baseline it is
+   part of the reading. The colour still carries the direction — that is
+   MetricDelta's job and it is untouched. */
+.lg-kpi-a-figure .lg-delta {
+  height: auto;
+  padding: 0;
+  background: none;
+}
+
+/* ---- Context: everything that answers "is this fine?" -------------------- */
+.lg-kpi-a-context {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  margin-top: auto;
+  padding-top: var(--space-4);
+}
+
+/* ---- Trend --------------------------------------------------------------- */
+/* Bled to the tile's left and right edges: a chart inset inside the padding
+   reads as a widget parked in a box, one that runs the full width reads as the
+   tile's own foundation. */
+.lg-kpi-a-trend {
+  margin-inline: calc(var(--space-4) * -1);
+  min-width: 0;
+}
+
+/* Last thing in the tile → it is the floor. The wash runs off the bottom edge
+   under the tile's own radius. With a target underneath it, it stops at the
+   padding instead, because the bar needs to align with the text above it. */
+.lg-kpi-a-context > .lg-kpi-a-trend:last-child {
+  margin-bottom: calc(var(--space-4) * -1);
+}
+
+.lg-kpi-a-trend-svg {
+  display: block;
+  width: 100%;
+  height: var(--lg-kpi-a-trend-h);
+}
+
+/* non-scaling-stroke is load-bearing: the viewBox is stretched non-uniformly to
+   the tile's width, and without it the line's weight stretches with it. */
+.lg-kpi-a-line {
+  fill: none;
+  stroke: var(--lg-kpi-a-series);
+  stroke-width: var(--chart-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.lg-kpi-a-area {
+  stroke: none;
+}
+/* Same 18% wash as --chart-fill, mixed from the tile's own series colour so it
+   follows the tone into --danger instead of staying blue under a red line. */
+.lg-kpi-a-area-top {
+  stop-color: color-mix(in srgb, var(--lg-kpi-a-series) 18%, transparent);
+}
+.lg-kpi-a-area-bottom {
+  stop-color: color-mix(in srgb, var(--lg-kpi-a-series) 18%, transparent);
+  stop-opacity: 0;
+}
+
+/* ---- Target -------------------------------------------------------------- */
+.lg-kpi-a-target {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1_5);
+  min-width: 0;
+}
+
+/* A recessed well, the same one a track anywhere else in the kit sits in. */
+.lg-kpi-a-track {
+  position: relative;
+  height: var(--space-1_5);
+  border-radius: var(--radius-pill);
+  background: var(--bg-subtle);
+}
+
+.lg-kpi-a-fill {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: var(--lg-kpi-a-fill, 0);
+  /* No min-width. A reading of nothing against a target draws nothing — a
+     floor here would paint a nub on "0 5xx responses" and call it progress. */
+  border-radius: var(--radius-pill);
+  background: var(--lg-kpi-a-tone);
+  transition:
+    width var(--dur-base) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard);
+}
+
+/* The gate. Opaque and overshooting the track top and bottom, so it reads as a
+   line the bar is measured against rather than a segment of the bar — and so it
+   still reads when the fill has run past it and it is sitting on colour. */
+.lg-kpi-a-gate {
+  position: absolute;
+  left: var(--lg-kpi-a-gate, 100%);
+  top: calc(var(--space-0_5) * -1);
+  bottom: calc(var(--space-0_5) * -1);
+  width: var(--space-0_5);
+  margin-left: calc(var(--space-0_5) / -2);
+  border-radius: var(--radius-pill);
+  background: var(--text-muted);
+}
+
+.lg-kpi-a-caption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* What the threshold is — a fact, not a hint. */
+.lg-kpi-a-threshold {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+  font-feature-settings: var(--num-features);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* How far past it, or how much room is left. Signed, like MetricDelta: the sign
+   carries the direction and the colour carries whether that is good news. */
+.lg-kpi-a-gap {
+  flex-shrink: 0;
+  font-size: var(--text-xs);
+  color: var(--lg-kpi-a-tone-text);
+  font-feature-settings: var(--num-features);
+  white-space: nowrap;
+}

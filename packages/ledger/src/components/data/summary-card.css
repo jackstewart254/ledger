@@ -1,0 +1,107 @@
+/* SummaryCard — the analytics summary board's one card.
+   Same surface treatment as the rest of the data family (hairline on --surface,
+   no shadow). Two things from the reference were NOT carried over: its white
+   cards on a grey page (this kit's surfaces are the warm neutrals it already
+   has) and its 40px figures (the type scale tops out at --text-3xl). */
+.lg-sum {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: var(--space-px) solid var(--border);
+  border-radius: var(--radius-surface);
+}
+
+/* Top-aligned, not centred: the title wraps on long metric names and the pill
+   has to stay on the first line when it does. The title's leading-tight at
+   --text-sm measures ~16px, the same as --pill-h-sm, so the two line up
+   without a nudge in the ordinary one-line case. */
+.lg-sum-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* No ellipsis. A truncated metric name is unreadable in exactly the case the
+   truncation exists for — cards in this family are wide enough for two lines
+   and the head is the only thing above them. */
+.lg-sum-title {
+  min-width: 0;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-body);
+  line-height: var(--leading-tight);
+  color: var(--text-muted);
+}
+
+.lg-sum-figures {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* The largest step in the scale. Body weight, not emphasis: at 28px the size
+   IS the emphasis, and a heavier cut turns a figure into a headline. */
+.lg-sum-value {
+  font-size: var(--text-3xl);
+  font-weight: var(--fw-body);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--text-strong);
+  font-feature-settings: var(--num-features);
+}
+
+/* --text-subtle is a step too far down on the near-black canvas at 13px; the
+   caption is the figure's baseline of comparison and has to stay readable. */
+.lg-sum-caption {
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+  font-feature-settings: var(--num-features);
+}
+
+.lg-sum-body {
+  min-width: 0;
+}
+
+/* ---- The split card's shares -------------------------------------------- */
+.lg-sum-split {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+.lg-sum-split-part {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0_5);
+  min-width: 0;
+}
+.lg-sum-split-part + .lg-sum-split-part {
+  padding-left: var(--space-3);
+  border-left: var(--space-px) solid var(--border-subtle);
+}
+.lg-sum-split-value {
+  font-size: var(--text-2xl);
+  font-weight: var(--fw-body);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--text-strong);
+  font-feature-settings: var(--num-features);
+}
+/* Everything after the leading share steps down a size and into the muted
+   ramp — that step IS the emphasis. */
+.lg-sum-split-part + .lg-sum-split-part .lg-sum-split-value {
+  font-size: var(--text-lg);
+  color: var(--text-muted);
+}
+
+.lg-sum-split-label {
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+}

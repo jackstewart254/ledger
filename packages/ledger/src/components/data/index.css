@@ -1,8 +1,18 @@
 /* data component styles — string-form @imports only. */
 @import "./table.css";
 @import "./kpi-tile.css";
+@import "./kpi-tile-a.css";
+@import "./kpi-tile-b.css";
+@import "./kpi-tile-c.css";
+@import "./kpi-tile-d.css";
 @import "./metric-delta.css";
 @import "./sparkline.css";
+/* chart.css first: the shared .lg-chart-svg rules and bar-chart.css's overrides
+   are equal specificity, so source order decides which height wins. */
+@import "./chart.css";
 @import "./trend-chart.css";
+@import "./bar-chart.css";
+@import "./compare-chart.css";
 @import "./key-value.css";
+@import "./summary-card.css";
 @import "./pagination.css";
