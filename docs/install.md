@@ -143,7 +143,7 @@ package — and this repo's root is the private `ui-designs` workspace, not
 
 ## Don't copy the source in
 
-Copying components into each project forks them. The kit is ~47 components plus
+Copying components into each project forks them. The kit is 55 components plus
 tokens, shared CSS primitives (`.lg-control`, the hairline scale) and utilities
 that components rely on across category boundaries — a partial copy pulls more
 than it looks like it will, and a fix then has to be applied N times. Install it.
