@@ -14,6 +14,7 @@ imported once, `data-theme` on `<html>`, Geist loaded.
 3. [Settings form with validation](#3-settings-form-with-validation)
 4. [A KPI row](#4-a-kpi-row)
 5. [Detail drawer opened from a table row](#5-detail-drawer-opened-from-a-table-row)
+6. [Sortable, selectable table with a bulk action](#6-sortable-selectable-table-with-a-bulk-action)
 
 ---
 
@@ -202,7 +203,7 @@ import {
   Card,
   DatePicker,
   EmptyState,
-  FilterChip,
+  FilterToggle,
   IconButton,
   Menu,
   PageColumn,
@@ -418,14 +419,14 @@ export default function ApplicationsPage({ data }: { data: Application[] }) {
 
         <div className="rc-chips">
           {STAGES.map((stage) => (
-            <FilterChip
+            <FilterToggle
               key={stage}
               count={data.filter((a) => a.stage === stage).length}
               active={stages.includes(stage)}
               onChange={toggleStage(stage)}
             >
               {STAGE[stage].label}
-            </FilterChip>
+            </FilterToggle>
           ))}
         </div>
 
@@ -1252,6 +1253,142 @@ export default function TicketsPage({ tickets }: { tickets: Ticket[] }) {
   confirmation for the destructive case, one undo for the reversible result.
 - Both overlays portal to `<body>`, so no transformed or filtered ancestor can
   re-base their fixed positioning or clip them.
+
+---
+
+## 6. Sortable, selectable table with a bulk action
+
+`Table` draws the sort affordance and the tick boxes; **you** own the sort state,
+the comparator and the selected set. Nothing below is optional ceremony — it is
+the whole contract:
+
+- The kit never reorders `rows`. It has no way to know that "status" sorts
+  `risk → watch → good` rather than alphabetically, or that your amounts are
+  strings that have to be compared as numbers. It renders the order you hand it.
+- Selection is keyed by `rowKey`, so give it a real id. With the index fallback,
+  selection tracks a row's *position*, and the first sort click moves every tick
+  onto a different record.
+
+Two pieces of state, one derived array, and the header un-hides itself because
+there is now something in it.
+
+```tsx
+import { useMemo, useState } from "react";
+import { Button, StatusPill, Table, formatDate } from "@mcleanstewart/ledger";
+import type { StatusPillStatus, TableColumn, TableRowKey, TableSort } from "@mcleanstewart/ledger";
+
+interface Run {
+  id: string;
+  pipeline: string;
+  startedAt: string;
+  durationMs: number;
+  status: StatusPillStatus;
+}
+
+const columns: TableColumn<Run>[] = [
+  { key: "startedAt", header: "Started", width: "150px", numeric: true, sortable: true,
+    render: (r) => formatDate(r.startedAt) },
+  { key: "pipeline", header: "Pipeline", sortable: true },
+  { key: "durationMs", header: "Duration", width: "110px", align: "right", numeric: true, sortable: true,
+    render: (r) => `${(r.durationMs / 1000).toFixed(1)}s` },
+  /* Not sortable: the order the pills happen to fall in carries no meaning, and
+     a sort control that produces an arbitrary order is worse than none. */
+  { key: "status", header: "Status", width: "120px", render: (r) => <StatusPill status={r.status} /> },
+];
+
+/* One comparator, ascending, per sortable key. Direction is applied once at the
+   call site — writing each comparator twice is how "sort descending by duration"
+   ends up subtly different from its ascending twin. */
+const comparators: Record<string, (a: Run, b: Run) => number> = {
+  startedAt: (a, b) => a.startedAt.localeCompare(b.startedAt),
+  pipeline: (a, b) => a.pipeline.localeCompare(b.pipeline),
+  durationMs: (a, b) => a.durationMs - b.durationMs,
+};
+
+export function RunsTable({ runs, onCancel }: { runs: Run[]; onCancel: (ids: string[]) => void }) {
+  const [sort, setSort] = useState<TableSort>({ key: "startedAt", dir: "desc" });
+  const [selected, setSelected] = useState<ReadonlySet<TableRowKey>>(new Set());
+
+  /* Sort a COPY. Array.prototype.sort mutates, and sorting the array you were
+     handed edits your caller's state in place — the render that reveals it is
+     usually several interactions later. */
+  const sorted = useMemo(() => {
+    const cmp = comparators[sort.key];
+    if (!cmp) return runs;
+    const dir = sort.dir === "asc" ? 1 : -1;
+    return [...runs].sort((a, b) => cmp(a, b) * dir);
+  }, [runs, sort]);
+
+  /* Selection outlives sorting — the keys are ids, so reordering moves the ticks
+     with their rows. It does NOT outlive the rows themselves: prune anything
+     that has left the list, or a bulk action fires at records that are gone. */
+  const selectedRuns = sorted.filter((r) => selected.has(r.id));
+
+  return (
+    <div className="rs-panel">
+      <div className="rs-bar" aria-live="polite">
+        <span className="rs-count">
+          {selectedRuns.length === 0 ? `${sorted.length} runs` : `${selectedRuns.length} selected`}
+        </span>
+        <Button
+          variant="danger"
+          disabled={selectedRuns.length === 0}
+          onClick={() => onCancel(selectedRuns.map((r) => r.id))}
+        >
+          Cancel
+        </Button>
+      </div>
+
+      <Table
+        columns={columns}
+        rows={sorted}
+        rowKey={(r) => r.id}
+        maxHeight="60vh"
+        sort={sort}
+        onSortChange={setSort}
+        selectedKeys={selected}
+        onSelectionChange={setSelected}
+        empty="No runs in this window"
+      />
+    </div>
+  );
+}
+```
+
+```css
+.rs-panel { display: grid; gap: var(--space-3); }
+
+/* The bulk bar is always mounted, never conditional: a bar that appears on the
+   first tick shoves the table down under the cursor mid-selection. */
+.rs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: var(--control-h-md);
+}
+
+.rs-count {
+  min-width: 12ch;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+```
+
+**What this pattern gets right**
+
+- `onSortChange` replaces the whole sort object, so there is one source of truth
+  for key *and* direction. The kit decides the next direction (a new column
+  starts ascending, the sorted one flips) and hands you the result — you never
+  work it out at the call site.
+- The comparator table is keyed by column key, so an unsortable or unknown key
+  falls through to the unsorted order instead of throwing.
+- `selectedKeys` is a `Set`, and every update is a **new** `Set`. Mutating the
+  one in state and calling the setter with it re-renders nothing.
+- The count is in a live region and on a reserved measure, so it announces
+  without the button beside it moving as the digits change.
+- `maxHeight` is what makes the header worth having: the body scrolls under a
+  pinned header row, so the column you sorted by is still named at row 200.
 
 ---
 

@@ -3,6 +3,9 @@ export {
   type TableProps,
   type TableColumn,
   type TableAlign,
+  type TableSort,
+  type TableSortDir,
+  type TableRowKey,
 } from "./Table.js";
 export { MetricDelta, type MetricDeltaProps } from "./MetricDelta.js";
 export { Sparkline, type SparklineProps } from "./Sparkline.js";

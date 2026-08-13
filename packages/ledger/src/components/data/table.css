@@ -1,4 +1,5 @@
-/* Table — hover rows, hairline separators, visually hidden header row.
+/* Table — hover rows, hairline separators, header row hidden until it holds a
+   control (then visible and sticky).
    Row height flows through --lg-table-row-h (prop-driven). */
 .lg-table {
   /* 42px rows with a generous horizontal inset — the Linear list proportion.
@@ -28,10 +29,12 @@
   border-collapse: collapse;
 }
 
-/* Header row: present for assistive tech, invisible on screen. Clipped rather
-   than display:none — display:none removes it from the accessibility tree too,
-   which is the one thing it is still here for. */
-.lg-table-head {
+/* Header row, hidden: present for assistive tech, invisible on screen. Clipped
+   rather than display:none — display:none removes it from the accessibility
+   tree too, which is the one thing it is still here for. The component drops
+   this class once the header has something to hold (a sortable column, or the
+   select-all box); everything below styles the visible state. */
+.lg-table-head--hidden {
   position: absolute;
   width: var(--space-px);
   height: var(--space-px);
@@ -42,6 +45,55 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* Sticky behind no prop: maxHeight is what makes the body scroll, and a table
+   that scrolls its headings away is only ever worse. Inert while the header is
+   clipped, since a header out of flow has nothing to pin. */
+.lg-table-head th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: var(--lg-table-row-h);
+  padding: 0 var(--space-4);
+  background: var(--surface);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  color: var(--text-muted);
+  text-align: left;
+  white-space: nowrap;
+  /* Same truncation contract as the cells below — the header is inside the
+     column-width budget, not exempt from it. The 16px inset leaves the sort
+     button's 4px focus ring well clear of the clip. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* The hairline is an inset shadow, not a border: under border-collapse the
+     collapsed border belongs to the table grid, not the cell, so it stays
+     behind while the sticky cell scrolls away from it. */
+  box-shadow: inset 0 calc(-1 * var(--space-px)) 0 var(--border);
+}
+.lg-table th.lg-table-th--right { text-align: right; }
+.lg-table th.lg-table-th--center { text-align: center; }
+
+/* The sort control IS the heading — a separate button beside the label would
+   be a second thing to aim at in a 42px row. Focus ring comes from the global
+   :focus-visible rule, activation from it being a real <button>. */
+.lg-table-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1_5);
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-table-sort:hover { color: var(--text); }
+/* The unsorted column's double-chevron: legible enough to read as "you can
+   sort by this", quiet enough not to compete with the sorted one. */
+.lg-table-sort-idle { color: var(--text-subtle); }
 
 
 .lg-table td {
@@ -70,11 +122,27 @@
   border-top: var(--space-px) solid var(--border-subtle);
 }
 
+/* Hover and selection paint the same background at the same specificity, so
+   source order is the priority list: selection last, and a row you ticked keeps
+   saying so while the pointer is on it. */
 .lg-table tbody tr {
   transition: background-color var(--dur-fast) var(--ease-standard);
 }
 .lg-table tbody tr:hover { background: var(--surface-hover); }
+.lg-table tbody tr[data-selected] { background: var(--accent-subtle); }
 .lg-table--clickable tbody tr { cursor: pointer; }
+
+/* Checkbox column — the box plus the standard cell inset, so it lines up with
+   every other column. */
+.lg-table-col--select { width: calc(var(--pill-h-sm) + 2 * var(--space-4)); }
+.lg-table th.lg-table-th--select,
+.lg-table td.lg-table-cell--select {
+  /* The checkbox is the entire cell, so there is nothing for it to share a
+     baseline with — and sitting on one leaves it a couple of pixels low, with
+     the line box's descender space underneath. Collapsing the line box makes
+     the cell's own vertical-align centre the box exactly. */
+  line-height: 0;
+}
 
 .lg-table-cell--num {
   font-family: var(--font-mono);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import {
   formatDate,
@@ -10,7 +10,7 @@ import {
   Table,
   TrendChart,
 } from "@mcleanstewart/ledger";
-import type { TableColumn } from "@mcleanstewart/ledger";
+import type { TableColumn, TableRowKey, TableSort } from "@mcleanstewart/ledger";
 
 const sub: CSSProperties = {
   fontSize: "var(--text-md)",
@@ -66,6 +66,18 @@ const TXN_COLUMNS: TableColumn<Txn>[] = [
   },
 ];
 
+/* Same columns, with the sort affordance switched on for the three that have a
+   meaningful order. Category is a label, not a scale. */
+const TXN_SORT_COLUMNS: TableColumn<Txn>[] = TXN_COLUMNS.map((c) => ({
+  ...c,
+  sortable: c.key !== "category",
+}));
+
+/* The comparator lives out here, in the app, because the app is the only thing
+   that knows "amount" is a number and "description" is not. */
+const compareTxn = (a: Txn, b: Txn, key: string) =>
+  key === "amount" ? a.amount - b.amount : String(a[key as keyof Txn]).localeCompare(String(b[key as keyof Txn]));
+
 interface Daemon {
   id: string;
   name: string;
@@ -108,7 +120,13 @@ const SPARK_C = [5, 5, 6, 5, 7, 6, 6, 7, 6, 7, 7, 8];
 
 export default function DataSection() {
   const [page, setPage] = useState(3);
+  const [sort, setSort] = useState<TableSort>({ key: "date", dir: "desc" });
+  const [selected, setSelected] = useState<ReadonlySet<TableRowKey>>(new Set());
 
+  const sortedTxns = useMemo(() => {
+    const dir = sort.dir === "asc" ? 1 : -1;
+    return [...TXNS].sort((a, b) => compareTxn(a, b, sort.key) * dir);
+  }, [sort]);
 
   return (
     <section id="data" className="pg-section">
@@ -162,6 +180,21 @@ export default function DataSection() {
 
       <h3 style={sub}>Table — daemons</h3>
       <Table columns={DAEMON_COLUMNS} rows={DAEMONS} rowKey={(r) => r.id} />
+
+      <h3 style={sub}>Table — sortable, selectable, sticky header</h3>
+      <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", margin: "0 0 var(--space-3)" }}>
+        {selected.size === 0 ? "Nothing selected" : `${selected.size} selected`} · sorted by {sort.key} ({sort.dir})
+      </p>
+      <Table
+        columns={TXN_SORT_COLUMNS}
+        rows={sortedTxns}
+        rowKey={(r) => r.id}
+        maxHeight="240px"
+        sort={sort}
+        onSortChange={setSort}
+        selectedKeys={selected}
+        onSelectionChange={setSelected}
+      />
 
       <h3 style={sub}>Sparkline</h3>
       <div style={{ display: "flex", gap: "var(--space-8)", alignItems: "center" }}>
