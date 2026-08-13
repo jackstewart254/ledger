@@ -5,6 +5,11 @@
     "packages/*",
     "playground"
   ],
+  "scripts": {
+    "pack:ledger": "npm run build -w @mcleanstewart/ledger && npm pack -w @mcleanstewart/ledger --pack-destination .",
+    "release:ledger:dry": "npm publish -w @mcleanstewart/ledger --dry-run",
+    "release:ledger": "npm publish -w @mcleanstewart/ledger"
+  },
   "devDependencies": {
     "typescript": "^5.9.2"
   }
