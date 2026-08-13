@@ -16,6 +16,10 @@ Icon-only 56px vertical rail. Items are glyphs; the label lives in a flyout chip
 
 `Rail` · props `RailProps` · [`packages/ledger/src/components/navigation/Rail.tsx`](../../packages/ledger/src/components/navigation/Rail.tsx)
 
+The items scroll on their own when a route list outgrows the viewport; the
+footer sits outside that region, so a theme toggle or sign out stays put
+instead of scrolling away with them.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `children` **·** required | `ReactNode` | — |  |
@@ -37,6 +41,12 @@ One glyph in the Rail. `label` never renders inline: it is the item's accessible
 
 `RailItem` · props `RailItemProps` · [`packages/ledger/src/components/navigation/Rail.tsx`](../../packages/ledger/src/components/navigation/Rail.tsx)
 
+The chip is the kit's Tooltip, portaled to &lt;body> and positioned fixed. It
+used to be an absolutely positioned span inside the item, which cannot
+survive the items region scrolling: a scroll container clips both axes (CSS
+forces overflow-x to `auto` once overflow-y is), so the chip was cut off at
+the 56px rail edge and dragged a horizontal scrollbar in with it.
+
 Renders an anchor when `href` is set and a button otherwise — a destination
 should be a real link, openable in a new tab, and an action should not be.
 `active` follows that split too: aria-current="page" on the link,
@@ -47,10 +57,11 @@ aria-pressed on the button.
 | `icon` **·** required | `LucideIcon` | — |  |
 | `label` **·** required | `string` | — | Flyout chip text — the item's only label. |
 | `active` | `boolean` | `false` |  |
+| `as` | `ElementType` | — | Render as another element — a router's Link, in practice: `<RailItem as={Link} href="/money" />`. Unrecognised props forward to it, so the router's own client-side navigation and prefetch apply and the rail stops reloading the document on every click. The kit imports no router; you pass yours. Defaults to `a` when `href` is set, `button` otherwise. |
 | `href` | `string` | — | Renders an &lt;a> when set, a &lt;button> otherwise. |
-| `onClick` | `() => void` | — |  |
-| `className` | `string` | — |  |
-| `style` | `CSSProperties` | — |  |
+| `onClick` | `(e: MouseEvent) => void` | — | Takes the event — a plain `<a>` item needs `e.preventDefault()` to be navigated in JS rather than by the browser. |
+
+Also accepts every prop of `Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "onClick">` — they are spread onto the underlying element.
 
 ```tsx
 <RailItem icon={Receipt} label="Invoices" href="/invoices" active />
@@ -70,7 +81,7 @@ views, SegmentedControl to pick a value inside one.
 | `items` **·** required | `TabItem[]` | — |  |
 | `value` | `string` | — |  |
 | `defaultValue` | `string` | — |  |
-| `onChange` | `(value: string) => void` | — |  |
+| `onChange` | `(value: string, e?: MouseEvent<HTMLElement>) => void` | — | Fires on both pointer and keyboard selection. The event is present only for a click — call `preventDefault()` on it when the tab is an anchor and you are routing yourself. |
 | `aria-label` | `string` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
@@ -149,6 +160,8 @@ The ⌘K palette. Scrim + centered panel, borderless search input, filterable fl
 | `value` **·** required | `string` | — |  |
 | `label` **·** required | `ReactNode` | — |  |
 | `disabled` | `boolean` | — |  |
+| `as` | `ElementType` | — | Element or component to render this tab as instead of `button` — a router's own link, say, so a tab that changes route stays a client-side navigation. Ignored when `disabled` is set: the platform has no disabled anchor, and the native `button` is what the styling and the roving focus key off. Defaults to `button`. |
+| `href` | `string` | — | Destination, passed through when `as` renders something anchor-like. |
 
 ### MenuItem
 
@@ -159,7 +172,9 @@ The ⌘K palette. Scrim + centered panel, borderless search input, filterable fl
 | `icon` | `LucideIcon` | — |  |
 | `danger` | `boolean` | — |  |
 | `disabled` | `boolean` | — |  |
-| `onSelect` | `() => void` | — |  |
+| `as` | `ElementType` | — | Element or component to render this item as instead of `button` — a router's own link, say, so an item that navigates stays a client-side route change. Ignored when `disabled` is set: the platform has no disabled anchor, and the native `button` is what the styling and the arrow-key focus walk key off. Defaults to `button`. |
+| `href` | `string` | — | Destination, passed through when `as` renders something anchor-like. |
+| `onSelect` | `(e: MouseEvent<HTMLElement>) => void` | — | Call `preventDefault()` on the event when the item is an anchor and you are routing yourself. |
 
 ### CommandMenuItem
 

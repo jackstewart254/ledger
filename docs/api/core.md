@@ -237,9 +237,11 @@ The anchor: ink-coloured text under a hairline underline that fills in to curren
 It has to exist because the kit ships no preflight — left alone, an &lt;a> is
 whatever blue the browser fancies.
 
-_No props of its own._
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `as` | `ElementType` | `"a"` | Element or component to render instead of `a` — a router's own link, say, so the click stays a client-side route change rather than a document load: `<Link as={NextLink} href="/x" />`. Unrecognised props are forwarded to it. Defaults to `a`. _(inherited)_ |
 
-Also accepts every prop of `AnchorHTMLAttributes<HTMLAnchorElement>` — they are spread onto the underlying element.
+Also accepts every prop of `AnchorHTMLAttributes<HTMLAnchorElement> & { /** * Element or component to render instead of `a` — a router's own link, say, * so the click stays a client-side route change rather than a document load: * `<Link as={NextLink} href="/x" />`. Unrecognised props are forwarded to it. * Defaults to `a`. */ as?: ElementType; }` — they are spread onto the underlying element.
 
 ```tsx
 <Link href="https://find-and-update.company-information.service.gov.uk">

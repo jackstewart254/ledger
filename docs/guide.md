@@ -90,6 +90,27 @@ and `style`, so a one-off is a class, not a fork.
 
 ---
 
+## Renamed: `FilterChip` and `RangeInput`
+
+Both names were taken by controls that do something else. A kit whose
+`FilterChip` is a toggle and whose `RangeInput` is a single slider reads, to
+anyone arriving from a kit where those names meant a removable filter token and
+a min/max pair, like a drop-in — so the import swaps cleanly, the page renders,
+and the control is wrong. They have been renamed to what they actually are.
+
+| Old name | New name | What actually changed |
+| --- | --- | --- |
+| `FilterChip` | `FilterToggle` | Nothing but the name and the `.lg-chip` class (now `.lg-filter-toggle`). It was always a toggle — `children` + `active` + `onChange(active)` + `count`, and no ×. If you wanted a removable applied-filter token with `label`/`value`/`onRemove`, this was never it. |
+| `RangeInput` | `Slider` | Nothing but the name and the `.lg-range` class (now `.lg-slider`). Still one native `<input type="range">` with a filled track, still one value, still an `onChange` carrying the DOM event. |
+| — | `RangeSlider` | **New.** The two-ended range that went missing: `value={{min, max}}`, `onChange({min, max})`, plus `min`/`max`/`step`. Salary filters, amount filters, date ranges — anything you were hand-rolling because the kit only had one thumb. |
+
+The old names are **not** re-exported as aliases, deliberately. A stale
+`FilterChip` or `RangeInput` import is now a compile error, which is the only
+form of this message that arrives before you ship. An alias would keep the
+import green and leave the wrong control on the page.
+
+---
+
 ## The rules that are not obvious
 
 Each of these is a decision the kit already made for you. They are worth
@@ -114,7 +135,7 @@ CSS rather than exposed as options:
 | --- | --- | --- |
 | Badge, StatusPill | 18px | A marker is read as text, not as a control |
 | CountBadge | 16px | Same, and it sits inside other things |
-| FilterChip | 26px | A row of filters is a filter bar, not an action row |
+| FilterToggle | 26px | A row of filters is a filter bar, not an action row |
 | Pagination buttons | 30px | Secondary navigation, below the content |
 | Table row, KeyValue row | 42px / 48px | List rhythm, not control rhythm |
 
@@ -360,18 +381,18 @@ select). They differ in what they claim:
 
 If the thing below it does not change wholesale, it's a value, not a view.
 
-### `Select` vs `MultiSelect` vs `FilterChip`
+### `Select` vs `MultiSelect` vs `FilterToggle`
 
 - **Select** — one of many, styled native `<select>`. Keeps the platform's
   picker on mobile, which is the right call.
 - **MultiSelect** — several of many, with real checkboxes in the popover so it
   stays keyboard-navigable. It grows a filter row from eight options up; below
   that, a filter row is chrome on a list you can already see.
-- **FilterChip** — a toggle you want *visible* while it is on, with a count.
+- **FilterToggle** — a toggle you want *visible* while it is on, with a count.
   Three to six of them across a table's toolbar is the pattern. Beyond that,
   MultiSelect.
 
-`FilterChip` carries its active state in the fill and border alone — no × inside
+`FilterToggle` carries its active state in the fill and border alone — no × inside
 it. The chip *is* the toggle, so an × would be a second control for what the
 whole chip already does, and it would make the active chip a different width
 from the inactive one.
@@ -520,10 +541,11 @@ Practical rules:
 4. Sum your fixed widths and compare them against the container before you add
    one more column.
 
-Widths go on `<col>`, not `<th>`, because the header row is pulled out of flow
-to hide it — anything sized there never reaches layout.
+Widths go on `<col>`, not `<th>`: while the header is hidden it is pulled out of
+flow, so anything sized there never reaches layout. `<col>` is the one place a
+width holds whether the header is showing or not.
 
-### The hidden header row
+### The header row, hidden by default
 
 `Table`'s header is in the DOM but visually clipped. A column of dates under a
 heading that says "Date" tells the reader what they already worked out, and on a
@@ -532,10 +554,28 @@ them (clipped, not `display: none`, which would remove them from the
 accessibility tree too), so the table stays navigable by column. Keep writing
 `header` on your columns — it is doing work you can't see.
 
-There is no sorting, and that follows from the same decision: sorting lived
-entirely in the header, and a sort control with nothing visible to click is
-worse than none. When a view needs sorting, put the control in the page toolbar
-where it can say what it does.
+**That is a constraint on your columns, not just on the chrome.** If a column's
+values do not say what they are, this `Table` cannot carry that column — there is
+no heading coming to rescue it. We built one that rendered `3m ago`, `1m ago` and
+a bare pid across five columns and shipped five anonymous columns of numbers. The
+fix was redesigning the columns — merge the pair, put the unit in the value, move
+the rest into a drawer — not switching the header back on. Read your columns on
+their own before you build the table, not after.
+
+The header un-hides itself when it has something to hold: a column marked
+`sortable`, or row selection (`selectedKeys` + `onSelectionChange`). That is the
+point where it stops restating the data and becomes a row of controls, so it
+earns its space — and once visible it is sticky, so `maxHeight` scrolls the body
+under it. Neither is a prop; both are keyed off what you passed, so there is
+nothing to remember and nothing to get out of sync.
+
+The corollary matters more than it looks: **on a plain table, a sort or filter
+control cannot go in the header row** — it would be invisible. Put it in the page
+toolbar, where it can say what it does. When you do want the control in the
+header, mark the column `sortable` and own the comparator yourself — the kit
+draws the affordance and the arrow, and never reorders your rows.
+[Recipe 6](./recipes.md#6-sortable-selectable-table-with-a-bulk-action) wires
+sorting and selection end to end.
 
 ---
 
@@ -546,7 +586,7 @@ These are real. A guide that hides them costs you more than it saves.
 **`FormField` drops its label wiring on composite controls.** It clones a single
 element child to inject `id`, `aria-describedby` and `aria-invalid`. That works
 for `Input`, `Textarea`, `Select`, `SearchField`, `Switch`, `MultiSelect`,
-`DatePicker` and `RangeInput`, which all forward unknown props to a real
+`DatePicker` and `Slider`, which all forward unknown props to a real
 focusable element. It does **not** work for `SegmentedControl` or `RadioGroup`,
 which take an explicit prop list and drop `id` on the floor — so the `<label
 htmlFor>` points at nothing, clicking the label does nothing, and any `error`
@@ -564,7 +604,9 @@ anyway, so this is a design gap, not just a missing spread.)
 **`Table`'s `rowKey` defaults to the array index.** Fine for a static list;
 wrong the moment rows are filtered, sorted or paged, because React will then
 reuse a row's DOM — and its hover state, and any focus inside it — for a
-different record. Always pass it:
+different record. It is also the key row selection is tracked by, so on the
+index fallback a selection follows a row's *position*: sort the table once and
+every tick is on a different record. Always pass it:
 
 ```tsx
 <Table columns={columns} rows={rows} rowKey={(r) => r.id} />

@@ -77,6 +77,15 @@ Transient notification for the bottom-right stack. Semantic tone colors the lead
 
 `Toast` · props `ToastProps` · [`packages/ledger/src/components/feedback/Toast.tsx`](../../packages/ledger/src/components/feedback/Toast.tsx)
 
+There is no `warning` tone, by design. The line here is lifetime, not
+severity: a toast is transient and takes its message with it when it
+dismisses, so a warning the user has to ACT on cannot live in one — once it
+is gone there is no way back to it. That case belongs in `InlineAlert`,
+which persists next to the thing it is about. If the message is still true
+after five seconds, it needs a component that is still on screen.
+
+Nor is there an `info` tone: `neutral` is info.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `tone` | `ToastTone` | `"neutral"` |  |

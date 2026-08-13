@@ -26,18 +26,27 @@ heading that reads "Date" tells the reader what they already worked out, and
 on a full-page table those labels are the only chrome left. Screen readers
 still get them, so the table stays navigable by column.
 
-No sorting. It lived entirely in the header, and a sort control with nothing
-visible to click is worse than none — when a view needs sorting, put the
-control in the page toolbar where it can say what it does.
+It un-hides itself when it has something to hold — a `sortable` column, or
+selection — because that is the point at which the header stops being a
+restatement of the data and becomes a row of controls. That is keyed off the
+props, not exposed as one: there is nothing for a consumer to remember, and
+a sort control with nothing visible to click is worse than no sorting at all.
+Once visible it is also sticky, so `maxHeight` scrolls the body under it.
+
+Sorting and selection are both fully controlled and neither touches `rows`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `columns` **·** required | `TableColumn<Row>[]` | — |  |
 | `rows` **·** required | `Row[]` | — |  |
-| `rowKey` | `(row: Row, index: number) => string \| number` | — |  |
+| `rowKey` | `(row: Row, index: number) => TableRowKey` | — | Row identity. Also the selection key, so give it something stable: with the index fallback, selection follows a row's POSITION, and sorting the rows then moves the ticks to different records. |
 | `onRowClick` | `(row: Row) => void` | — |  |
 | `rowHeight` | `string` | — | Row-height override — sets the --lg-table-row-h custom prop. |
-| `maxHeight` | `string` | — | Caps the scroll container's height. Nothing is sticky — the header row is hidden, so there is no column strip to pin and the whole table scrolls. |
+| `maxHeight` | `string` | — | Caps the scroll container's height. A visible header row (see the note on the component) pins itself to the top of that container as the body scrolls — there is no prop for it, because a scrolling table that loses its headings is only ever worse. |
+| `sort` | `TableSort \| null` | — | Current sort, or null/undefined for none. Fully controlled: the kit draws the header affordance and the direction arrow, the CONSUMER owns the comparator and passes rows already in order. Nothing here re-orders `rows` — a component that sorts your data owns state you can't see, and the sort you want ("live first, then name") is rarely the one it would guess. |
+| `onSortChange` | `(sort: TableSort) => void` | — | Fires with the next sort when a sortable header is activated: a new column starts at "asc", the sorted column flips direction. Two states only — there is no third click back to unsorted. |
+| `selectedKeys` | `ReadonlySet<TableRowKey>` | — | Selected row keys (from `rowKey`). Fully controlled — pass this together with `onSelectionChange` to get the checkbox column. |
+| `onSelectionChange` | `(keys: Set<TableRowKey>) => void` | — | Fires with the next selection. The header checkbox adds or removes every key in the CURRENT `rows`, leaving keys outside them alone, so selecting on a filtered or paged view doesn't silently drop what's off-screen. |
 | `empty` | `ReactNode` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
@@ -356,11 +365,35 @@ Controlled: hairline chevron buttons + a fixed-width run of page numerals.
 | `align` | `TableAlign` | — |  |
 | `numeric` | `boolean` | — | Numeric cell — tabular figures via --num-features. |
 | `render` | `(row: Row) => ReactNode` | — | Render-prop cell — falls back to row[key]. |
+| `sortable` | `boolean` | — | Turns this column's header into a sort button. Needs `onSortChange` on the table; without it the flag does nothing, since there would be nowhere to report the click. Any sortable column un-hides the header row — see the note on the component. |
 
 ### TableAlign
 
 ```ts
 type TableAlign = "left" | "center" | "right";
+```
+
+### TableSort
+
+Controlled sort state: which column, which direction.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `key` **·** required | `string` | — |  |
+| `dir` **·** required | `TableSortDir` | — |  |
+
+### TableSortDir
+
+```ts
+type TableSortDir = "asc" | "desc";
+```
+
+### TableRowKey
+
+Whatever `rowKey` returns — the identity a row is selected by.
+
+```ts
+type TableRowKey = string | number;
 ```
 
 ### BarChartDatum

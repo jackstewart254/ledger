@@ -42,7 +42,7 @@ import "@mcleanstewart/ledger/styles.css";
 - [Menu](navigation.md#menu) — Anchored action menu (kebab/dropdown).
 - [CommandMenu](navigation.md#commandmenu) — The ⌘K palette.
 
-## [Forms](forms.md) · 13
+## [Forms](forms.md) · 14
 
 - [FormField](forms.md#formfield) — Label + control slot + error line.
 - [Input](forms.md#input) — Text field on the shared .lg-control frame.
@@ -50,13 +50,14 @@ import "@mcleanstewart/ledger/styles.css";
 - [Select](forms.md#select) — Styled native &lt;select> on the .lg-control frame, chevron overlay.
 - [SearchField](forms.md#searchfield) — Input frame + search icon + clear button.
 - [MultiSelect](forms.md#multiselect) — Trigger with chip summary + checkbox popover list.
-- [FilterChip](forms.md#filterchip) — Toggleable chip.
+- [FilterToggle](forms.md#filtertoggle) — Toggleable chip.
 - [Textarea](forms.md#textarea) — The Input voice, auto min-height via --row-h multiples.
 - [Checkbox](forms.md#checkbox) — Styled native input, custom-drawn box, Lucide check/minus mark.
 - [RadioGroup](forms.md#radiogroup) — Styled native radios, matches the Checkbox voice.
 - [Switch](forms.md#switch) — Track + thumb toggle.
 - [SegmentedControl](forms.md#segmentedcontrol) — Exclusive picker in a hairline group; the active segment raises to --surface-raised.
-- [RangeInput](forms.md#rangeinput) — A native range with a filled track: the accent up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
+- [Slider](forms.md#slider) — A native range with a filled track: the accent up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
+- [RangeSlider](forms.md#rangeslider) — A genuine two-ended range: `{min, max}` in, `{min, max}` out.
 
 ## [Data](data.md) · 10
 
@@ -96,4 +97,4 @@ import "@mcleanstewart/ledger/styles.css";
 | `formatDate` | `(value: string \| number \| Date \| null \| undefined, locale?: string) => string` | Human date — "11 Aug 2026". ISO strings belong in the data layer, not on screen: `2026-08-11` makes the reader parse a format before reading a date, and a column of them reads as serial numbers. Native Intl, no dependency. |
 | `pct` | `(n: number \| null \| undefined, digits?: number) => string` | Percentage to `digits` places — 12.53 becomes "12.5%". Nullish and non-finite give an em dash, as compactNumber does. |
 
-_54 components, 26 exported types, 7 utilities._
+_55 components, 30 exported types, 7 utilities._

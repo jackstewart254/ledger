@@ -8,13 +8,14 @@ Generated from `src/components/forms` — do not edit by hand, run `npm run docs
 - [Select](#select) — Styled native &lt;select> on the .lg-control frame, chevron overlay.
 - [SearchField](#searchfield) — Input frame + search icon + clear button.
 - [MultiSelect](#multiselect) — Trigger with chip summary + checkbox popover list.
-- [FilterChip](#filterchip) — Toggleable chip.
+- [FilterToggle](#filtertoggle) — Toggleable chip.
 - [Textarea](#textarea) — The Input voice, auto min-height via --row-h multiples.
 - [Checkbox](#checkbox) — Styled native input, custom-drawn box, Lucide check/minus mark.
 - [RadioGroup](#radiogroup) — Styled native radios, matches the Checkbox voice.
 - [Switch](#switch) — Track + thumb toggle.
 - [SegmentedControl](#segmentedcontrol) — Exclusive picker in a hairline group; the active segment raises to --surface-raised.
-- [RangeInput](#rangeinput) — A native range with a filled track: the accent up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
+- [Slider](#slider) — A native range with a filled track: the accent up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
+- [RangeSlider](#rangeslider) — A genuine two-ended range: `{min, max}` in, `{min, max}` out.
 
 ## Components
 
@@ -180,11 +181,11 @@ Also accepts every prop of `Omit<ComponentProps<"button">, "value" | "defaultVal
 />
 ```
 
-### FilterChip
+### FilterToggle
 
 Toggleable chip. Active is carried by the fill and border shift alone: the chip IS the toggle, so an × inside it is a second control for the thing the whole chip already does, and it makes the active chip a different width from the inactive one.
 
-`FilterChip` · props `FilterChipProps` · [`packages/ledger/src/components/forms/FilterChip.tsx`](../../packages/ledger/src/components/forms/FilterChip.tsx)
+`FilterToggle` · props `FilterToggleProps` · [`packages/ledger/src/components/forms/FilterToggle.tsx`](../../packages/ledger/src/components/forms/FilterToggle.tsx)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -198,9 +199,9 @@ Toggleable chip. Active is carried by the fill and border shift alone: the chip 
 Also accepts every prop of `Omit<ComponentProps<"button">, "onChange" | "value" | "ref">` — they are spread onto the underlying element.
 
 ```tsx
-<FilterChip active={unreconciled} onChange={setUnreconciled} count={8}>
+<FilterToggle active={unreconciled} onChange={setUnreconciled} count={8}>
   Unreconciled
-</FilterChip>
+</FilterToggle>
 ```
 
 ### Textarea
@@ -320,11 +321,11 @@ Single size on purpose — the kit ships one control size, no `size` prop.
 />
 ```
 
-### RangeInput
+### Slider
 
 A native range with a filled track: the accent up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
 
-`RangeInput` · props `RangeInputProps` · [`packages/ledger/src/components/forms/RangeInput.tsx`](../../packages/ledger/src/components/forms/RangeInput.tsx)
+`Slider` · props `SliderProps` · [`packages/ledger/src/components/forms/Slider.tsx`](../../packages/ledger/src/components/forms/Slider.tsx)
 
 Deliberately NOT wrapped in the `.lg-control` frame. A pill frame is the
 shape for something you type into; around a slider it reads as a text field
@@ -340,12 +341,51 @@ filled portion of a native range to CSS.
 Also accepts every prop of `Omit<ComponentProps<"input">, "type" | "size" | "ref">` — they are spread onto the underlying element.
 
 ```tsx
-<RangeInput
+<Slider
   min={0}
   max={5000}
   step={50}
   value={threshold}
   onChange={(e) => setThreshold(Number(e.target.value))}
+/>
+```
+
+### RangeSlider
+
+A genuine two-ended range: `{min, max}` in, `{min, max}` out. Two native ranges share one track, so each end is a real tab stop with the arrow/Home/End keys the platform already gives it, and no dependency buys a thumb the browser ships.
+
+`RangeSlider` · props `RangeSliderProps` · [`packages/ledger/src/components/forms/RangeSlider.tsx`](../../packages/ledger/src/components/forms/RangeSlider.tsx)
+
+The thumbs cannot cross: each end clamps against the other on change, and
+each carries the aria-valuemin/max of the span it may actually reach rather
+than the scale's — the reachable range is what a screen reader needs.
+
+Only the filled span behind the inputs paints a rail; the inputs' own tracks
+are blanked in CSS, since two stacked native tracks would draw two.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `RangeValue` | — | Controlled span. |
+| `defaultValue` | `RangeValue` | — |  |
+| `onChange` | `(value: RangeValue) => void` | — |  |
+| `min` | `number` | `0` | Lower bound of the scale. |
+| `max` | `number` | `100` | Upper bound of the scale. |
+| `step` | `number` | `1` |  |
+| `disabled` | `boolean` | `false` |  |
+| `minLabel` | `string` | `"Minimum"` | Accessible name for the lower thumb. |
+| `maxLabel` | `string` | `"Maximum"` | Accessible name for the upper thumb. |
+| `className` | `string` | — |  |
+| `style` | `CSSProperties` | — |  |
+
+```tsx
+<RangeSlider
+  min={0}
+  max={5000}
+  step={50}
+  value={amount}
+  onChange={setAmount}
+  minLabel="Minimum amount"
+  maxLabel="Maximum amount"
 />
 ```
 
@@ -382,3 +422,12 @@ Also accepts every prop of `Omit<ComponentProps<"input">, "type" | "size" | "ref
 | `value` **·** required | `string` | — |  |
 | `label` **·** required | `ReactNode` | — |  |
 | `disabled` | `boolean` | — |  |
+
+### RangeValue
+
+The selected span — not the scale it sits on (that is `min`/`max`).
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `min` **·** required | `number` | — |  |
+| `max` **·** required | `number` | — |  |
