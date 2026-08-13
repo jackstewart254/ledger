@@ -1,19 +1,42 @@
 "use client";
 
-import { useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
+import {
+  useRef,
+  useState,
+  type CSSProperties,
+  type ElementType,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import { cx } from "../../internal/cx.js";
 
 export interface TabItem {
   value: string;
   label: ReactNode;
   disabled?: boolean;
+  /**
+   * Element or component to render this tab as instead of `button` — a router's
+   * own link, say, so a tab that changes route stays a client-side navigation.
+   * Ignored when `disabled` is set: the platform has no disabled anchor, and
+   * the native `button` is what the styling and the roving focus key off.
+   * Defaults to `button`.
+   */
+  as?: ElementType;
+  /** Destination, passed through when `as` renders something anchor-like. */
+  href?: string;
 }
 
 export interface TabsProps {
   items: TabItem[];
   value?: string;
   defaultValue?: string;
-  onChange?: (value: string) => void;
+  /**
+   * Fires on both pointer and keyboard selection. The event is present only for
+   * a click — call `preventDefault()` on it when the tab is an anchor and you
+   * are routing yourself.
+   */
+  onChange?: (value: string, e?: MouseEvent<HTMLElement>) => void;
   "aria-label"?: string;
   className?: string;
   style?: CSSProperties;
@@ -41,9 +64,9 @@ export function Tabs({
   const [internal, setInternal] = useState(defaultValue ?? items[0]?.value ?? "");
   const current = value ?? internal;
 
-  const select = (v: string) => {
+  const select = (v: string, e?: MouseEvent<HTMLElement>) => {
     if (value === undefined) setInternal(v);
-    onChange?.(v);
+    onChange?.(v, e);
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -71,21 +94,25 @@ export function Tabs({
       style={style}
       onKeyDown={onKeyDown}
     >
-      {items.map((item) => (
-        <button
-          key={item.value}
-          type="button"
-          role="tab"
-          data-value={item.value}
-          aria-selected={item.value === current}
-          disabled={item.disabled}
-          tabIndex={item.value === current ? 0 : -1}
-          className="lg-tab"
-          onClick={() => select(item.value)}
-        >
-          {item.label}
-        </button>
-      ))}
+      {items.map((item) => {
+        const Tab: ElementType = item.disabled ? "button" : (item.as ?? "button");
+        return (
+          <Tab
+            key={item.value}
+            {...(Tab === "button"
+              ? { type: "button", disabled: item.disabled }
+              : { href: item.href })}
+            role="tab"
+            data-value={item.value}
+            aria-selected={item.value === current}
+            tabIndex={item.value === current ? 0 : -1}
+            className="lg-tab"
+            onClick={(e: MouseEvent<HTMLElement>) => select(item.value, e)}
+          >
+            {item.label}
+          </Tab>
+        );
+      })}
     </div>
   );
 }

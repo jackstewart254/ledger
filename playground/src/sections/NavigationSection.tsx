@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
 import {
+  Bell,
+  Building2,
   ChartLine,
   Check,
   Download,
   Ellipsis,
+  FileText,
   Inbox,
   LayoutGrid,
   LogOut,
   Plus,
   PoundSterling,
   RefreshCw,
+  Settings,
+  SunMoon,
+  Users,
+  Wallet,
   X,
 } from "lucide-react";
 import {
@@ -32,8 +39,23 @@ const COMMANDS: CommandMenuItem[] = [
   { id: "sign-out", label: "Sign out", group: "Actions", icon: LogOut },
 ];
 
+/* enough routes to outgrow a short viewport — the scrolling rail demo */
+const LONG_RAIL = [
+  { id: "overview", label: "Overview", icon: LayoutGrid },
+  { id: "charts", label: "Charts", icon: ChartLine },
+  { id: "money", label: "Money", icon: PoundSterling },
+  { id: "wallets", label: "Wallets", icon: Wallet },
+  { id: "inbox", label: "Inbox", icon: Inbox },
+  { id: "alerts", label: "Alerts", icon: Bell },
+  { id: "reports", label: "Reports", icon: FileText },
+  { id: "entities", label: "Entities", icon: Building2 },
+  { id: "people", label: "People", icon: Users },
+  { id: "settings", label: "Settings", icon: Settings },
+];
+
 export default function NavigationSection() {
   const [railActive, setRailActive] = useState("overview");
+  const [longRailActive, setLongRailActive] = useState("overview");
   const [tab, setTab] = useState("positions");
   const [cmdOpen, setCmdOpen] = useState(false);
 
@@ -93,6 +115,42 @@ export default function NavigationSection() {
         </Rail>
         <div style={{ padding: "var(--space-4)", color: "var(--text-muted)" }}>
           Hover or focus an item for its flyout label.
+        </div>
+      </div>
+
+      <h3 style={{ fontSize: "var(--text-md)", fontWeight: "var(--fw-semibold)" }}>
+        Rail — more routes than height
+      </h3>
+      <div
+        style={{
+          height: "400px",
+          border: "1px solid var(--border)",
+          borderRadius: "var(--radius-lg)",
+          display: "flex",
+          marginBottom: "var(--space-8)",
+        }}
+      >
+        <Rail
+          aria-label="Long primary"
+          footer={
+            <>
+              <RailItem icon={SunMoon} label="Theme" onClick={() => undefined} />
+              <RailItem icon={LogOut} label="Sign out" onClick={() => undefined} />
+            </>
+          }
+        >
+          {LONG_RAIL.map((item) => (
+            <RailItem
+              key={item.id}
+              icon={item.icon}
+              label={item.label}
+              active={longRailActive === item.id}
+              onClick={() => setLongRailActive(item.id)}
+            />
+          ))}
+        </Rail>
+        <div style={{ padding: "var(--space-4)", color: "var(--text-muted)" }}>
+          Ten routes in 400px: the items scroll (bar appears on hover), the footer stays pinned.
         </div>
       </div>
 

@@ -8,8 +8,10 @@ import {
   useState,
   type AriaAttributes,
   type CSSProperties,
+  type ElementType,
   type FocusEvent,
   type KeyboardEvent,
+  type MouseEvent,
   type ReactNode,
 } from "react";
 import { Icon, type LucideIcon } from "../core/Icon.js";
@@ -22,7 +24,18 @@ export interface MenuItem {
   icon?: LucideIcon;
   danger?: boolean;
   disabled?: boolean;
-  onSelect?: () => void;
+  /**
+   * Element or component to render this item as instead of `button` — a
+   * router's own link, say, so an item that navigates stays a client-side
+   * route change. Ignored when `disabled` is set: the platform has no disabled
+   * anchor, and the native `button` is what the styling and the arrow-key
+   * focus walk key off. Defaults to `button`.
+   */
+  as?: ElementType;
+  /** Destination, passed through when `as` renders something anchor-like. */
+  href?: string;
+  /** Call `preventDefault()` on the event when the item is an anchor and you are routing yourself. */
+  onSelect?: (e: MouseEvent<HTMLElement>) => void;
 }
 
 export interface MenuProps {
@@ -59,7 +72,7 @@ export function Menu({ trigger, items, align = "start", className, style }: Menu
   /* click-outside lives on document while open */
   useEffect(() => {
     if (!open) return;
-    const onDown = (e: MouseEvent) => {
+    const onDown = (e: globalThis.MouseEvent) => {
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
     };
     document.addEventListener("mousedown", onDown);
@@ -140,22 +153,26 @@ export function Menu({ trigger, items, align = "start", className, style }: Menu
           className={cx("lg-menu-panel", align === "end" && "lg-menu-panel--end")}
           onKeyDown={onPanelKeyDown}
         >
-          {items.map((item, i) => (
-            <button
-              key={item.id ?? i}
-              type="button"
-              role="menuitem"
-              disabled={item.disabled}
-              className={cx("lg-menu-item", item.danger && "lg-menu-item--danger")}
-              onClick={() => {
-                item.onSelect?.();
-                close(true);
-              }}
-            >
-              {item.icon && <Icon as={item.icon} />}
-              {item.label}
-            </button>
-          ))}
+          {items.map((item, i) => {
+            const Item: ElementType = item.disabled ? "button" : (item.as ?? "button");
+            return (
+              <Item
+                key={item.id ?? i}
+                {...(Item === "button"
+                  ? { type: "button", disabled: item.disabled }
+                  : { href: item.href })}
+                role="menuitem"
+                className={cx("lg-menu-item", item.danger && "lg-menu-item--danger")}
+                onClick={(e: MouseEvent<HTMLElement>) => {
+                  item.onSelect?.(e);
+                  close(true);
+                }}
+              >
+                {item.icon && <Icon as={item.icon} />}
+                {item.label}
+              </Item>
+            );
+          })}
         </div>
       )}
     </span>

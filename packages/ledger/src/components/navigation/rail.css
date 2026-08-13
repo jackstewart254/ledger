@@ -1,9 +1,14 @@
 /* Rail — icon-only vertical rail, --rail-w wide (matches the AppShell column).
-   Labels live in the flyout chip only — translucent surface + backdrop blur,
-   pops from the side. Elevation via the one sanctioned shadow. */
+   Labels live in the flyout chip only; the chip is the kit's Tooltip now
+   (tooltip.css), which keeps the translucent surface, the backdrop blur and the
+   one sanctioned shadow, and survives the items region's scroll clip. */
 .lg-rail {
   width: var(--rail-w);
+  /* --rail-w is the width, not a suggestion: in a flex parent the rail would
+     otherwise shrink to its glyphs and stop matching the AppShell column. */
+  flex: none;
   height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,8 +18,54 @@
      own border-right doubled up against the content pane's left hairline. */
 }
 
+/* Only the items scroll. A real app's rail (overview, sections, sub-routes,
+   dividers) outgrows a laptop viewport, and a rail whose sign-out scrolls off
+   the bottom with everything else is only half fixed — so the footer stays
+   outside this box. min-height: 0 is what lets a flex item shrink below its
+   content and actually scroll. */
+.lg-rail-items {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  overflow-y: auto;
+  /* Bar hidden until the rail is hovered. A rail is 56px of chrome next to the
+     content pane; a permanent track in it reads as loud in a kit that draws
+     hairlines instead. Colour only — the width never changes, so nothing
+     shifts on hover. */
+  scrollbar-color: transparent transparent;
+}
+/* Items keep their control height: a flex column shrinks its children before it
+   overflows, so without this the glyphs squash to fit and the rail never
+   scrolls at all. Every child, not just .lg-rail-item — dividers squash too. */
+.lg-rail-items > * {
+  flex: none;
+}
+
+.lg-rail-items::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+.lg-rail:hover .lg-rail-items,
+.lg-rail-items:focus-within {
+  scrollbar-color: color-mix(in srgb, var(--text) 25%, transparent) transparent;
+}
+.lg-rail:hover .lg-rail-items::-webkit-scrollbar-thumb,
+.lg-rail-items:focus-within::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--text) 25%, transparent);
+}
+
+/* Pinned: the items region takes the slack, so the footer never scrolls away.
+   overflow-y is here for the gutter, not for scrolling — a classic scrollbar
+   takes its width out of the items region's content box, and only by reserving
+   the same gutter (globally `stable`, styles.css) does the footer's glyph
+   column stay on the same axis as the items' instead of sitting a half-bar to
+   the right of it. Platforms with overlay scrollbars reserve nothing, in both. */
 .lg-rail-footer {
-  margin-top: auto;
+  flex: 0 0 auto;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,7 +73,6 @@
 }
 
 .lg-rail-item {
-  position: relative;
   width: var(--control-h-sm);
   height: var(--control-h-sm);
   display: grid;
@@ -43,44 +93,4 @@
 .lg-rail-item[aria-pressed="true"] {
   background: var(--surface-active);
   color: var(--text);
-}
-
-/* Flyout label chip — hidden at rest, pops from the side on hover/focus. */
-.lg-rail-flyout {
-  position: absolute;
-  left: calc(100% + var(--space-2));
-  top: 50%;
-  z-index: var(--z-tooltip);
-  width: max-content;
-  padding: var(--space-1) var(--space-2);
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  -webkit-backdrop-filter: blur(var(--blur-chrome)) saturate(1.4);
-  backdrop-filter: blur(var(--blur-chrome)) saturate(1.4);
-  border: var(--space-px) solid var(--border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-md);
-  color: var(--text);
-  font-size: var(--text-xs);
-  font-weight: var(--fw-body);
-  line-height: var(--leading-snug);
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(calc(-1 * var(--space-1)), -50%) scale(0.97);
-  transform-origin: center left;
-  transition:
-    opacity var(--dur-base) var(--ease-out),
-    transform var(--dur-base) var(--ease-out);
-}
-.lg-rail-item:hover .lg-rail-flyout,
-.lg-rail-item:focus-visible .lg-rail-flyout {
-  opacity: 1;
-  transform: translate(0, -50%) scale(1);
-}
-
-/* Transform pop guarded; the centering translate stays. */
-@media (prefers-reduced-motion: reduce) {
-  .lg-rail-flyout {
-    transform: translate(0, -50%);
-  }
 }
