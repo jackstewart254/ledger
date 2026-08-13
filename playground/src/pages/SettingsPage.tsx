@@ -16,7 +16,7 @@ import {
   MultiSelect,
   PageColumn,
   RadioGroup,
-  RangeInput,
+  Slider,
   SearchField,
   SectionHeading,
   SegmentedControl,
@@ -429,7 +429,7 @@ export default function SettingsPage() {
                 label={`Rate limit — ${rateLimit} requests a minute`}
                 className="pg-set-span"
               >
-                <RangeInput
+                <Slider
                   min={60}
                   max={600}
                   step={60}

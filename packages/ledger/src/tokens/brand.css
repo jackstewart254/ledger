@@ -40,7 +40,7 @@
                                 --brand-primary, so a hue swap has to set all
                                 three or the hover reverts to blue.
      --brand-primary-fg         text/glyph ON a primary fill — check contrast
-     --brand-primary-subtle     tinted chip background (FilterChip pressed, etc.)
+     --brand-primary-subtle     tinted chip background (FilterToggle pressed, etc.)
      --brand-primary-subtle-fg  text on that tint
      --brand-primary-border
      --brand-secondary          NOT consumed by any component in the kit; it is

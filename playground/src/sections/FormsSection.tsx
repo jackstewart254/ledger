@@ -3,15 +3,16 @@ import { PoundSterling } from "lucide-react";
 import {
   Checkbox,
   DatePicker,
-  FilterChip,
+  FilterToggle,
   FormField,
   Input,
   MultiSelect,
   RadioGroup,
-  RangeInput,
+  RangeSlider,
   SearchField,
   SegmentedControl,
   Select,
+  Slider,
   Switch,
   Textarea,
 } from "@mcleanstewart/ledger";
@@ -56,6 +57,7 @@ const ACCOUNTS = [
 
 export default function FormsSection() {
   const [daemons, setDaemons] = useState<string[]>(["reconcile"]);
+  const [amount, setAmount] = useState({ min: 500, max: 3500 });
 
   return (
     <section id="forms" className="pg-section">
@@ -211,18 +213,45 @@ export default function FormsSection() {
           />
         </Spec>
 
-        <Spec title="Filter chip">
-          <FilterChip defaultActive count={12}>Pending</FilterChip>
-          <FilterChip count={3}>Failed</FilterChip>
-          <FilterChip>Settled</FilterChip>
-          <FilterChip>Over £1,000</FilterChip>
-          <FilterChip disabled>Voided</FilterChip>
+        <Spec title="Filter toggle">
+          <FilterToggle defaultActive count={12}>Pending</FilterToggle>
+          <FilterToggle count={3}>Failed</FilterToggle>
+          <FilterToggle>Settled</FilterToggle>
+          <FilterToggle>Over £1,000</FilterToggle>
+          <FilterToggle disabled>Voided</FilterToggle>
         </Spec>
 
-        <Spec title="Range input">
-          <RangeInput aria-label="Alert threshold" defaultValue={40} style={fieldW} />
-          <RangeInput aria-label="Position size" min={0} max={100} step={5} defaultValue={65} style={fieldW} />
-          <RangeInput aria-label="Locked threshold" defaultValue={20} disabled style={fieldW} />
+        <Spec title="Slider">
+          <Slider aria-label="Alert threshold" defaultValue={40} style={fieldW} />
+          <Slider aria-label="Position size" min={0} max={100} step={5} defaultValue={65} style={fieldW} />
+          <Slider aria-label="Locked threshold" defaultValue={20} disabled style={fieldW} />
+        </Spec>
+
+        <Spec title="Range slider">
+          <FormField label={`Amount — £${amount.min} to £${amount.max}`} style={fieldW}>
+            <RangeSlider
+              min={0}
+              max={5000}
+              step={50}
+              value={amount}
+              onChange={setAmount}
+              minLabel="Minimum amount"
+              maxLabel="Maximum amount"
+            />
+          </FormField>
+          <RangeSlider
+            defaultValue={{ min: 20, max: 80 }}
+            minLabel="Lowest score"
+            maxLabel="Highest score"
+            style={fieldW}
+          />
+          <RangeSlider
+            defaultValue={{ min: 30, max: 70 }}
+            minLabel="Locked minimum"
+            maxLabel="Locked maximum"
+            disabled
+            style={fieldW}
+          />
         </Spec>
 
         <Spec title="Date picker">

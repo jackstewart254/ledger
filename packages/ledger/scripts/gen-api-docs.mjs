@@ -156,7 +156,7 @@ const readComponent = (sym, decl) => {
     };
   });
 
-  /* A default set on an inherited prop (RangeInput's min/max, IconButton's
+  /* A default set on an inherited prop (Slider's min/max, IconButton's
      type) is the component's behaviour too, and it appears nowhere else. */
   const inherited = [...defaults]
     .filter(([key, value]) => value !== undefined && !own.has(key))
@@ -378,9 +378,9 @@ const EXAMPLES = {
   placeholder="All accounts"
   searchable
 />`,
-  FilterChip: `<FilterChip active={unreconciled} onChange={setUnreconciled} count={8}>
+  FilterToggle: `<FilterToggle active={unreconciled} onChange={setUnreconciled} count={8}>
   Unreconciled
-</FilterChip>`,
+</FilterToggle>`,
   Textarea: `<Textarea
   minRows={3}
   placeholder="Note for the auditor"
@@ -404,12 +404,21 @@ const EXAMPLES = {
   onChange={setGrain}
   aria-label="Time grain"
 />`,
-  RangeInput: `<RangeInput
+  Slider: `<Slider
   min={0}
   max={5000}
   step={50}
   value={threshold}
   onChange={(e) => setThreshold(Number(e.target.value))}
+/>`,
+  RangeSlider: `<RangeSlider
+  min={0}
+  max={5000}
+  step={50}
+  value={amount}
+  onChange={setAmount}
+  minLabel="Minimum amount"
+  maxLabel="Maximum amount"
 />`,
 
   Table: `<Table

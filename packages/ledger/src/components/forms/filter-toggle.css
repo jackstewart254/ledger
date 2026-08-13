@@ -1,7 +1,7 @@
-/* FilterChip — ghost hairline chip at rest; active is the accent's subtle tint
+/* FilterToggle — ghost hairline chip at rest; active is the accent's subtle tint
    + a tinted border, never a solid accent fill. A filter is a state you are in,
    not the action of the page. */
-.lg-chip {
+.lg-filter-toggle {
   display: inline-flex;
   align-items: center;
   gap: var(--gap-sm);
@@ -18,30 +18,30 @@
   cursor: pointer;
   transition: var(--transition-colors);
 }
-.lg-chip:hover {
+.lg-filter-toggle:hover {
   background: var(--surface-hover);
   color: var(--text);
 }
-.lg-chip[aria-pressed="true"],
-.lg-chip[aria-pressed="true"]:hover {
+.lg-filter-toggle[aria-pressed="true"],
+.lg-filter-toggle[aria-pressed="true"]:hover {
   background: var(--accent-subtle);
   border-color: var(--accent-border);
   color: var(--accent-subtle-fg);
 }
-.lg-chip:disabled {
+.lg-filter-toggle:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
-.lg-chip__count {
+.lg-filter-toggle__count {
   font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
   color: var(--text-subtle);
 }
-.lg-chip[aria-pressed="true"] .lg-chip__count { color: inherit; }
+.lg-filter-toggle[aria-pressed="true"] .lg-filter-toggle__count { color: inherit; }
 
-.lg-chip__clear {
+.lg-filter-toggle__clear {
   flex-shrink: 0;
   color: var(--text-subtle);
 }
-.lg-chip[aria-pressed="true"] .lg-chip__clear { color: inherit; }
+.lg-filter-toggle[aria-pressed="true"] .lg-filter-toggle__clear { color: inherit; }

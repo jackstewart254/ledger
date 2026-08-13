@@ -1,15 +1,15 @@
-/* RangeInput — filled track, no surrounding field frame.
+/* Slider — filled track, no surrounding field frame.
    Webkit and Gecko pseudo selectors cannot share a rule (an unknown selector
    voids the whole block), so the pairs are duplicated below.
-   The filled portion comes from a gradient driven by --lg-range-pct, set by the
+   The filled portion comes from a gradient driven by --lg-slider-pct, set by the
    component: no browser exposes "how much of a native range is filled" to CSS. */
-.lg-range {
+.lg-slider {
   --_track: var(--space-1);
   --_thumb: var(--space-4);
   --_fill: linear-gradient(
     to right,
-    var(--accent) 0 var(--lg-range-pct, 0%),
-    var(--surface-active) var(--lg-range-pct, 0%) 100%
+    var(--accent) 0 var(--lg-slider-pct, 0%),
+    var(--surface-active) var(--lg-slider-pct, 0%) 100%
   );
   appearance: none;
   -webkit-appearance: none;
@@ -21,23 +21,23 @@
   background: transparent;
   cursor: pointer;
 }
-.lg-range:disabled {
+.lg-slider:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
-.lg-range::-webkit-slider-runnable-track {
+.lg-slider::-webkit-slider-runnable-track {
   height: var(--_track);
   border-radius: var(--radius-pill);
   background: var(--_fill);
 }
-.lg-range::-moz-range-track {
+.lg-slider::-moz-range-track {
   height: var(--_track);
   border-radius: var(--radius-pill);
   background: var(--_fill);
 }
 
-.lg-range::-webkit-slider-thumb {
+.lg-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   box-sizing: border-box;
   width: var(--_thumb);
@@ -48,7 +48,7 @@
   background: var(--accent);
   transition: var(--transition-colors);
 }
-.lg-range::-moz-range-thumb {
+.lg-slider::-moz-range-thumb {
   box-sizing: border-box;
   width: var(--_thumb);
   height: var(--_thumb);
@@ -58,5 +58,5 @@
   transition: var(--transition-colors);
 }
 
-.lg-range:hover:not(:disabled)::-webkit-slider-thumb { background: var(--accent-hover); }
-.lg-range:hover:not(:disabled)::-moz-range-thumb { background: var(--accent-hover); }
+.lg-slider:hover:not(:disabled)::-webkit-slider-thumb { background: var(--accent-hover); }
+.lg-slider:hover:not(:disabled)::-moz-range-thumb { background: var(--accent-hover); }

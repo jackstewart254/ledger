@@ -15,7 +15,7 @@ import {
   Card,
   DatePicker,
   EmptyState,
-  FilterChip,
+  FilterToggle,
   IconButton,
   Menu,
   PageColumn,
@@ -484,14 +484,14 @@ export default function RunsPage() {
 
         <div className="pg-runs-chips">
           {STAGES.map((stage) => (
-            <FilterChip
+            <FilterToggle
               key={stage}
               count={APPLICATIONS.filter((a) => a.stage === stage).length}
               active={stages.includes(stage)}
               onChange={toggleStage(stage)}
             >
               {STAGE[stage].label}
-            </FilterChip>
+            </FilterToggle>
           ))}
         </div>
 

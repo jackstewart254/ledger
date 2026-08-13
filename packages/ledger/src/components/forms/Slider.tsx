@@ -3,7 +3,7 @@
 import { useState, type ComponentProps, type CSSProperties } from "react";
 import { cx } from "../../internal/cx.js";
 
-export type RangeInputProps = Omit<ComponentProps<"input">, "type" | "size" | "ref">;
+export type SliderProps = Omit<ComponentProps<"input">, "type" | "size" | "ref">;
 
 const pctOf = (value: number, min: number, max: number): number =>
   max === min ? 0 : ((value - min) / (max - min)) * 100;
@@ -14,7 +14,7 @@ const num = (v: unknown, fallback: number): number => {
 };
 
 /**
- * RangeInput — a native range with a filled track: the accent up to the thumb,
+ * Slider — a native range with a filled track: the accent up to the thumb,
  * faint after it, so the value reads at a glance instead of being inferred from
  * the thumb's position against nothing.
  *
@@ -24,7 +24,7 @@ const num = (v: unknown, fallback: number): number => {
  * The fill percentage rides a custom property because no browser exposes the
  * filled portion of a native range to CSS.
  */
-export function RangeInput({
+export function Slider({
   className,
   style,
   min = 0,
@@ -33,7 +33,7 @@ export function RangeInput({
   defaultValue,
   onChange,
   ...rest
-}: RangeInputProps) {
+}: SliderProps) {
   const lo = num(min, 0);
   const hi = num(max, 100);
   const controlled = value !== undefined;
@@ -52,8 +52,8 @@ export function RangeInput({
         if (!controlled) setInternal(num(e.target.value, lo));
         onChange?.(e);
       }}
-      className={cx("lg-range", className)}
-      style={{ "--lg-range-pct": `${pctOf(current, lo, hi)}%`, ...style } as CSSProperties}
+      className={cx("lg-slider", className)}
+      style={{ "--lg-slider-pct": `${pctOf(current, lo, hi)}%`, ...style } as CSSProperties}
     />
   );
 }

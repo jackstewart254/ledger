@@ -95,8 +95,8 @@ CountBadge · Avatar · Kbd · Divider · Link
 **layout** AppShell · PageColumn · Card
 **navigation** Rail · RailItem · Tabs · Menu · CommandMenu
 **forms** FormField · Input · Textarea · Select · MultiSelect · SearchField ·
-Checkbox · RadioGroup · Switch · SegmentedControl · FilterChip · RangeInput ·
-DatePicker
+Checkbox · RadioGroup · Switch · SegmentedControl · FilterToggle · Slider ·
+RangeSlider · DatePicker
 **data** Table · SummaryCard · SummarySplit · MetricDelta · KeyValue ·
 Sparkline · TrendChart · BarChart · CompareChart · Pagination
 **feedback** Modal · Drawer · Toast · ToastViewport · Tooltip · InlineAlert ·

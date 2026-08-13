@@ -3,7 +3,7 @@
 import { useState, type ComponentProps, type ReactNode } from "react";
 import { cx } from "../../internal/cx.js";
 
-export interface FilterChipProps
+export interface FilterToggleProps
   extends Omit<ComponentProps<"button">, "onChange" | "value" | "ref"> {
   /** Controlled active state. */
   active?: boolean;
@@ -16,12 +16,12 @@ export interface FilterChipProps
 }
 
 /**
- * FilterChip — toggleable chip. Active is carried by the fill and border shift
+ * FilterToggle — toggleable chip. Active is carried by the fill and border shift
  * alone: the chip IS the toggle, so an × inside it is a second control for the
  * thing the whole chip already does, and it makes the active chip a different
  * width from the inactive one.
  */
-export function FilterChip({
+export function FilterToggle({
   active,
   defaultActive = false,
   onChange,
@@ -31,7 +31,7 @@ export function FilterChip({
   className,
   onClick,
   ...rest
-}: FilterChipProps) {
+}: FilterToggleProps) {
   const [internal, setInternal] = useState(defaultActive);
   const controlled = active !== undefined;
   const on = controlled ? active : internal;
@@ -48,14 +48,14 @@ export function FilterChip({
       {...rest}
       type="button"
       aria-pressed={on}
-      className={cx("lg-chip", className)}
+      className={cx("lg-filter-toggle", className)}
       onClick={(e) => {
         onClick?.(e);
         toggle();
       }}
     >
-      <span className="lg-chip__label">{children}</span>
-      {count != null && <span className="lg-chip__count">{count}</span>}
+      <span className="lg-filter-toggle__label">{children}</span>
+      {count != null && <span className="lg-filter-toggle__count">{count}</span>}
     </button>
   );
 }

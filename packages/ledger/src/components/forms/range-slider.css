@@ -1,0 +1,54 @@
+/* RangeSlider — two native ranges over one shared rail. The inputs reuse
+   .lg-slider for the thumb and have their own tracks blanked, so the single
+   filled span behind them is the only rail drawn instead of two stacked ones.
+   The inputs ignore the pointer and their thumbs take it back, so the lower
+   thumb stays draggable through the input sitting on top of it.
+   Webkit and Gecko pseudo selectors cannot share a rule (an unknown selector
+   voids the whole block), so the pairs are duplicated below. */
+.lg-range-slider {
+  --_track: var(--space-1);
+  --_thumb: var(--space-4);
+  position: relative;
+  display: block;
+  width: 100%;
+  height: var(--_thumb);
+}
+.lg-range-slider[data-disabled] {
+  opacity: 0.55;
+}
+
+.lg-range-slider__track {
+  position: absolute;
+  top: calc((var(--_thumb) - var(--_track)) / 2);
+  right: 0;
+  left: 0;
+  height: var(--_track);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    to right,
+    var(--surface-active) 0 var(--lg-range-lo, 0%),
+    var(--accent) var(--lg-range-lo, 0%) var(--lg-range-hi, 100%),
+    var(--surface-active) var(--lg-range-hi, 100%) 100%
+  );
+}
+
+.lg-range-slider .lg-slider {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.lg-range-slider .lg-slider:disabled {
+  opacity: 1; /* the wrapper already dims the whole control */
+}
+
+.lg-range-slider .lg-slider::-webkit-slider-runnable-track { background: transparent; }
+.lg-range-slider .lg-slider::-moz-range-track { background: transparent; }
+
+.lg-range-slider .lg-slider::-webkit-slider-thumb { pointer-events: auto; }
+.lg-range-slider .lg-slider::-moz-range-thumb { pointer-events: auto; }
+
+/* Ring the focused THUMB, not the input box: both inputs span the full track,
+   so a ring around the box cannot say which end has focus. */
+.lg-range-slider .lg-slider:focus-visible { box-shadow: none; }
+.lg-range-slider .lg-slider:focus-visible::-webkit-slider-thumb { box-shadow: var(--focus-ring); }
+.lg-range-slider .lg-slider:focus-visible::-moz-range-thumb { box-shadow: var(--focus-ring); }

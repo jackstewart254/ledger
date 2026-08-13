@@ -7,9 +7,10 @@
 @import "./radio-group.css";
 @import "./switch.css";
 @import "./segmented-control.css";
-@import "./range-input.css";
+@import "./slider.css";
+@import "./range-slider.css";
 @import "./date-picker.css";
 @import "./select.css";
 @import "./search-field.css";
 @import "./multi-select.css";
-@import "./filter-chip.css";
+@import "./filter-toggle.css";

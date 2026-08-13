@@ -24,7 +24,7 @@ import {
   Divider,
   Drawer,
   EmptyState,
-  FilterChip,
+  FilterToggle,
   Icon,
   IconButton,
   InlineAlert,
@@ -540,27 +540,27 @@ export default function Dashboard({ toolbar }: DashboardProps) {
                   title="Fleet"
                   actions={
                     <>
-                      <FilterChip
+                      <FilterToggle
                         count={failing}
                         active={states.includes("failing")}
                         onChange={toggleState("failing")}
                       >
                         Failing
-                      </FilterChip>
-                      <FilterChip
+                      </FilterToggle>
+                      <FilterToggle
                         count={DAEMONS.filter((d) => d.state === "degraded").length}
                         active={states.includes("degraded")}
                         onChange={toggleState("degraded")}
                       >
                         Degraded
-                      </FilterChip>
-                      <FilterChip
+                      </FilterToggle>
+                      <FilterToggle
                         count={DAEMONS.filter((d) => d.state === "paused").length}
                         active={states.includes("paused")}
                         onChange={toggleState("paused")}
                       >
                         Paused
-                      </FilterChip>
+                      </FilterToggle>
                     </>
                   }
                 />
