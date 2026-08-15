@@ -20,6 +20,14 @@
   color: var(--text-muted);
 }
 
+/* The hint glyph rides in the label's text flow rather than turning the label
+   into a flex row — the columns orientation ellipsises that label, and
+   text-overflow needs a block box to do it in. */
+.lg-keyvalue-label .lg-tooltip-anchor {
+  vertical-align: middle;
+  margin-left: var(--space-1);
+}
+
 .lg-keyvalue-value {
   margin: 0;
   font-size: var(--text-sm);

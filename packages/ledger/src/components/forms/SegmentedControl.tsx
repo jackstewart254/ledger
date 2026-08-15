@@ -16,6 +16,12 @@ export interface SegmentedControlProps {
   defaultValue?: string;
   onChange?: (value: string) => void;
   disabled?: boolean;
+  /**
+   * Fill the container and split the segments evenly across it. Natural width
+   * is still the default — a picker stretched across a wide card puts metres
+   * between two words that are meant to be compared.
+   */
+  fullWidth?: boolean;
   "aria-label"?: string;
   className?: string;
   style?: CSSProperties;
@@ -34,6 +40,7 @@ export function SegmentedControl({
   defaultValue,
   onChange,
   disabled = false,
+  fullWidth = false,
   "aria-label": ariaLabel,
   className,
   style,
@@ -75,7 +82,7 @@ export function SegmentedControl({
       ref={groupRef}
       role="radiogroup"
       aria-label={ariaLabel}
-      className={cx("lg-seg", className)}
+      className={cx("lg-seg", fullWidth && "lg-seg--full", className)}
       style={style}
       onKeyDown={onKeyDown}
     >

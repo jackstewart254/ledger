@@ -30,3 +30,11 @@
 .lg-card-body {
   padding: var(--space-4);
 }
+
+/* A card whose content is a list of rows wants its edge, not a second inset
+   inside the first — each row already carries its own padding and its own
+   hairline. Reached through the `flush` prop so the consumer never has to
+   write `.lg-card-body { padding: 0 }` against an internal class. */
+.lg-card-body--flush {
+  padding: 0;
+}

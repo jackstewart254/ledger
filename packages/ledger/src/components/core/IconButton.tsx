@@ -2,6 +2,8 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { Icon, type LucideIcon } from "./Icon.js";
 import { Tooltip, type TooltipSide } from "../feedback/Tooltip.js";
 
+export type IconButtonVariant = "control" | "primary" | "bare";
+
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: LucideIcon;
   /** Accessible name — becomes aria-label and, by default, the tooltip. */
@@ -9,12 +11,14 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   /** Persistent pressed look (toolbar toggles). */
   active?: boolean;
   /**
-   * `control` (default) is the 36px box that lines up with Button. `bare` drops
+   * `control` (default) is the 36px box that lines up with Button. `primary` is
+   * that same box carrying Button's accent fill, for the one glyph in a cluster
+   * that *is* the action — a send control at the end of an input. `bare` drops
    * the box entirely — for a glyph annotating a heading or a row, where a
    * control-sized target around a 17px icon is all chrome and no message. Still
    * a button, so it keeps focus and the tooltip.
    */
-  variant?: "control" | "bare";
+  variant?: IconButtonVariant;
   /** Override the tip text, or `false` to suppress it (menu triggers, toolbars
    *  that already name themselves). Defaults to `label`. */
   tooltip?: ReactNode | false;
@@ -40,7 +44,7 @@ export function IconButton({
 }: IconButtonProps) {
   const classes = [
     "lg-icon-btn",
-    variant === "bare" && "lg-icon-btn--bare",
+    variant !== "control" && `lg-icon-btn--${variant}`,
     active && "lg-icon-btn--active",
     className,
   ]

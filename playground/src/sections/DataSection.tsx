@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import {
+  Card,
   formatDate,
   KeyValue,
   MetricDelta,
@@ -220,11 +221,27 @@ export default function DataSection() {
             {
               label: "Amount",
               value: <span style={{ color: "var(--danger-text)" }}>{gbp(-42.17)}</span>,
+              hint: "Gross — the merchant's own fee is settled separately.",
             },
             { label: "Balance after", value: "£12,480.22" },
           ]}
         />
       </div>
+
+      <h3 style={sub}>KeyValue — columns, one item qualified</h3>
+      {/* the hint is what keeps this label the same length as its neighbours */}
+      <Card>
+        <KeyValue
+          orientation="columns"
+          items={[
+            { label: "Inflow", value: "£18,420" },
+            { label: "Outflow", value: "£11,905" },
+            { label: "Net", value: "£6,515" },
+            { label: "Projection", value: "£78,180", hint: "Year-end, all rows — not just this page." },
+            { label: "Accounts", value: "9" },
+          ]}
+        />
+      </Card>
 
       <h3 style={sub}>Pagination</h3>
       <Pagination page={page} pageCount={12} onPageChange={setPage} />

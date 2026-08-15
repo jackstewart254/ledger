@@ -1,6 +1,7 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { PoundSterling } from "lucide-react";
 import {
+  Button,
   Checkbox,
   DatePicker,
   FilterToggle,
@@ -58,6 +59,7 @@ const ACCOUNTS = [
 export default function FormsSection() {
   const [daemons, setDaemons] = useState<string[]>(["reconcile"]);
   const [amount, setAmount] = useState({ min: 500, max: 3500 });
+  const [submitted, setSubmitted] = useState<{ accounts: string[]; ref: string } | null>(null);
 
   return (
     <section id="forms" className="pg-section">
@@ -211,6 +213,49 @@ export default function FormsSection() {
             ]}
             defaultValue="1w"
           />
+        </Spec>
+
+        <Spec title="Segmented control — fullWidth">
+          {/* the group stretches and the segments split the box evenly;
+              without it, width:100% only widened the box */}
+          <div style={{ width: 420 }}>
+            <SegmentedControl
+              fullWidth
+              aria-label="Atom type"
+              options={["Fact", "Question", "Decision"]}
+              defaultValue="Question"
+            />
+          </div>
+        </Spec>
+
+        <Spec title="MultiSelect in an uncontrolled form">
+          <form
+            style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              const data = new FormData(e.currentTarget);
+              setSubmitted({
+                accounts: data.getAll("accounts").map(String),
+                ref: String(data.get("ref") ?? ""),
+              });
+            }}
+          >
+            <Input name="ref" placeholder="Reference" defaultValue="INV-4471" style={{ width: 160 }} />
+            <MultiSelect
+              name="accounts"
+              aria-label="Accounts to include"
+              placeholder="Any account"
+              defaultValue={["current", "payroll"]}
+              width={240}
+              options={ACCOUNTS}
+            />
+            <Button type="submit" variant="primary">Submit</Button>
+          </form>
+          <output style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
+            {submitted
+              ? `getAll("accounts") → [${submitted.accounts.join(", ")}] · get("ref") → ${submitted.ref}`
+              : "No state lifted — submit to read the selection back out of FormData."}
+          </output>
         </Spec>
 
         <Spec title="Filter toggle">

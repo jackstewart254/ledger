@@ -153,12 +153,18 @@ Trigger with chip summary + checkbox popover list. Real checkboxes in the popove
 
 `MultiSelect` · props `MultiSelectProps` · [`packages/ledger/src/components/forms/MultiSelect.tsx`](../../packages/ledger/src/components/forms/MultiSelect.tsx)
 
+Given a `name`, it serialises as repeated hidden fields rather than one JSON
+blob: repeated same-named fields are what `FormData.getAll` and every server
+action's parser already understand, whereas a blob makes the one control in
+the form that needs decoding before it can be read.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `options` **·** required | `MultiSelectOption[]` | — |  |
 | `value` | `string[]` | — | Controlled selection. |
 | `defaultValue` | `string[]` | — |  |
 | `onChange` | `(next: string[]) => void` | — |  |
+| `name` | `string` | — | Form field name. Emits one hidden input per selected value, so `FormData.getAll(name)` reads the selection and the control works in an uncontrolled form like every other one in the kit. |
 | `placeholder` | `string` | `"Any"` |  |
 | `searchable` | `boolean` | — | Filter row inside the popover. Defaults to on from 8 options up — a short list doesn't earn one. |
 | `width` | `number \| string` | `220` |  |
@@ -308,6 +314,7 @@ Single size on purpose — the kit ships one control size, no `size` prop.
 | `defaultValue` | `string` | — |  |
 | `onChange` | `(value: string) => void` | — |  |
 | `disabled` | `boolean` | `false` |  |
+| `fullWidth` | `boolean` | `false` | Fill the container and split the segments evenly across it. Natural width is still the default — a picker stretched across a wide card puts metres between two words that are meant to be compared. |
 | `aria-label` | `string` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |

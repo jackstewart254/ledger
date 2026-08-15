@@ -97,4 +97,4 @@ import "@mcleanstewart/ledger/styles.css";
 | `formatDate` | `(value: string \| number \| Date \| null \| undefined, locale?: string) => string` | Human date — "11 Aug 2026". ISO strings belong in the data layer, not on screen: `2026-08-11` makes the reader parse a format before reading a date, and a column of them reads as serial numbers. Native Intl, no dependency. |
 | `pct` | `(n: number \| null \| undefined, digits?: number) => string` | Percentage to `digits` places — 12.53 becomes "12.5%". Nullish and non-finite give an em dash, as compactNumber does. |
 
-_55 components, 30 exported types, 7 utilities._
+_55 components, 31 exported types, 7 utilities._

@@ -240,7 +240,14 @@ direction — a Button labelled "×".
 target box, leaving the glyph. Use it for annotations — an info glyph beside a
 card header, a clear button next to a filled field — where a control-sized box
 around a 17px icon is all chrome and no message. It is still a real button, so
-it keeps focus and its tooltip.
+it keeps focus and its tooltip — and `active` on a bare glyph fills a chip
+around it rather than only shading it, so a bare toggle reads as pressed
+without costing the row a 36px column.
+
+`variant="primary"` is the third: the `control` box carrying Button's accent
+fill, for the glyph that *is* the action rather than one of several beside it —
+a send control at the end of an input. One per cluster; a row of them is a row
+of primaries, which is a row of no primaries.
 
 ### `Badge` vs `StatusPill` vs `CountBadge` vs `StatusDot`
 
@@ -387,7 +394,10 @@ If the thing below it does not change wholesale, it's a value, not a view.
   picker on mobile, which is the right call.
 - **MultiSelect** — several of many, with real checkboxes in the popover so it
   stays keyboard-navigable. It grows a filter row from eight options up; below
-  that, a filter row is chrome on a list you can already see.
+  that, a filter row is chrome on a list you can already see. Give it a `name`
+  and it emits one hidden input per selected value, so `FormData.getAll(name)`
+  reads it and an otherwise-uncontrolled form does not have to lift this one
+  control into React state.
 - **FilterToggle** — a toggle you want *visible* while it is on, with a count.
   Three to six of them across a table's toolbar is the pattern. Beyond that,
   MultiSelect.
