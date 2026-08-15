@@ -27,7 +27,7 @@ export default function App() {
 }
 ```
 
-## Three things that will catch you out
+## Four things that will catch you out
 
 **1. It loads no fonts.** The tokens declare a stack with system fallbacks and
 stop there — a design system that pulls down a webfont is a design system that
@@ -48,6 +48,14 @@ import { GeistSans } from "geist/font/sans";
 does not — those resolvers leave the nested file as a literal rule and then
 drop it, and every token silently vanishes from your build. This bit us; it is
 why every `@import` in the source is string-form.
+
+**4. In an App Router app, don't pass a function to one of these.** Most of the
+kit is client components, which is fine — they render from a server component
+happily. Functions do not cross that boundary, and `format`, `rowKey`
+and a column's `render` are functions even though none of them reads like
+interaction. It typechecks, it builds, and it throws when the route first
+renders. Put the view in your own `'use client'` file and pass it data:
+[recipe 7](https://github.com/jackstewart254/ledger/blob/main/docs/recipes.md#7-charts-and-tables-under-a-server-component).
 
 ## Themes
 
@@ -114,7 +122,9 @@ EmptyState · Skeleton · Spinner · Progress
 - A control is a word or a glyph, never both — `Button` takes text, `IconButton`
   takes an icon and carries its own tooltip.
 - Colour is semantic. `tone` on a component is a claim about the data.
-- `className` and `style` pass through on every component root.
+- `className` and `style` pass through on every component root — which on a
+  framed control (`Input`, `Select`, `SearchField`, …) is the `.lg-control`
+  frame, not the inner `<input>`. Every other native prop reaches the control.
 
 ## Licence
 

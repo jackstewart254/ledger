@@ -21,16 +21,20 @@ Centered dialog on the scrim. Surface-raised panel, hairline border, the sanctio
 
 `Modal` · props `ModalProps` · [`packages/ledger/src/components/feedback/Modal.tsx`](../../packages/ledger/src/components/feedback/Modal.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `open` **·** required | `boolean` | — |  |
-| `onClose` **·** required | `() => void` | — |  |
+| `onClose` **·** required **·** function | `() => void` | — |  |
 | `title` | `ReactNode` | — |  |
 | `children` | `ReactNode` | — |  |
 | `footer` | `ReactNode` | — | Right-aligned action slot under a hairline. |
 | `width` | `number` | `480` | Panel width in px (dynamic — passed as a custom property). |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`onClose` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <Modal
@@ -54,16 +58,20 @@ Right-side sheet for filters/details. Slides in over the scrim, focus trapped, s
 
 `Drawer` · props `DrawerProps` · [`packages/ledger/src/components/feedback/Drawer.tsx`](../../packages/ledger/src/components/feedback/Drawer.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `open` **·** required | `boolean` | — |  |
-| `onClose` **·** required | `() => void` | — |  |
+| `onClose` **·** required **·** function | `() => void` | — |  |
 | `title` | `ReactNode` | — |  |
 | `children` | `ReactNode` | — |  |
 | `footer` | `ReactNode` | — |  |
 | `width` | `number` | `360` | Panel width in px (dynamic — passed as a custom property). |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`onClose` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <Drawer open={open} onClose={close} title="Transaction detail" width={420}>
@@ -76,6 +84,8 @@ Right-side sheet for filters/details. Slides in over the scrim, focus trapped, s
 Transient notification for the bottom-right stack. Semantic tone colors the leading icon only; auto-dismisses via `duration` when `onClose` is provided. Render inside a ToastViewport, which owns the live region.
 
 `Toast` · props `ToastProps` · [`packages/ledger/src/components/feedback/Toast.tsx`](../../packages/ledger/src/components/feedback/Toast.tsx)
+
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
 
 There is no `warning` tone, by design. The line here is lifetime, not
 severity: a toast is transient and takes its message with it when it
@@ -92,10 +102,12 @@ Nor is there an `info` tone: `neutral` is info.
 | `title` **·** required | `ReactNode` | — |  |
 | `description` | `ReactNode` | — |  |
 | `action` | `ReactNode` | — | Action slot (e.g. an undo button). |
-| `onClose` | `() => void` | — |  |
+| `onClose` **·** function | `() => void` | — |  |
 | `duration` | `number` | `5000` | Auto-dismiss delay in ms; 0 disables. |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`onClose` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <Toast
@@ -112,6 +124,8 @@ Nor is there an `info` tone: `neutral` is info.
 Fixed bottom-right stack for toasts — outranks every interactive layer. Carries the live region: it is mounted for the life of the page, so toasts appearing inside it are announced. A region inserted together with its own content routinely is not.
 
 `ToastViewport` · props `ToastViewportProps` · [`packages/ledger/src/components/feedback/Toast.tsx`](../../packages/ledger/src/components/feedback/Toast.tsx)
+
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -132,6 +146,8 @@ Fixed bottom-right stack for toasts — outranks every interactive layer. Carrie
 Hover/focus label. Wraps a single child; shows on delay. Portaled to &lt;body> with fixed positioning, so no ancestor (overflow clip, transform, stacking context) can cut it off or re-base its coordinates. Pops from the anchor side on enter, fades on exit — CSS transitions only, which keeps the library zero-dep. Reduced motion lands the same end states instantly. The unmount is on a timer rather than transitionend, because a hidden tab may never fire one.
 
 `Tooltip` · props `TooltipProps` · [`packages/ledger/src/components/feedback/Tooltip.tsx`](../../packages/ledger/src/components/feedback/Tooltip.tsx)
+
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -156,6 +172,8 @@ One line, always: tone glyph, the headline, an info glyph carrying the detail, t
 
 `InlineAlert` · props `InlineAlertProps` · [`packages/ledger/src/components/feedback/InlineAlert.tsx`](../../packages/ledger/src/components/feedback/InlineAlert.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 The detail used to sit under the headline as a second line of muted prose,
 which made every alert a two-line block whose second line most readers skip —
 and gave the alert a variable height that shoved the page around. The
@@ -168,9 +186,11 @@ material, so it goes where reference material goes.
 | `title` | `ReactNode` | — |  |
 | `children` | `ReactNode` | — | The detail. Lives behind the info glyph, not on a second line. |
 | `action` | `ReactNode` | — | Trailing action slot. |
-| `onClose` | `() => void` | — |  |
+| `onClose` **·** function | `() => void` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`onClose` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <InlineAlert tone="warning" title="Two statements unmatched" onClose={dismiss}>

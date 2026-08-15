@@ -16,6 +16,8 @@ Icon-only 56px vertical rail. Items are glyphs; the label lives in a flyout chip
 
 `Rail` · props `RailProps` · [`packages/ledger/src/components/navigation/Rail.tsx`](../../packages/ledger/src/components/navigation/Rail.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 The items scroll on their own when a route list outgrows the viewport; the
 footer sits outside that region, so a theme toggle or sign out stays put
 instead of scrolling away with them.
@@ -41,6 +43,8 @@ One glyph in the Rail. `label` never renders inline: it is the item's accessible
 
 `RailItem` · props `RailItemProps` · [`packages/ledger/src/components/navigation/Rail.tsx`](../../packages/ledger/src/components/navigation/Rail.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 The chip is the kit's Tooltip, portaled to &lt;body> and positioned fixed. It
 used to be an absolutely positioned span inside the item, which cannot
 survive the items region scrolling: a scroll container clips both axes (CSS
@@ -59,9 +63,11 @@ aria-pressed on the button.
 | `active` | `boolean` | `false` |  |
 | `as` | `ElementType` | — | Render as another element — a router's Link, in practice: `<RailItem as={Link} href="/money" />`. Unrecognised props forward to it, so the router's own client-side navigation and prefetch apply and the rail stops reloading the document on every click. The kit imports no router; you pass yours. Defaults to `a` when `href` is set, `button` otherwise. |
 | `href` | `string` | — | Renders an &lt;a> when set, a &lt;button> otherwise. |
-| `onClick` | `(e: MouseEvent) => void` | — | Takes the event — a plain `<a>` item needs `e.preventDefault()` to be navigated in JS rather than by the browser. |
+| `onClick` **·** function | `(e: MouseEvent) => void` | — | Takes the event — a plain `<a>` item needs `e.preventDefault()` to be navigated in JS rather than by the browser. |
 
-Also accepts every prop of `Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "onClick">` — they are spread onto the underlying element.
+`onClick` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
+
+Also accepts every prop of `Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "onClick">` — they are spread onto the underlying element. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <RailItem icon={Receipt} label="Invoices" href="/invoices" active />
@@ -73,6 +79,8 @@ Rounded chips, no underline rail: inactive tabs are bare, the active one lifts t
 
 `Tabs` · props `TabsProps` · [`packages/ledger/src/components/navigation/Tabs.tsx`](../../packages/ledger/src/components/navigation/Tabs.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 Same cell as SegmentedControl, ungrouped. Reach for Tabs to move between
 views, SegmentedControl to pick a value inside one.
 
@@ -81,10 +89,12 @@ views, SegmentedControl to pick a value inside one.
 | `items` **·** required | `TabItem[]` | — |  |
 | `value` | `string` | — |  |
 | `defaultValue` | `string` | — |  |
-| `onChange` | `(value: string, e?: MouseEvent<HTMLElement>) => void` | — | Fires on both pointer and keyboard selection. The event is present only for a click — call `preventDefault()` on it when the tab is an anchor and you are routing yourself. |
+| `onChange` **·** function | `(value: string, e?: MouseEvent<HTMLElement>) => void` | — | Fires on both pointer and keyboard selection. The event is present only for a click — call `preventDefault()` on it when the tab is an anchor and you are routing yourself. |
 | `aria-label` | `string` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`onChange` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <Tabs
@@ -105,6 +115,8 @@ views, SegmentedControl to pick a value inside one.
 Anchored action menu (kebab/dropdown). Trigger + positioned panel (surface-raised, hairline, the sanctioned shadow). Arrow keys move focus, Enter/Space commit, Escape and click-outside close. Danger item variant for destructive actions.
 
 `Menu` · props `MenuProps` · [`packages/ledger/src/components/navigation/Menu.tsx`](../../packages/ledger/src/components/navigation/Menu.tsx)
+
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -132,13 +144,17 @@ The ⌘K palette. Scrim + centered panel, borderless search input, filterable fl
 
 `CommandMenu` · props `CommandMenuProps` · [`packages/ledger/src/components/navigation/CommandMenu.tsx`](../../packages/ledger/src/components/navigation/CommandMenu.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `open` **·** required | `boolean` | — |  |
-| `onClose` **·** required | `() => void` | — |  |
+| `onClose` **·** required **·** function | `() => void` | — |  |
 | `items` **·** required | `CommandMenuItem[]` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`onClose` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <CommandMenu
@@ -174,7 +190,9 @@ The ⌘K palette. Scrim + centered panel, borderless search input, filterable fl
 | `disabled` | `boolean` | — |  |
 | `as` | `ElementType` | — | Element or component to render this item as instead of `button` — a router's own link, say, so an item that navigates stays a client-side route change. Ignored when `disabled` is set: the platform has no disabled anchor, and the native `button` is what the styling and the arrow-key focus walk key off. Defaults to `button`. |
 | `href` | `string` | — | Destination, passed through when `as` renders something anchor-like. |
-| `onSelect` | `(e: MouseEvent<HTMLElement>) => void` | — | Call `preventDefault()` on the event when the item is an anchor and you are routing yourself. |
+| `onSelect` **·** function | `(e: MouseEvent<HTMLElement>) => void` | — | Call `preventDefault()` on the event when the item is an anchor and you are routing yourself. |
+
+`onSelect` is a function, and a function cannot cross the server→client boundary. Building this object in a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ### CommandMenuItem
 
@@ -185,4 +203,6 @@ The ⌘K palette. Scrim + centered panel, borderless search input, filterable fl
 | `group` | `string` | — |  |
 | `icon` | `LucideIcon` | — |  |
 | `keywords` | `string` | — | Extra match terms beyond the label. |
-| `onSelect` | `() => void` | — |  |
+| `onSelect` **·** function | `() => void` | — |  |
+
+`onSelect` is a function, and a function cannot cross the server→client boundary. Building this object in a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.

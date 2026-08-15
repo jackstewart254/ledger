@@ -21,6 +21,8 @@ Render-prop columns, row hover, 42px rows (--lg-table-row-h, which defaults to -
 
 `Table<Row>` · props `TableProps<Row>` · [`packages/ledger/src/components/data/Table.tsx`](../../packages/ledger/src/components/data/Table.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 The header row is in the DOM but hidden visually: a column of dates under a
 heading that reads "Date" tells the reader what they already worked out, and
 on a full-page table those labels are the only chrome left. Screen readers
@@ -39,17 +41,19 @@ Sorting and selection are both fully controlled and neither touches `rows`.
 | --- | --- | --- | --- |
 | `columns` **·** required | `TableColumn<Row>[]` | — |  |
 | `rows` **·** required | `Row[]` | — |  |
-| `rowKey` | `(row: Row, index: number) => TableRowKey` | — | Row identity. Also the selection key, so give it something stable: with the index fallback, selection follows a row's POSITION, and sorting the rows then moves the ticks to different records. |
-| `onRowClick` | `(row: Row) => void` | — |  |
+| `rowKey` **·** function | `(row: Row, index: number) => TableRowKey` | — | Row identity. Also the selection key, so give it something stable: with the index fallback, selection follows a row's POSITION, and sorting the rows then moves the ticks to different records. |
+| `onRowClick` **·** function | `(row: Row) => void` | — |  |
 | `rowHeight` | `string` | — | Row-height override — sets the --lg-table-row-h custom prop. |
 | `maxHeight` | `string` | — | Caps the scroll container's height. A visible header row (see the note on the component) pins itself to the top of that container as the body scrolls — there is no prop for it, because a scrolling table that loses its headings is only ever worse. |
 | `sort` | `TableSort \| null` | — | Current sort, or null/undefined for none. Fully controlled: the kit draws the header affordance and the direction arrow, the CONSUMER owns the comparator and passes rows already in order. Nothing here re-orders `rows` — a component that sorts your data owns state you can't see, and the sort you want ("live first, then name") is rarely the one it would guess. |
-| `onSortChange` | `(sort: TableSort) => void` | — | Fires with the next sort when a sortable header is activated: a new column starts at "asc", the sorted column flips direction. Two states only — there is no third click back to unsorted. |
+| `onSortChange` **·** function | `(sort: TableSort) => void` | — | Fires with the next sort when a sortable header is activated: a new column starts at "asc", the sorted column flips direction. Two states only — there is no third click back to unsorted. |
 | `selectedKeys` | `ReadonlySet<TableRowKey>` | — | Selected row keys (from `rowKey`). Fully controlled — pass this together with `onSelectionChange` to get the checkbox column. |
-| `onSelectionChange` | `(keys: Set<TableRowKey>) => void` | — | Fires with the next selection. The header checkbox adds or removes every key in the CURRENT `rows`, leaving keys outside them alone, so selecting on a filtered or paged view doesn't silently drop what's off-screen. |
+| `onSelectionChange` **·** function | `(keys: Set<TableRowKey>) => void` | — | Fires with the next selection. The header checkbox adds or removes every key in the CURRENT `rows`, leaving keys outside them alone, so selecting on a filtered or paged view doesn't silently drop what's off-screen. |
 | `empty` | `ReactNode` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`rowKey`, `onRowClick`, `onSortChange` and `onSelectionChange` are functions, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <Table
@@ -95,7 +99,7 @@ direction is good instead of asking the caller to flip a colour.
 | --- | --- | --- | --- |
 | `value` **·** required | `number` | — |  |
 | `suffix` | `string` | `"%"` | Appended to the default rendering (ignored when `format` is given). |
-| `format` | `(value: number) => string` | — |  |
+| `format` **·** function | `(value: number) => string` | — |  |
 | `polarity` | `MetricPolarity` | `"higher-is-better"` | Defaults to higher-is-better — revenue, uptime, runs completed. |
 | `epsilon` | `number` | — | Magnitude below which a delta is flat rather than green or red. Defaults to 0.005 — half a penny, a fifth of the finest percentage step `pct` prints. Raise it if `value` is a fraction rather than percentage points. |
 | `className` | `string` | — |  |
@@ -112,6 +116,8 @@ direction is good instead of asking the caller to flip a colour.
 Tiny inline SVG polyline from a number[]. Stroke --chart-line, optional --chart-fill area. No lib.
 
 `Sparkline` · props `SparklineProps` · [`packages/ledger/src/components/data/Sparkline.tsx`](../../packages/ledger/src/components/data/Sparkline.tsx)
+
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -133,6 +139,8 @@ Area chart: gradient fill under a hairline-thin line, grid at rounded tick value
 
 `TrendChart` · props `TrendChartProps` · [`packages/ledger/src/components/data/TrendChart.tsx`](../../packages/ledger/src/components/data/TrendChart.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 Draws at its measured width (see useChartWidth), so it fills a fluid column
 instead of scaling its own type up with a fixed viewBox.
 
@@ -143,9 +151,11 @@ instead of scaling its own type up with a fixed viewBox.
 | `width` | `number` | `560` | Drawing width before the container is measured (SSR / first paint). |
 | `height` | `number` | `200` |  |
 | `area` | `boolean` | `true` | Gradient area fill under the line. |
-| `format` | `(value: number) => string` | `String` | Tick + readout formatter (mono, tabular). |
+| `format` **·** function | `(value: number) => string` | `String` | Tick + readout formatter (mono, tabular). |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`format` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <TrendChart
@@ -161,6 +171,8 @@ The log-panel series: caps micro-label, headline figure and secondary counts, th
 
 `BarChart` · props `BarChartProps` · [`packages/ledger/src/components/data/BarChart.tsx`](../../packages/ledger/src/components/data/BarChart.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 Ordinary buckets are the accent; a `tone` bar is the exception that should
 catch the eye, which is what a red error spike does against a run of blue.
 One exception, derived rather than configured: once ANY bucket carries a
@@ -173,12 +185,14 @@ reds and ambers, blue would be the only colour saying nothing.
 | `label` | `ReactNode` | — | Caps micro-label above the figure. |
 | `value` | `ReactNode` | — | Headline figure — the total the series sums to. |
 | `meta` | `ReactNode` | — | Secondary counts, on the figure's baseline. |
-| `format` | `(value: number) => string` | `String` | Tooltip value formatter. |
+| `format` **·** function | `(value: number) => string` | `String` | Tooltip value formatter. |
 | `height` | `string` | — | CSS length for the plot area — the width always comes from the container. |
 | `xStartLabel` | `ReactNode` | — |  |
 | `xEndLabel` | `ReactNode` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`format` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <BarChart
@@ -202,6 +216,8 @@ One measure over two periods: the current period in accent, the previous behind 
 
 `CompareChart` · props `CompareChartProps` · [`packages/ledger/src/components/data/CompareChart.tsx`](../../packages/ledger/src/components/data/CompareChart.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 No area fill on either line: two stacked gradients would fight, and the
 subject here is the gap between the periods, not the volume under them.
 
@@ -214,10 +230,12 @@ instead of scaling its own type up with a fixed viewBox.
 | `previous` | `CompareSeries` | — |  |
 | `labels` | `string[]` | — | x-axis tick labels, spread evenly across the width. |
 | `yTicks` | `number` | `4` | how many y ticks to aim for; default 4. |
-| `format` | `(value: number) => string` | `String` | formats y tick labels and the hover readout. |
+| `format` **·** function | `(value: number) => string` | `String` | formats y tick labels and the hover readout. |
 | `height` | `number` | `200` |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`format` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <CompareChart
@@ -342,13 +360,17 @@ Controlled: hairline chevron buttons + a fixed-width run of page numerals.
 
 `Pagination` · props `PaginationProps` · [`packages/ledger/src/components/data/Pagination.tsx`](../../packages/ledger/src/components/data/Pagination.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `page` **·** required | `number` | — | Current page, 1-based. |
 | `pageCount` **·** required | `number` | — |  |
-| `onPageChange` **·** required | `(page: number) => void` | — |  |
+| `onPageChange` **·** required **·** function | `(page: number) => void` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`onPageChange` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <Pagination page={page} pageCount={9} onPageChange={setPage} />
@@ -365,8 +387,10 @@ Controlled: hairline chevron buttons + a fixed-width run of page numerals.
 | `width` | `string` | — | Column width (any CSS length). The table lays out fixed, so this is honoured exactly rather than treated as a hint — columns left unset split whatever space is over. Don't reach for the auto-layout `width: "100%"` idiom to mean "take the rest": under fixed layout it takes all of it. |
 | `align` | `TableAlign` | — |  |
 | `numeric` | `boolean` | — | Numeric cell — tabular figures via --num-features. |
-| `render` | `(row: Row) => ReactNode` | — | Render-prop cell — falls back to row[key]. |
+| `render` **·** function | `(row: Row) => ReactNode` | — | Render-prop cell — falls back to row[key]. |
 | `sortable` | `boolean` | — | Turns this column's header into a sort button. Needs `onSortChange` on the table; without it the flag does nothing, since there would be nowhere to report the click. Any sortable column un-hides the header row — see the note on the component. |
+
+`render` is a function, and a function cannot cross the server→client boundary. Building this object in a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ### TableAlign
 
@@ -395,6 +419,14 @@ Whatever `rowKey` returns — the identity a row is selected by.
 
 ```ts
 type TableRowKey = string | number;
+```
+
+### MetricPolarity
+
+Which way is good. Queue depth and latency rise when things get worse.
+
+```ts
+type MetricPolarity = "higher-is-better" | "lower-is-better";
 ```
 
 ### BarChartDatum

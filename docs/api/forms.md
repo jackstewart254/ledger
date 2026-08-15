@@ -25,6 +25,8 @@ Label + control slot + error line. Wires aria-describedby / aria-invalid onto a 
 
 `FormField` · props `FormFieldProps` · [`packages/ledger/src/components/forms/FormField.tsx`](../../packages/ledger/src/components/forms/FormField.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 There is deliberately NO hint slot. Explainer text under a field is a model
 narrating its own interface; a field that needs a caption to be understood
 needs a better label or a better control. Errors stay — those report
@@ -58,6 +60,8 @@ Text field on the shared .lg-control frame. className/style land on the frame; e
 
 `Input` · props `InputProps` · [`packages/ledger/src/components/forms/Input.tsx`](../../packages/ledger/src/components/forms/Input.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 Single size on purpose — the kit ships one control height, no `size` prop.
 
 | Prop | Type | Default | Description |
@@ -65,7 +69,7 @@ Single size on purpose — the kit ships one control height, no `size` prop.
 | `invalid` | `boolean` | `false` |  |
 | `icon` | `LucideIcon` | — | Optional leading icon — a lucide-react component. |
 
-Also accepts every prop of `Omit<ComponentProps<"input">, "size" | "ref">` — they are spread onto the underlying element.
+Also accepts every prop of `Omit<ComponentProps<"input">, "size" | "ref">` — they are spread onto the underlying `<input>`. `className` and `style` are the exception: they land on the `<span>` wrapping it, not on the `<input>` — style this component and you are styling the wrapper. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <Input icon={Building2} placeholder="Account name" defaultValue="Marlow Joinery Ltd" />
@@ -77,18 +81,22 @@ Also accepts every prop of `Omit<ComponentProps<"input">, "size" | "ref">` — t
 
 `DatePicker` · props `DatePickerProps` · [`packages/ledger/src/components/forms/DatePicker.tsx`](../../packages/ledger/src/components/forms/DatePicker.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `value` | `Date \| string` | — | Controlled selection. Date, or an ISO `YYYY-MM-DD` string. |
 | `defaultValue` | `Date \| string` | — |  |
-| `onChange` | `(date: Date) => void` | — |  |
+| `onChange` **·** function | `(date: Date) => void` | — |  |
 | `min` | `Date \| string` | — | Selectable range — days outside it render disabled. |
 | `max` | `Date \| string` | — |  |
 | `placeholder` | `string` | `"Select date"` |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
 
-Also accepts every prop of `Omit<ComponentProps<"button">, "value" | "defaultValue" | "onChange" | "ref">` — they are spread onto the underlying element.
+`onChange` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
+
+Also accepts every prop of `Omit<ComponentProps<"button">, "value" | "defaultValue" | "onChange" | "ref">` — they are spread onto the underlying `<button>`. `className` and `style` are the exception: they land on the `<div>` wrapping it, not on the `<button>` — style this component and you are styling the wrapper. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <DatePicker
@@ -106,13 +114,15 @@ Styled native &lt;select> on the .lg-control frame, chevron overlay. Single size
 
 `Select` · props `SelectProps` · [`packages/ledger/src/components/forms/Select.tsx`](../../packages/ledger/src/components/forms/Select.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `invalid` | `boolean` | `false` |  |
 | `options` | `SelectOption[]` | — | Option list — or pass &lt;option> children instead. |
 | `placeholder` | `string` | — |  |
 
-Also accepts every prop of `Omit<ComponentProps<"select">, "size" | "ref">` — they are spread onto the underlying element.
+Also accepts every prop of `Omit<ComponentProps<"select">, "size" | "ref">` — they are spread onto the underlying `<select>`. `className` and `style` are the exception: they land on the `<span>` wrapping it, not on the `<select>` — style this component and you are styling the wrapper. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <Select
@@ -132,11 +142,15 @@ Input frame + search icon + clear button. Single size on purpose — the kit shi
 
 `SearchField` · props `SearchFieldProps` · [`packages/ledger/src/components/forms/SearchField.tsx`](../../packages/ledger/src/components/forms/SearchField.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `onClear` | `() => void` | — | Called after the clear button empties the field. |
+| `onClear` **·** function | `() => void` | — | Called after the clear button empties the field. |
 
-Also accepts every prop of `Omit<ComponentProps<"input">, "size" | "type" | "ref">` — they are spread onto the underlying element.
+`onClear` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
+
+Also accepts every prop of `Omit<ComponentProps<"input">, "size" | "type" | "ref">` — they are spread onto the underlying `<input>`. `className` and `style` are the exception: they land on the `<span>` wrapping it, not on the `<input>` — style this component and you are styling the wrapper. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <SearchField
@@ -153,19 +167,23 @@ Trigger with chip summary + checkbox popover list. Real checkboxes in the popove
 
 `MultiSelect` · props `MultiSelectProps` · [`packages/ledger/src/components/forms/MultiSelect.tsx`](../../packages/ledger/src/components/forms/MultiSelect.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `options` **·** required | `MultiSelectOption[]` | — |  |
 | `value` | `string[]` | — | Controlled selection. |
 | `defaultValue` | `string[]` | — |  |
-| `onChange` | `(next: string[]) => void` | — |  |
+| `onChange` **·** function | `(next: string[]) => void` | — |  |
 | `placeholder` | `string` | `"Any"` |  |
 | `searchable` | `boolean` | — | Filter row inside the popover. Defaults to on from 8 options up — a short list doesn't earn one. |
 | `width` | `number \| string` | `220` |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
 
-Also accepts every prop of `Omit<ComponentProps<"button">, "value" | "defaultValue" | "onChange" | "ref">` — they are spread onto the underlying element.
+`onChange` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
+
+Also accepts every prop of `Omit<ComponentProps<"button">, "value" | "defaultValue" | "onChange" | "ref">` — they are spread onto the underlying `<button>`. `className` and `style` are the exception: they land on the `<div>` wrapping it, not on the `<button>` — style this component and you are styling the wrapper. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <MultiSelect
@@ -187,16 +205,20 @@ Toggleable chip. Active is carried by the fill and border shift alone: the chip 
 
 `FilterToggle` · props `FilterToggleProps` · [`packages/ledger/src/components/forms/FilterToggle.tsx`](../../packages/ledger/src/components/forms/FilterToggle.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `active` | `boolean` | — | Controlled active state. |
 | `defaultActive` | `boolean` | `false` |  |
-| `onChange` | `(active: boolean) => void` | — |  |
+| `onChange` **·** function | `(active: boolean) => void` | — |  |
 | `count` | `number` | — |  |
-| `onClear` | `() => void` | — | Called when the chip is toggled off. |
+| `onClear` **·** function | `() => void` | — | Called when the chip is toggled off. |
 | `children` **·** required | `ReactNode` | — |  |
 
-Also accepts every prop of `Omit<ComponentProps<"button">, "onChange" | "value" | "ref">` — they are spread onto the underlying element.
+`onChange` and `onClear` are functions, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
+
+Also accepts every prop of `Omit<ComponentProps<"button">, "onChange" | "value" | "ref">` — they are spread onto the underlying `<button>`. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <FilterToggle active={unreconciled} onChange={setUnreconciled} count={8}>
@@ -210,12 +232,14 @@ The Input voice, auto min-height via --row-h multiples. Single size on purpose �
 
 `Textarea` · props `TextareaProps` · [`packages/ledger/src/components/forms/Textarea.tsx`](../../packages/ledger/src/components/forms/Textarea.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `invalid` | `boolean` | `false` |  |
 | `minRows` | `number` | `2` | Minimum height in --row-h multiples (not native rows). |
 
-Also accepts every prop of `Omit<ComponentProps<"textarea">, "rows" | "ref">` — they are spread onto the underlying element.
+Also accepts every prop of `Omit<ComponentProps<"textarea">, "rows" | "ref">` — they are spread onto the underlying `<textarea>`. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <Textarea
@@ -231,12 +255,14 @@ Styled native input, custom-drawn box, Lucide check/minus mark. Controlled or un
 
 `Checkbox` · props `CheckboxProps` · [`packages/ledger/src/components/forms/Checkbox.tsx`](../../packages/ledger/src/components/forms/Checkbox.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` | `ReactNode` | — |  |
 | `indeterminate` | `boolean` | `false` |  |
 
-Also accepts every prop of `Omit<ComponentProps<"input">, "type" | "size" | "ref">` — they are spread onto the underlying element.
+Also accepts every prop of `Omit<ComponentProps<"input">, "type" | "size" | "ref">` — they are spread onto the underlying `<input>`. `className` and `style` are the exception: they land on the `<label>` wrapping it, not on the `<input>` — style this component and you are styling the wrapper. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <Checkbox label="Include VAT" defaultChecked />
@@ -248,18 +274,22 @@ Styled native radios, matches the Checkbox voice.
 
 `RadioGroup` · props `RadioGroupProps` · [`packages/ledger/src/components/forms/RadioGroup.tsx`](../../packages/ledger/src/components/forms/RadioGroup.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `options` **·** required | `RadioOption[]` | — |  |
 | `value` | `string` | — | Controlled value. |
 | `defaultValue` | `string` | — |  |
-| `onChange` | `(value: string) => void` | — |  |
+| `onChange` **·** function | `(value: string) => void` | — |  |
 | `name` | `string` | — | Shared input name — auto-generated when unset. |
 | `orientation` | `"vertical" \| "horizontal"` | `"vertical"` |  |
 | `disabled` | `boolean` | `false` |  |
 | `aria-label` | `string` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`onChange` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <RadioGroup
@@ -280,14 +310,18 @@ Track + thumb toggle. Controlled or uncontrolled. Single size on purpose — the
 
 `Switch` · props `SwitchProps` · [`packages/ledger/src/components/forms/Switch.tsx`](../../packages/ledger/src/components/forms/Switch.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `checked` | `boolean` | — |  |
 | `defaultChecked` | `boolean` | `false` |  |
-| `onChange` | `(checked: boolean) => void` | — |  |
+| `onChange` **·** function | `(checked: boolean) => void` | — |  |
 | `label` | `ReactNode` | — |  |
 
-Also accepts every prop of `Omit<ComponentProps<"button">, "onChange" | "value" | "ref">` — they are spread onto the underlying element.
+`onChange` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
+
+Also accepts every prop of `Omit<ComponentProps<"button">, "onChange" | "value" | "ref">` — they are spread onto the underlying `<button>`. `className` and `style` are the exception: they land on the `<label>` wrapping it, not on the `<button>` — style this component and you are styling the wrapper. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <Switch checked={autoMatch} onChange={setAutoMatch} label="Auto-match payments" />
@@ -299,6 +333,8 @@ Exclusive picker in a hairline group; the active segment raises to --surface-rai
 
 `SegmentedControl` · props `SegmentedControlProps` · [`packages/ledger/src/components/forms/SegmentedControl.tsx`](../../packages/ledger/src/components/forms/SegmentedControl.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 Single size on purpose — the kit ships one control size, no `size` prop.
 
 | Prop | Type | Default | Description |
@@ -306,11 +342,13 @@ Single size on purpose — the kit ships one control size, no `size` prop.
 | `options` **·** required | `Array<SegmentOption \| string>` | — |  |
 | `value` | `string` | — | Controlled value. |
 | `defaultValue` | `string` | — |  |
-| `onChange` | `(value: string) => void` | — |  |
+| `onChange` **·** function | `(value: string) => void` | — |  |
 | `disabled` | `boolean` | `false` |  |
 | `aria-label` | `string` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`onChange` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <SegmentedControl
@@ -327,6 +365,8 @@ A native range with a filled track: the accent up to the thumb, faint after it, 
 
 `Slider` · props `SliderProps` · [`packages/ledger/src/components/forms/Slider.tsx`](../../packages/ledger/src/components/forms/Slider.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 Deliberately NOT wrapped in the `.lg-control` frame. A pill frame is the
 shape for something you type into; around a slider it reads as a text field
 someone dropped a dot into, and it forces a second rail inside the first.
@@ -338,7 +378,7 @@ filled portion of a native range to CSS.
 | `min` | `string \| number` | `0` | _(inherited)_ |
 | `max` | `string \| number` | `100` | _(inherited)_ |
 
-Also accepts every prop of `Omit<ComponentProps<"input">, "type" | "size" | "ref">` — they are spread onto the underlying element.
+Also accepts every prop of `Omit<ComponentProps<"input">, "type" | "size" | "ref">` — they are spread onto the underlying `<input>`. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <Slider
@@ -356,6 +396,8 @@ A genuine two-ended range: `{min, max}` in, `{min, max}` out. Two native ranges 
 
 `RangeSlider` · props `RangeSliderProps` · [`packages/ledger/src/components/forms/RangeSlider.tsx`](../../packages/ledger/src/components/forms/RangeSlider.tsx)
 
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
+
 The thumbs cannot cross: each end clamps against the other on change, and
 each carries the aria-valuemin/max of the span it may actually reach rather
 than the scale's — the reachable range is what a screen reader needs.
@@ -367,7 +409,7 @@ are blanked in CSS, since two stacked native tracks would draw two.
 | --- | --- | --- | --- |
 | `value` | `RangeValue` | — | Controlled span. |
 | `defaultValue` | `RangeValue` | — |  |
-| `onChange` | `(value: RangeValue) => void` | — |  |
+| `onChange` **·** function | `(value: RangeValue) => void` | — |  |
 | `min` | `number` | `0` | Lower bound of the scale. |
 | `max` | `number` | `100` | Upper bound of the scale. |
 | `step` | `number` | `1` |  |
@@ -376,6 +418,8 @@ are blanked in CSS, since two stacked native tracks would draw two.
 | `maxLabel` | `string` | `"Maximum"` | Accessible name for the upper thumb. |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
+
+`onChange` is a function, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <RangeSlider
