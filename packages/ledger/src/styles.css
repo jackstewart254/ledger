@@ -57,21 +57,21 @@
   /* ---- Scrollbars — thin, token-tinted, transparent track. var(--text)
      flips per theme so the thumb stays warm-ink in both.
 
-     `scrollbar-gutter: stable` is the important one: a classic scrollbar takes
-     its width OUT of the content box, so a list that grows past its container
-     shoves everything left the moment the bar appears — and shoves it back when
-     a filter empties the list. Reserving the track means the layout is the same
-     whether the bar is there or not. It only affects scroll containers
-     (overflow other than visible), so applying it broadly costs nothing on
-     elements that never scroll, and it covers app-authored containers too, not
-     just the kit's own.
+     `scrollbar-gutter: stable` is NOT here, deliberately. It reserves the track
+     on any element whose overflow is not `visible` — whether or not that element
+     ever overflows — so as a `*` rule it silently took a scrollbar's width out of
+     every scroll container in the kit, permanently. Two visible consequences:
+     rail icons sat 5.5px left of centre, and every table that fitted its
+     container still drew an empty 11px strip down its right (JAC-313).
 
-     Not a substitute for a stable layout: macOS overlay scrollbars float above
-     content and never caused the jump, so test this one on Windows. ---------- */
+     Reserving a gutter is right where a list genuinely grows and shrinks under a
+     filter; it is a per-container decision, not a global one. `.lg-rail-items`
+     opts in. Note `scrollbar-width: thin` below is what opts macOS out of
+     overlay scrollbars, so a reserved gutter costs real width there too — this
+     was never a Windows-only concern. ------------------------------------- */
   * {
     scrollbar-width: thin;
     scrollbar-color: color-mix(in srgb, var(--text) 25%, transparent) transparent;
-    scrollbar-gutter: stable;
   }
   *::-webkit-scrollbar { width: 8px; height: 8px; }
   *::-webkit-scrollbar-track { background: transparent; }
