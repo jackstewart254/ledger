@@ -460,11 +460,17 @@ export default function Dashboard({ toolbar }: DashboardProps) {
         search={
           <>
             <IconButton icon={RefreshCw} label="Refresh" tooltip="Last swept 09:41" />
+            {/* Not onFocus: the palette's focus trap returns focus here on
+                close, and that would reopen it on every dismissal. */}
             <SearchField
               placeholder="Search daemons, runs, hosts…"
               readOnly
-              onFocus={() => setCmdOpen(true)}
               onClick={() => setCmdOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter" && e.key !== " ") return;
+                e.preventDefault();
+                setCmdOpen(true);
+              }}
             />
             {/* fleet controls belong to the fleet page, not to the shell */}
             {page === "daemons" && (

@@ -119,6 +119,76 @@ const propsShape = (typeNode) => {
   return { members: [], heritage: [], type };
 };
 
+/** The pragma is per-module and it is the whole fact: a bundler reads nothing
+ *  else to decide the component is a client boundary, so neither do we. */
+const isClientFile = (file) => {
+  const [first] = file.statements;
+  return Boolean(
+    first &&
+      ts.isExpressionStatement(first) &&
+      ts.isStringLiteral(first.expression) &&
+      first.expression.text === "use client",
+  );
+};
+
+/** A prop whose type is an arrow. Read off the written type rather than a list
+ *  of prop names, so a new callback is flagged the day it is added. */
+const isFunctionProp = (type) => /=>/.test(type);
+
+const jsxElements = (fn) => {
+  const found = [];
+  const walk = (node) => {
+    if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) found.push(node);
+    node.forEachChild(walk);
+  };
+  if (fn.body) walk(fn.body);
+  return found;
+};
+
+/** The attribute's VALUE. `node.getText()` on the attribute would include its
+ *  own name, so every `className=…` would look like it referenced the binding. */
+const attrValue = (el, name) => {
+  const found = el.attributes.properties.find(
+    (p) => ts.isJsxAttribute(p) && p.name.getText() === name && p.initializer,
+  );
+  return found ? found.initializer.getText() : "";
+};
+
+/** Which element `{...rest}` reaches, and which one `className`/`style` reach
+ *  when the component pulls them out of the spread. On any component that wraps
+ *  its control in a frame (Input, Select, SearchField) these are different
+ *  elements, and "spread onto the underlying element" was a lie about the half
+ *  a consumer actually styles. */
+const spreadTargets = (fn) => {
+  const binding = fn.parameters[0]?.name;
+  if (!binding || !ts.isObjectBindingPattern(binding)) return {};
+  const rest = binding.elements.find((el) => el.dotDotDotToken)?.name.getText();
+  const els = jsxElements(fn);
+
+  const restEl = rest
+    ? els.find((el) =>
+        el.attributes.properties.some(
+          (p) => ts.isJsxSpreadAttribute(p) && p.expression.getText() === rest,
+        ),
+      )
+    : undefined;
+  // The frame's className is `cx(…, className)` — the destructured binding, not
+  // the element's own literal class. Match the identifier, not the attribute.
+  const frameEl = els.find((el) =>
+    ["className", "style"].some((n) => new RegExp(`\\b${n}\\b`).test(attrValue(el, n))),
+  );
+
+  // Only an intrinsic tag names something the reader can picture; a polymorphic
+  // `<As>` (RailItem, Link) is a local variable and says nothing.
+  const tag = (el) => {
+    const name = el?.tagName.getText();
+    return name && /^[a-z][a-z0-9-]*$/.test(name) ? name : undefined;
+  };
+  const spreadTag = tag(restEl);
+  const frameTag = restEl !== frameEl ? tag(frameEl) : undefined;
+  return spreadTag && frameTag ? { spreadTag, frameTag } : { spreadTag };
+};
+
 /** Defaults are only visible where the component destructures them. */
 const defaultsOf = (fn) => {
   const binding = fn.parameters[0]?.name;
@@ -176,6 +246,8 @@ const readComponent = (sym, decl) => {
 
   return {
     name,
+    client: isClientFile(file),
+    ...spreadTargets(decl),
     category: file.fileName.split("/components/")[1]?.split("/")[0] ?? "other",
     // repo-relative, so the docs/api/*.md links resolve with ../../
     file: file.fileName.slice(file.fileName.indexOf("packages/ledger/")),
@@ -573,11 +645,30 @@ const bullet = (c, href) => {
 const propTable = (props) => {
   if (props.length === 0) return "";
   const rows = props.map((p) => {
-    const name = p.optional ? `\`${p.name}\`` : `\`${p.name}\` **·** required`;
+    const tags = [!p.optional && "required", isFunctionProp(p.type) && "function"].filter(Boolean);
+    const name = [`\`${p.name}\``, ...tags].join(" **·** ");
     const doc = p.inherited ? [p.doc, "_(inherited)_"].filter(Boolean).join(" ") : p.doc;
     return `| ${name} | \`${cell(p.type)}\` | ${p.default ? `\`${cell(p.default)}\`` : "—"} | ${cell(escapeAngles(doc || ""))} |`;
   });
   return ["| Prop | Type | Default | Description |", "| --- | --- | --- | --- |", ...rows].join("\n");
+};
+
+const RECIPE = "[Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component)";
+
+const names = (props) =>
+  props.map((p) => `\`${p.name}\``).join(", ").replace(/, ([^,]*)$/, " and $1");
+
+/** The whole point of the marker: name the props, then say what happens. A
+ *  reader who has been told "function" but not "and therefore your route
+ *  throws" has been told nothing they could not read off the type column. */
+const boundaryNote = (props, subject) => {
+  const fns = props.filter((p) => isFunctionProp(p.type));
+  if (fns.length === 0) return [];
+  return [
+    `${names(fns)} ${fns.length === 1 ? "is a function" : "are functions"}, and a function cannot cross the server→client boundary. ` +
+      `${subject} typechecks, compiles, and throws the first time the route renders. ${RECIPE} is the shape that works.`,
+    "",
+  ];
 };
 
 const componentSection = (c) => {
@@ -587,13 +678,23 @@ const componentSection = (c) => {
     `\`${c.name}${c.typeParams ? `<${c.typeParams}>` : ""}\`${c.propsType ? ` · props \`${c.propsType}\`` : ""} · [\`${c.file}\`](../../${c.file})`,
     "",
   );
+  if (c.client)
+    out.push(
+      `**Client component** — the file carries \`"use client"\`. It renders from a server component; its props must be serialisable to get there.`,
+      "",
+    );
   if (c.rationale) out.push(renderProse(c.rationale), "");
 
   const table = propTable(c.props);
   out.push(table || "_No props of its own._", "");
+  if (c.client) out.push(...boundaryNote(c.props, `Passing one from a server component`));
   if (c.heritage.length > 0)
     out.push(
-      `Also accepts every prop of ${c.heritage.map((h) => `\`${h}\``).join(", ")} — they are spread onto the underlying element.`,
+      `Also accepts every prop of ${c.heritage.map((h) => `\`${h}\``).join(", ")} — they are spread onto the underlying ${c.spreadTag ? `\`<${c.spreadTag}>\`` : "element"}.` +
+        (c.frameTag
+          ? ` \`className\` and \`style\` are the exception: they land on the \`<${c.frameTag}>\` wrapping it, not on the \`<${c.spreadTag}>\` — style this component and you are styling the wrapper.`
+          : "") +
+        (c.client ? " Event handlers among them are functions too, and carry the same restriction." : ""),
       "",
     );
 
@@ -614,6 +715,9 @@ const typeSection = (t) => {
     return out.join("\n");
   }
   out.push(propTable(t.members.map((m) => ({ ...m, default: undefined }))) || "_Empty._", "");
+  // A function hidden one level down in an object prop is the worst version of
+  // this: the call site passes an array literal and nothing reads as a callback.
+  out.push(...boundaryNote(t.members, "Building this object in a server component"));
   return out.join("\n");
 };
 
@@ -656,6 +760,20 @@ const index = [
   'import { Table, SummaryCard } from "@mcleanstewart/ledger";',
   'import "@mcleanstewart/ledger/styles.css";',
   "```",
+  "",
+  "## Reading these tables",
+  "",
+  `**Client component** marks a component whose file carries \`"use client"\` — ${components.filter((c) => c.client).length}`,
+  `of ${components.length}. A **·** \`function\` tag marks a prop whose type is a function.`,
+  "",
+  "In a React Server Components app the pair is a trap. A client component",
+  "renders from a server component perfectly well, so nothing warns you — but a",
+  "function prop cannot be sent to it, and that call typechecks, survives",
+  "`next build`, and throws the first time the route renders. `format` and",
+  "`rowKey` are the ones that catch people: they read as pure formatting rather",
+  "than interaction, and the boundary does not care what a prop reads as.",
+  "[Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the",
+  "wrapper that fixes it.",
   "",
   ...categories.map((category) => {
     const inCategory = components.filter((c) => c.category === category);

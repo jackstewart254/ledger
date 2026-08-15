@@ -25,7 +25,7 @@ controls steps the row.
 | `subtitle` | `ReactNode` | — | Muted one-liner under the title. |
 | `actions` | `ReactNode` | — | Right-hand controls, on the title's baseline. |
 
-Also accepts every prop of `Omit<HTMLAttributes<HTMLElement>, "title">` — they are spread onto the underlying element.
+Also accepts every prop of `Omit<HTMLAttributes<HTMLElement>, "title">` — they are spread onto the underlying `<header>`.
 
 ```tsx
 <PageHeader
@@ -50,7 +50,7 @@ without every caller having to work out where it sits.
 | `title` **·** required | `ReactNode` | — |  |
 | `actions` | `ReactNode` | — | Right-aligned slot for actions (buttons, filters). |
 
-Also accepts every prop of `Omit<HTMLAttributes<HTMLDivElement>, "title">` — they are spread onto the underlying element.
+Also accepts every prop of `Omit<HTMLAttributes<HTMLDivElement>, "title">` — they are spread onto the underlying `<div>`.
 
 ```tsx
 <SectionHeading
