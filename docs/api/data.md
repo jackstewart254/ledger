@@ -23,6 +23,14 @@ Render-prop columns, row hover, 42px rows (--lg-table-row-h, which defaults to -
 
 **Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
 
+An interactive row (`rowHref` or `onRowClick`) puts a real `<a>`/`<button>`
+in the row's identifying cell rather than wiring keys onto the `<tr>`. The
+tempting shape — `tabIndex` and `role="button"` on the row — is the wrong
+one: two of the major screen readers drop a row carrying that role out of
+the table altogether, so the reader gains a button and loses every column
+heading that told them what its cells meant. A control in a cell keeps the
+table a table, and its accessible name is that cell's own text.
+
 The header row is in the DOM but hidden visually: a column of dates under a
 heading that reads "Date" tells the reader what they already worked out, and
 on a full-page table those labels are the only chrome left. Screen readers
@@ -42,7 +50,8 @@ Sorting and selection are both fully controlled and neither touches `rows`.
 | `columns` **·** required | `TableColumn<Row>[]` | — |  |
 | `rows` **·** required | `Row[]` | — |  |
 | `rowKey` **·** function | `(row: Row, index: number) => TableRowKey` | — | Row identity. Also the selection key, so give it something stable: with the index fallback, selection follows a row's POSITION, and sorting the rows then moves the ticks to different records. |
-| `onRowClick` **·** function | `(row: Row) => void` | — |  |
+| `rowHref` **·** function | `string \| ((row: Row) => string)` | — | Makes each row a link. The row's identifying cell (the first column, or the one flagged `link`) becomes a real `<a href>`, which is what buys focus, Enter, middle-click and open-in-new-tab without a line of key handling. Clicking anywhere else on the row follows it too. Takes a template string as well as a function, and the template is the form to reach for: `"/runs/{id}"` interpolates fields from the row (URI-encoded) and is serialisable, so a server component can pass it. A function cannot cross that boundary — it type-checks and throws when the route renders. Set this or `onRowClick`, not usually both: with both, the control navigates and `onRowClick` still fires for clicks elsewhere in the row. |
+| `onRowClick` **·** function | `(row: Row) => void` | — | Row action for rows that have no URL to point at — a drawer, a modal. Same identifying cell becomes a `<button>`, so the row is reachable by keyboard; the whole row stays clickable for the mouse. |
 | `rowHeight` | `string` | — | Row-height override — sets the --lg-table-row-h custom prop. |
 | `maxHeight` | `string` | — | Caps the scroll container's height. A visible header row (see the note on the component) pins itself to the top of that container as the body scrolls — there is no prop for it, because a scrolling table that loses its headings is only ever worse. |
 | `sort` | `TableSort \| null` | — | Current sort, or null/undefined for none. Fully controlled: the kit draws the header affordance and the direction arrow, the CONSUMER owns the comparator and passes rows already in order. Nothing here re-orders `rows` — a component that sorts your data owns state you can't see, and the sort you want ("live first, then name") is rarely the one it would guess. |
@@ -53,7 +62,7 @@ Sorting and selection are both fully controlled and neither touches `rows`.
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
 
-`rowKey`, `onRowClick`, `onSortChange` and `onSelectionChange` are functions, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
+`rowKey`, `rowHref`, `onRowClick`, `onSortChange` and `onSelectionChange` are functions, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <Table
@@ -389,6 +398,7 @@ Controlled: hairline chevron buttons + a fixed-width run of page numerals.
 | `numeric` | `boolean` | — | Numeric cell — tabular figures via --num-features. |
 | `render` **·** function | `(row: Row) => ReactNode` | — | Render-prop cell — falls back to row[key]. |
 | `sortable` | `boolean` | — | Turns this column's header into a sort button. Needs `onSortChange` on the table; without it the flag does nothing, since there would be nowhere to report the click. Any sortable column un-hides the header row — see the note on the component. |
+| `link` | `boolean` | — | Host the row's control — the anchor from `rowHref`, or the button from `onRowClick` — in this column instead of the first. The control takes its accessible name from the cell it wraps, so this wants to be the column that identifies the row, never a status dot or a bare icon. |
 
 `render` is a function, and a function cannot cross the server→client boundary. Building this object in a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 

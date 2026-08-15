@@ -75,7 +75,7 @@ the div that is already there, so they pass straight through.
 | `header` | `ReactNode` | — | Optional header row — hairline-separated, --row-h tall. |
 | `flush` | `boolean` | `false` | Drop the body's padding. For the card that *is* its content — a list of rows, a table — where the inset belongs to each row and not to the card. The header keeps its own padding either way. |
 
-Also accepts every prop of `HTMLAttributes<HTMLDivElement>` — they are spread onto the underlying element.
+Also accepts every prop of `HTMLAttributes<HTMLDivElement>` — they are spread onto the underlying `<div>`.
 
 ```tsx
 <Card header={<SectionHeading title="VAT return · Q2" />}>
