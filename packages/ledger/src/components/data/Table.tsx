@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, MouseEvent, ReactNode } from "react";
 import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react";
 import { cx } from "../../internal/cx.js";
 import { Icon } from "../core/Icon.js";
@@ -39,6 +39,13 @@ export interface TableColumn<Row> {
    * note on the component.
    */
   sortable?: boolean;
+  /**
+   * Host the row's control — the anchor from `rowHref`, or the button from
+   * `onRowClick` — in this column instead of the first. The control takes its
+   * accessible name from the cell it wraps, so this wants to be the column
+   * that identifies the row, never a status dot or a bare icon.
+   */
+  link?: boolean;
 }
 
 export interface TableProps<Row> {
@@ -50,6 +57,27 @@ export interface TableProps<Row> {
    * rows then moves the ticks to different records.
    */
   rowKey?: (row: Row, index: number) => TableRowKey;
+  /**
+   * Makes each row a link. The row's identifying cell (the first column, or
+   * the one flagged `link`) becomes a real `<a href>`, which is what buys
+   * focus, Enter, middle-click and open-in-new-tab without a line of key
+   * handling. Clicking anywhere else on the row follows it too.
+   *
+   * Takes a template string as well as a function, and the template is the
+   * form to reach for: `"/runs/{id}"` interpolates fields from the row
+   * (URI-encoded) and is serialisable, so a server component can pass it. A
+   * function cannot cross that boundary — it type-checks and throws when the
+   * route renders.
+   *
+   * Set this or `onRowClick`, not usually both: with both, the control
+   * navigates and `onRowClick` still fires for clicks elsewhere in the row.
+   */
+  rowHref?: string | ((row: Row) => string);
+  /**
+   * Row action for rows that have no URL to point at — a drawer, a modal.
+   * Same identifying cell becomes a `<button>`, so the row is reachable by
+   * keyboard; the whole row stays clickable for the mouse.
+   */
   onRowClick?: (row: Row) => void;
   /** Row-height override — sets the --lg-table-row-h custom prop. */
   rowHeight?: string;
@@ -90,9 +118,28 @@ export interface TableProps<Row> {
   style?: CSSProperties;
 }
 
+/* A template beats a function here because a function prop cannot cross the
+   server→client boundary, and "this row is a link" is the case least likely to
+   need one: `"/runs/{id}"` is what most call sites want anyway. Values are
+   URI-encoded, since a row field is data and can hold a slash. */
+const rowHrefFor = <Row,>(spec: string | ((row: Row) => string), row: Row): string =>
+  typeof spec === "function"
+    ? spec(row)
+    : spec.replace(/\{(\w+)\}/g, (_, field: string) =>
+        encodeURIComponent(String((row as Record<string, unknown>)[field] ?? "")),
+      );
+
 /**
  * Table — render-prop columns, row hover, 42px rows (--lg-table-row-h, which
  * defaults to --control-h-lg; override per instance with `rowHeight`).
+ *
+ * An interactive row (`rowHref` or `onRowClick`) puts a real `<a>`/`<button>`
+ * in the row's identifying cell rather than wiring keys onto the `<tr>`. The
+ * tempting shape — `tabIndex` and `role="button"` on the row — is the wrong
+ * one: two of the major screen readers drop a row carrying that role out of
+ * the table altogether, so the reader gains a button and loses every column
+ * heading that told them what its cells meant. A control in a cell keeps the
+ * table a table, and its accessible name is that cell's own text.
  *
  * The header row is in the DOM but hidden visually: a column of dates under a
  * heading that reads "Date" tells the reader what they already worked out, and
@@ -112,6 +159,7 @@ export function Table<Row>({
   columns,
   rows,
   rowKey,
+  rowHref,
   onRowClick,
   rowHeight,
   maxHeight,
@@ -152,9 +200,13 @@ export function Table<Row>({
     onSelectionChange(next);
   };
 
+  const interactive = rowHref != null || onRowClick != null;
+  // findIndex's -1 folds into the first column, which is the default anyway.
+  const linkIndex = Math.max(0, columns.findIndex((c) => c.link));
+
   const cls = cx(
     "lg-table",
-    onRowClick && "lg-table--clickable",
+    interactive && "lg-table--clickable",
     className,
   );
   const vars = {
@@ -241,12 +293,40 @@ export function Table<Row>({
             {rows.map((row, i) => {
               const k = keys[i];
               const selected = selectable && selectedKeys.has(k);
+              const href = rowHref != null ? rowHrefFor(rowHref, row) : undefined;
+
+              /* The row's real control, and the only thing the keyboard ever
+                 reaches. An anchor when there is a URL, since that is what
+                 carries new-tab and middle-click; a button when there is not. */
+              const control = (content: ReactNode) => {
+                if (href != null)
+                  return (
+                    <a className="lg-table-rowlink" href={href}>
+                      {content}
+                    </a>
+                  );
+                if (onRowClick)
+                  return (
+                    <button type="button" className="lg-table-rowlink" onClick={() => onRowClick(row)}>
+                      {content}
+                    </button>
+                  );
+                return content;
+              };
+
+              /* Mouse-only shortcut from the rest of the row to the control's
+                 action. A link row re-fires its own anchor rather than pushing
+                 history itself, so the anchor stays the single definition of
+                 where the row goes — and a consumer's routed <a> keeps working. */
+              const onRowMouse = onRowClick
+                ? () => onRowClick(row)
+                : href != null
+                  ? (e: MouseEvent<HTMLTableRowElement>) =>
+                      e.currentTarget.querySelector<HTMLAnchorElement>(".lg-table-rowlink")?.click()
+                  : undefined;
+
               return (
-                <tr
-                  key={k}
-                  data-selected={selected || undefined}
-                  onClick={onRowClick ? () => onRowClick(row) : undefined}
-                >
+                <tr key={k} data-selected={selected || undefined} onClick={onRowMouse}>
                   {selectable && (
                     // The click stops here: a checkbox that also fires the
                     // row's own onRowClick opens a drawer every time you tick.
@@ -258,15 +338,26 @@ export function Table<Row>({
                       />
                     </td>
                   )}
-                  {columns.map((c) => {
+                  {columns.map((c, ci) => {
                     const tdCls = cx(
                       c.numeric && "lg-table-cell--num",
                       c.align === "right" && "lg-table-cell--right",
                       c.align === "center" && "lg-table-cell--center",
                     );
+                    const content = c.render
+                      ? c.render(row)
+                      : ((row as Record<string, unknown>)[c.key] as ReactNode);
+                    const isControl = interactive && ci === linkIndex;
                     return (
-                      <td key={c.key} className={tdCls || undefined}>
-                        {c.render ? c.render(row) : ((row as Record<string, unknown>)[c.key] as ReactNode)}
+                      <td
+                        key={c.key}
+                        className={tdCls || undefined}
+                        // Same reason the checkbox cell stops here: the control
+                        // has already run the row's action, and letting the
+                        // click reach the <tr> would run it a second time.
+                        onClick={isControl ? (e) => e.stopPropagation() : undefined}
+                      >
+                        {isControl ? control(content) : content}
                       </td>
                     );
                   })}

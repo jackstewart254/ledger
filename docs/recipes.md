@@ -1253,6 +1253,10 @@ export default function TicketsPage({ tickets }: { tickets: Ticket[] }) {
   confirmation for the destructive case, one undo for the reversible result.
 - Both overlays portal to `<body>`, so no transformed or filtered ancestor can
   re-base their fixed positioning or clip them.
+- `onRowClick` makes the first cell a real `<button>`, so the row is a single
+  tab stop and Enter opens the drawer — the list is traversable without a
+  mouse. `swallow` on the actions cell is what stops the kebab opening the
+  drawer underneath the menu it just opened.
 
 ---
 

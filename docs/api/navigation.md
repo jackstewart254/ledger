@@ -106,6 +106,15 @@ Anchored action menu (kebab/dropdown). Trigger + positioned panel (surface-raise
 
 `Menu` · props `MenuProps` · [`packages/ledger/src/components/navigation/Menu.tsx`](../../packages/ledger/src/components/navigation/Menu.tsx)
 
+The panel is portaled to &lt;body> and placed against the trigger's rect, like
+Tooltip: an absolutely-positioned panel is cut off by any ancestor that
+clips, and this kit's own Card and Table both do. Portaling means the
+panel is no longer a DOM descendant of the root, so the two checks that ask
+"is this still inside the menu?" — click-outside and focus-exit — have to
+ask the panel as well. Escape and the arrow-key walk need no such care:
+React propagates events across a portal along the tree it rendered, not the
+DOM.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `trigger` **·** required | `ReactNode` | — | The element that toggles the menu — any clickable node. |
