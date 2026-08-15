@@ -52,7 +52,7 @@ Single size on purpose — the kit ships one button height, no `size` prop. Text
 | `variant` | `ButtonVariant` | `"secondary"` | primary = accent fill · secondary = surface + hairline · tertiary = ghost text · danger = the semantic red |
 | `type` | `"submit" \| "reset" \| "button"` | `"button"` | _(inherited)_ |
 
-Also accepts every prop of `ButtonHTMLAttributes<HTMLButtonElement>` — they are spread onto the underlying element.
+Also accepts every prop of `ButtonHTMLAttributes<HTMLButtonElement>` — they are spread onto the underlying `<button>`.
 
 ```tsx
 <Button variant="primary" onClick={createInvoice}>New invoice</Button>
@@ -74,7 +74,7 @@ The icon-only control. A glyph alone is only legible if it says what it is on ho
 | `tooltipSide` | `TooltipSide` | `"top"` |  |
 | `type` | `"submit" \| "reset" \| "button"` | `"button"` | _(inherited)_ |
 
-Also accepts every prop of `ButtonHTMLAttributes<HTMLButtonElement>` — they are spread onto the underlying element.
+Also accepts every prop of `ButtonHTMLAttributes<HTMLButtonElement>` — they are spread onto the underlying `<button>`.
 
 ```tsx
 <IconButton icon={RefreshCw} label="Refresh balances" onClick={reload} />
@@ -97,7 +97,7 @@ two pages disagreeing about whether "paused" is warning or neutral.
 | `variant` | `BadgeVariant` | `"subtle"` |  |
 | `dot` | `boolean` | `false` | Leading status dot. |
 
-Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread onto the underlying element.
+Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread onto the underlying `<span>`.
 
 ```tsx
 <Badge tone="warning" dot>Awaiting settlement</Badge>
@@ -115,7 +115,7 @@ Single size on purpose — the kit ships one pill height, no `size` prop.
 | `label` | `ReactNode` | — | Names the pillar (e.g. "Growth", "Brand safety"). |
 | `value` | `ReactNode` | — | Optional tabular numeric value beside the label. |
 
-Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread onto the underlying element.
+Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread onto the underlying `<span>`.
 
 ```tsx
 <StatusPill status="watch" label="Faster Payments" value="98.2%" />
@@ -136,7 +136,7 @@ to is usually reporting "fine". The colour is the whole signal.
 | `status` | `StatusDotStatus` | `"unknown"` |  |
 | `label` | `string` | — | Accessible name; defaults to the status word. |
 
-Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread onto the underlying element.
+Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread onto the underlying `<span>`.
 
 ```tsx
 <StatusDot status="good" label="HMRC gateway" />
@@ -159,7 +159,7 @@ unbounded width.
 | `max` | `number` | `99` | Values above this render as "max+". Defaults to 99. |
 | `tone` | `CountBadgeTone` | `"neutral"` |  |
 
-Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread onto the underlying element.
+Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread onto the underlying `<span>`.
 
 ```tsx
 <CountBadge count={128} max={99} tone="accent" />
@@ -170,6 +170,8 @@ Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread
 Image with an initials fallback and an optional corner indicator.
 
 `Avatar` · props `AvatarProps` · [`packages/ledger/src/components/core/Avatar.tsx`](../../packages/ledger/src/components/core/Avatar.tsx)
+
+**Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
 
 `size` is a free number rather than a step on a scale: it is the dimension
 of a box, not a control height, and the initials and the indicator are both
@@ -187,7 +189,7 @@ fades up instead of snapping in half-drawn.
 | `square` | `boolean` | `false` |  |
 | `decorative` | `boolean` | `false` | Set when the same name is visibly adjacent — hides the avatar from AT. |
 
-Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread onto the underlying element.
+Also accepts every prop of `HTMLAttributes<HTMLSpanElement>` — they are spread onto the underlying `<span>`. Event handlers among them are functions too, and carry the same restriction.
 
 ```tsx
 <Avatar name="Priya Raghunathan" indicator="success" />
@@ -205,7 +207,7 @@ itself, which is the same reason the kit has no hint microcopy.
 
 _No props of its own._
 
-Also accepts every prop of `HTMLAttributes<HTMLElement>` — they are spread onto the underlying element.
+Also accepts every prop of `HTMLAttributes<HTMLElement>` — they are spread onto the underlying `<kbd>`.
 
 ```tsx
 Press <Kbd>⌘</Kbd> <Kbd>K</Kbd> to search
@@ -221,7 +223,7 @@ The kit's hairline as an element, since separation here is a 1px border rather t
 | --- | --- | --- | --- |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |  |
 
-Also accepts every prop of `HTMLAttributes<HTMLDivElement>` — they are spread onto the underlying element.
+Also accepts every prop of `HTMLAttributes<HTMLDivElement>` — they are spread onto the underlying `<div>`.
 
 ```tsx
 <Divider />

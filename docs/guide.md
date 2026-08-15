@@ -625,9 +625,16 @@ const swallow = (e: MouseEvent<HTMLElement>) => e.stopPropagation();
 render: (row) => <span onClick={swallow}><Menu trigger={…} items={…} /></span>
 ```
 
-**`MetricPolarity` is not exported from the barrel.** `MetricDelta` takes
-`polarity`, but the union type itself isn't re-exported, so you can pass the
-string literal and you cannot name the type. Use `"lower-is-better"` inline.
+**A function prop cannot reach a client component from a server component.**
+Most of the kit carries `"use client"` (the [API index](./api/README.md) counts
+them), and a function is not serialisable, so a server component that passes
+`format`, `rowKey`, a column's `render` or any handler throws — after a clean
+typecheck and a clean
+`next build`, on the first render of the route. The API reference marks both
+halves (**Client component**, and **·** `function` on the prop);
+[recipe 7](./recipes.md#7-charts-and-tables-under-a-server-component) is the
+wrapper. `format` and `rowKey` are the ones that get through review, because
+formatting does not read as interaction.
 
 **`Progress` is determinate only.** There is no indeterminate variant: a chunk
 sliding back and forth reports nothing, and `Spinner` already covers "working,

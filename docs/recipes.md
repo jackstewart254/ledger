@@ -15,6 +15,7 @@ imported once, `data-theme` on `<html>`, Geist loaded.
 4. [A KPI row](#4-a-kpi-row)
 5. [Detail drawer opened from a table row](#5-detail-drawer-opened-from-a-table-row)
 6. [Sortable, selectable table with a bulk action](#6-sortable-selectable-table-with-a-bulk-action)
+7. [Charts and tables under a server component](#7-charts-and-tables-under-a-server-component)
 
 ---
 
@@ -128,12 +129,18 @@ export default function Shell({ pages }: { pages: Record<PageId, ReactNode> }) {
         search={
           <>
             <IconButton icon={RefreshCw} label="Refresh" tooltip="Last swept 09:41" />
-            {/* read-only: the field is a door to the palette, not a second search */}
+            {/* read-only: the field is a door to the palette, not a second search.
+                Click and Enter/Space, never onFocus — CommandMenu's focus trap
+                hands focus back to the opener on close, which would refire it. */}
             <SearchField
               placeholder="Search daemons, runs, hosts…"
               readOnly
-              onFocus={() => setCmdOpen(true)}
               onClick={() => setCmdOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter" && e.key !== " ") return;
+                e.preventDefault();
+                setCmdOpen(true);
+              }}
             />
             {/* page-level controls belong to the page, not to the shell */}
             {page === "daemons" && (
@@ -186,6 +193,10 @@ export default function Shell({ pages }: { pages: Record<PageId, ReactNode> }) {
   in the row.
 - `CommandMenu` is fully controlled: you own `open` and the item list. It
   filters on `label` plus `keywords`.
+- The field opens the palette on **click and Enter/Space, never on focus.**
+  Every overlay in the kit traps focus and returns it to the opener on close —
+  so opening on `onFocus` reopens the moment the palette closes, forever. Two
+  primitives, each correct alone, and an infinite loop between them.
 
 ---
 
@@ -1389,6 +1400,139 @@ export function RunsTable({ runs, onCancel }: { runs: Run[]; onCancel: (ids: str
   without the button beside it moving as the digits change.
 - `maxHeight` is what makes the header worth having: the body scrolls under a
   pinned header row, so the column you sorted by is still named at row 200.
+
+---
+
+## 7. Charts and tables under a server component
+
+The only recipe here not lifted from the playground — the playground is Vite,
+and this shape only exists in an App Router app. It is also the one you will
+need first, because in Next.js a page is a server component unless you say
+otherwise.
+
+Most of the kit carries `"use client"` — the [API index](./api/README.md) marks
+every one — and on its own that costs you nothing: a client component renders
+from a server component without ceremony.
+What cannot cross is a **function**. React serialises the props it
+sends over that boundary and there is no wire format for a closure — so
+`format`, `rowKey`, a column's `render` and every handler stay behind.
+
+The failure is quiet in each of the three places you would expect to catch it.
+The prop types are right, so `tsc --noEmit` passes. The import is legal, so
+`next build` passes. It throws on the first render of the route:
+
+```text
+Functions cannot be passed directly to Client Components unless you explicitly
+expose it by marking it with "use server".
+  <... current={{...}} previous={{...}} labels=... format={function gbp0} height=...>
+```
+
+`onRowClick` announces itself — nobody is surprised that a click handler needs
+a client component. `format` and `rowKey` do not, and they are what actually
+ships broken: a number formatter reads as pure data, and the boundary does not
+care what it reads as.
+
+One file fixes it. A `'use client'` module owns every function; the page keeps
+the fetch and passes arrays.
+
+```tsx
+// app/money/money-view.tsx
+"use client";
+
+import { CompareChart, SummaryCard, Table } from "@mcleanstewart/ledger";
+import type { TableColumn } from "@mcleanstewart/ledger";
+
+export interface Spend {
+  key: string;
+  category: string;
+  amount: number;
+}
+
+export interface MoneyViewProps {
+  months: string[];
+  thisYear: number[];
+  lastYear: number[];
+  spend: Spend[];
+  balance: number;
+}
+
+/* Constructed once per module, not per render: Intl.NumberFormat is expensive
+   to build and free to reuse, and one instance keeps every figure on the page
+   formatted identically. */
+const gbp0 = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency: "GBP",
+  maximumFractionDigits: 0,
+});
+
+/* Every function the kit needs is declared on this side of the boundary — the
+   formatter, the row key, the render prop. None of them is passed in. */
+const columns: TableColumn<Spend>[] = [
+  { key: "category", header: "Category" },
+  {
+    key: "amount",
+    header: "Amount",
+    width: "120px",
+    align: "right",
+    numeric: true,
+    render: (r) => gbp0.format(r.amount),
+  },
+];
+
+export function MoneyView({ months, thisYear, lastYear, spend, balance }: MoneyViewProps) {
+  return (
+    <SummaryCard title="Cash at bank" value={gbp0.format(balance)} caption="vs last year">
+      <CompareChart
+        current={{ label: "This year", data: thisYear }}
+        previous={{ label: "Last year", data: lastYear }}
+        labels={months}
+        format={(v) => gbp0.format(v)}
+      />
+      <Table columns={columns} rows={spend} rowKey={(r) => r.key} empty="Nothing spent yet" />
+    </SummaryCard>
+  );
+}
+```
+
+```tsx
+// app/money/page.tsx — a server component: no "use client", and it may await.
+import { MoneyView } from "./money-view";
+import { fetchMoney } from "@/lib/money";
+
+export default async function MoneyPage() {
+  const { months, thisYear, lastYear, spend, balance } = await fetchMoney();
+  return (
+    <MoneyView
+      months={months}
+      thisYear={thisYear}
+      lastYear={lastYear}
+      spend={spend}
+      balance={balance}
+    />
+  );
+}
+```
+
+**What this pattern gets right**
+
+- **The boundary is one named file, not a scattering of pragmas.** Every prop
+  crossing it is in `MoneyViewProps`, so "is this serialisable?" is a question
+  you answer by reading one interface — and the compiler will not answer it for
+  you, since a function type is perfectly legal there.
+- **The page still fetches on the server.** Nothing here moves data access to
+  the client; the wrapper is a rendering shim, not a data layer. Keep the
+  `await` in the page and the secrets stay in the page.
+- **The formatter is defined next to what it formats.** The alternative — the
+  page building a formatter and handing it down — is exactly the call that
+  throws, and it also means two files disagree about how money looks.
+- **The wrapper is per page, not a re-export of the kit.** A
+  `"use client"` barrel that re-exports every component would compile and would
+  drag the whole kit into the client bundle of every route that touches one
+  component. Wrap the view you are building.
+
+Dates deserve the same treatment. `formatDate` is a plain function, so calling
+it in the server component and passing the resulting **string** is fine — but a
+column that formats dates needs `render`, and that puts it back on this side.
 
 ---
 

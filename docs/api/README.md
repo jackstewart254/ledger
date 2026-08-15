@@ -9,6 +9,20 @@ import { Table, SummaryCard } from "@mcleanstewart/ledger";
 import "@mcleanstewart/ledger/styles.css";
 ```
 
+## Reading these tables
+
+**Client component** marks a component whose file carries `"use client"` — 32
+of 55. A **·** `function` tag marks a prop whose type is a function.
+
+In a React Server Components app the pair is a trap. A client component
+renders from a server component perfectly well, so nothing warns you — but a
+function prop cannot be sent to it, and that call typechecks, survives
+`next build`, and throws the first time the route renders. `format` and
+`rowKey` are the ones that catch people: they read as pure formatting rather
+than interaction, and the boundary does not care what a prop reads as.
+[Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the
+wrapper that fixes it.
+
 ## [Core](core.md) · 11
 
 - [Icon](core.md#icon) — The styling wrapper around a lucide-react glyph (ISC licensed, the system's one sanctioned runtime dependency).
@@ -97,4 +111,4 @@ import "@mcleanstewart/ledger/styles.css";
 | `formatDate` | `(value: string \| number \| Date \| null \| undefined, locale?: string) => string` | Human date — "11 Aug 2026". ISO strings belong in the data layer, not on screen: `2026-08-11` makes the reader parse a format before reading a date, and a column of them reads as serial numbers. Native Intl, no dependency. |
 | `pct` | `(n: number \| null \| undefined, digits?: number) => string` | Percentage to `digits` places — 12.53 becomes "12.5%". Nullish and non-finite give an em dash, as compactNumber does. |
 
-_55 components, 30 exported types, 7 utilities._
+_55 components, 31 exported types, 7 utilities._
