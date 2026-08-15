@@ -14,6 +14,24 @@
 @import "./components/feedback/index.css" layer(lg);
 
 @layer lg {
+  /* ---- box-sizing — the kit's geometry is written assuming it, so the kit has
+     to ship it. .lg-page-column is `width: 100%` plus a symmetric --page-gutter;
+     under the CSS default that border box is 2 gutters wider than its container
+     and every page of a consumer without a reset scrolls sideways. Same shape of
+     bug in .lg-app-shell (100dvh AND padding), .lg-rail, .lg-textarea, and every
+     `width: 100%` menu/command row.
+
+     Global rather than scoped to .lg-app-shell: Modal, Drawer, Tooltip and
+     CommandMenu portal to document.body and would sit outside any such scope,
+     PageColumn is usable without the shell at all, and a descendant selector
+     misses the shell element itself — the one that pairs 100dvh with padding.
+     The sheet already claims `*` for scrollbars and focus; this is the least
+     surprising of the three, and @layer lg leaves any unlayered consumer rule
+     free to take it back. ---- */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
   /* ---- Keyboard focus — the one sanctioned ring, both themes: the accent,
      held off the element by a page-coloured gap.
      No `border-radius: inherit` here: it would overwrite the focused element's

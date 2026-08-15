@@ -1,7 +1,9 @@
 /* Playground chrome — ledger tokens only. Dev-only, never published. */
-* {
-  box-sizing: border-box;
-}
+
+/* No box-sizing reset here on purpose. It used to live at the top of this file,
+   which meant the playground silently supplied what the kit failed to ship and
+   nothing here could ever reproduce JAC-311. styles.css owns the reset now; if
+   it regresses, this page scrolls sideways and we find out. */
 html {
   scroll-behavior: smooth; /* anchor nav; the DS reduced-motion kill resets it */
 }

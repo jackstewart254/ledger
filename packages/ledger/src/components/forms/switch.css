@@ -1,6 +1,11 @@
 /* Switch — pill track derived from the pill-height tokens (track w = h × 2,
-   thumb = h − space-1, inset space-0_5). Thumb travel animates left with the
-   motion tokens; the global reduced-motion kill zeroes it. */
+   thumb = h − space-1). Thumb travel animates left with the motion tokens; the
+   global reduced-motion kill zeroes it.
+   The inset is not uniform, and the arithmetic above is why: --_track-h is the
+   BORDER box, so the hairline eats 2px of the inner box the thumb centres in.
+   That leaves 2px of track beside the thumb and 1px above it. Uniform would
+   mean sizing the thumb off the inner box, which costs it 2px of diameter on a
+   14px control — the asymmetry is the cheaper of the two. */
 /* Single size on purpose — one track height, no sm/md modifiers. */
 .lg-switch {
   --_track-h: var(--pill-h-md);

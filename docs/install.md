@@ -61,6 +61,17 @@ The package declares `"sideEffects": ["*.css"]`, so bundlers keep the stylesheet
 instead of tree-shaking a side-effect-only import away. That failure used to
 show up only in production builds.
 
+### It resets `box-sizing`, globally
+
+`styles.css` sets `box-sizing: border-box` on `*, *::before, *::after`, so it
+reaches your elements too, not only `.lg-*` ones. That is deliberate: the kit's
+own geometry is written for border-box (`PageColumn` is `width: 100%` plus a
+symmetric gutter, `AppShell` is `100dvh` plus padding), and components portal to
+`document.body`, so there is no subtree it could be confined to. If you already
+ship a reset — Preflight, normalize, your own — this changes nothing. If you
+need it gone, an unlayered `box-sizing` rule of your own outranks it, but expect
+the layout bugs it exists to prevent.
+
 ## Publishing a new version
 
 **npm caches by version.** This is the one thing that bites silently: if the
