@@ -77,7 +77,7 @@ Sorting and selection are both fully controlled and neither touches `rows`.
 
 ### MetricDelta
 
-A signed change as a tinted badge: good green, bad red, grey at zero.
+A signed change as a tinted badge: good green, bad red, grey at zero. "Zero" means near enough, not exactly: a delta of 0.004 is the residue of summing floats, and painting it red is a confident claim about a direction that is not there. See `epsilon`.
 
 `MetricDelta` · props `MetricDeltaProps` · [`packages/ledger/src/components/data/MetricDelta.tsx`](../../packages/ledger/src/components/data/MetricDelta.tsx)
 
@@ -97,6 +97,7 @@ direction is good instead of asking the caller to flip a colour.
 | `suffix` | `string` | `"%"` | Appended to the default rendering (ignored when `format` is given). |
 | `format` | `(value: number) => string` | — |  |
 | `polarity` | `MetricPolarity` | `"higher-is-better"` | Defaults to higher-is-better — revenue, uptime, runs completed. |
+| `epsilon` | `number` | — | Magnitude below which a delta is flat rather than green or red. Defaults to 0.005 — half a penny, a fifth of the finest percentage step `pct` prints. Raise it if `value` is a fraction rather than percentage points. |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
 

@@ -816,8 +816,10 @@ export default function SettingsPage() {
   by a "type DELETE" field.
 - `Checkbox` and `Switch` differ in when they apply: a Checkbox is part of a form
   you will submit, a Switch takes effect immediately.
-- `SegmentedControl` and `RadioGroup` need an explicit `aria-label` inside a
-  FormField (see the sharp edges in the guide).
+- `SegmentedControl` and `RadioGroup` are labelled as a group by `FormField` on
+  their own. Any *other* child that is not the focusable control — a hand-built
+  input group rooted at a `<div>`, say — needs `group` passed explicitly, or the
+  field's `id` lands on the wrapper (see the sharp edges in the guide).
 
 ---
 
@@ -912,7 +914,10 @@ export function SummaryPanels() {
 - `polarity` is how a falling number reads as good. Latency, queue depth and
   error rate are `lower-is-better`; everything else defaults to
   `higher-is-better`.
-- Zero renders grey and unsigned. You do not need to special-case it.
+- Zero renders grey and unsigned. You do not need to special-case it, and that
+  includes a zero that summing floats left at `0.004` — anything under `epsilon`
+  (0.005, half a penny) is flat rather than red. Raise `epsilon` if you pass a
+  fraction instead of percentage points.
 - Non-finite values render nothing at all, so a delta computed from a missing
   baseline will not print `NaN%`.
 - `SummarySplit` takes its emphasis from **order** — `parts[0]` is the leading

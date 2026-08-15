@@ -25,6 +25,24 @@ interface WirableProps {
 const isGroupShaped = (type: unknown) =>
   typeof type === "function" && (type as { __lgGroup?: boolean }).__lgGroup === true;
 
+/** The elements `<label htmlFor>` can actually name and activate. */
+const LABELABLE = new Set(["input", "select", "textarea", "button", "meter", "output", "progress"]);
+
+/**
+ * A child we can prove is the wrong place for the id. Only a HOST element's tag
+ * is knowable from here — a component's rendered root is not, and the kit's own
+ * controls forward unknown props down to a real control, so silence is right
+ * for them. That leaves the case worth catching: a hand-built group whose root
+ * is a plain `<div>`.
+ */
+const isNonControlHost = (type: unknown): type is string =>
+  typeof type === "string" && !LABELABLE.has(type);
+
+declare const process: { env?: { NODE_ENV?: string } } | undefined;
+/* Bundlers inline NODE_ENV and drop the branch, so the warning costs production
+   nothing. Undefined `process` means no bundler told us; stay quiet. */
+const DEV = typeof process !== "undefined" && process.env?.NODE_ENV !== "production";
+
 /** Preferred landing spot for a label click: the group's actual tab stop. */
 const TAB_STOP = "[tabindex='0'], input[type='radio']:checked:not(:disabled)";
 const FOCUSABLE =
@@ -115,13 +133,27 @@ export function FormField({
   let control = children;
   let controlId = htmlFor;
   if (isValidElement<WirableProps>(children)) {
-    controlId = htmlFor ?? children.props.id ?? autoId;
-    control = cloneElement(children, {
-      id: controlId,
-      "aria-describedby":
-        cx(children.props["aria-describedby"], showDesc && descId) || undefined,
-      "aria-invalid": error != null ? true : children.props["aria-invalid"],
-    });
+    if (isNonControlHost(children.type)) {
+      /* Planting the id here would duplicate the real control's and aim the
+         label at something that cannot take focus — both silent. Skip it and
+         say so; `group` is the fix, and nobody discovers it otherwise. */
+      if (DEV) {
+        console.warn(
+          `FormField: <${children.type}> is not a labelable element, so \`id\` was not cloned onto it — ` +
+            "it would duplicate the id of the real control inside and point the label at something " +
+            "that cannot take focus. Pass `group` if this child is a set of controls, or make the " +
+            "focusable control FormField's direct child.",
+        );
+      }
+    } else {
+      controlId = htmlFor ?? children.props.id ?? autoId;
+      control = cloneElement(children, {
+        id: controlId,
+        "aria-describedby":
+          cx(children.props["aria-describedby"], showDesc && descId) || undefined,
+        "aria-invalid": error != null ? true : children.props["aria-invalid"],
+      });
+    }
   }
 
   return (
