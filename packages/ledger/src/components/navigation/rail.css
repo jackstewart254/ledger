@@ -32,6 +32,12 @@
   align-items: center;
   gap: var(--space-1);
   overflow-y: auto;
+  /* Both edges, not one. The rail centres a 30px item in its 56px width, so a
+     gutter on the right alone pushes every icon 5.5px left of the rail's centre
+     — permanently, since `stable` reserves whether or not the list scrolls.
+     Reserving both edges keeps the centre line true and still costs nothing on
+     hover, because the width never changes. */
+  scrollbar-gutter: stable both-edges;
   /* Bar hidden until the rail is hovered. A rail is 56px of chrome next to the
      content pane; a permanent track in it reads as loud in a kit that draws
      hairlines instead. Colour only — the width never changes, so nothing
