@@ -4,6 +4,7 @@ import {
   cloneElement,
   isValidElement,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type AriaAttributes,
@@ -14,6 +15,7 @@ import {
   type MouseEvent,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 import { Icon, type LucideIcon } from "../core/Icon.js";
 import { cx } from "../../internal/cx.js";
 
@@ -53,6 +55,15 @@ export interface MenuProps {
  * (surface-raised, hairline, the sanctioned shadow). Arrow keys move focus,
  * Enter/Space commit, Escape and click-outside close. Danger item variant for
  * destructive actions.
+ *
+ * The panel is portaled to <body> and placed against the trigger's rect, like
+ * Tooltip: an absolutely-positioned panel is cut off by any ancestor that
+ * clips, and this kit's own Card and Table both do. Portaling means the
+ * panel is no longer a DOM descendant of the root, so the two checks that ask
+ * "is this still inside the menu?" — click-outside and focus-exit — have to
+ * ask the panel as well. Escape and the arrow-key walk need no such care:
+ * React propagates events across a portal along the tree it rendered, not the
+ * DOM.
  */
 export function Menu({ trigger, items, align = "start", className, style }: MenuProps) {
   const [open, setOpen] = useState(false);
@@ -69,15 +80,63 @@ export function Menu({ trigger, items, align = "start", className, style }: Menu
     if (refocus) focusTrigger();
   };
 
+  const inside = (node: Node | null) =>
+    node != null && (rootRef.current?.contains(node) === true || panelRef.current?.contains(node) === true);
+
   /* click-outside lives on document while open */
   useEffect(() => {
     if (!open) return;
     const onDown = (e: globalThis.MouseEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+      if (!inside(e.target as Node)) setOpen(false);
     };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
   }, [open]);
+
+  /* Place before paint, then follow the trigger. This is where Menu parts
+     company with Tooltip, which simply hides on scroll: a menu holds focus, and
+     focusing the first item can itself scroll the page — a menu that closed on
+     scroll would shut the instant it opened, and again on every wheel tick
+     inside a long panel.
+
+     Flipping upward is the other half of the fix rather than a separate
+     feature. Clipping used to bound the damage: the panel stayed in flow near
+     its trigger. Fixed to the viewport it can sit entirely off-screen with no
+     scroll that reaches it, so a menu with no room below has to go above.
+     Horizontal is only ever clamped — a menu nudged sideways is still usable,
+     one dropped on top of its own trigger is not. */
+  useLayoutEffect(() => {
+    if (!open) return;
+    const place = () => {
+      const panel = panelRef.current;
+      const anchor = rootRef.current;
+      if (!panel || !anchor) return;
+      const a = anchor.getBoundingClientRect();
+      /* offsetWidth/Height, not the rect: the entrance animation scales the
+         panel, and a transformed rect would place it against its shrunk size. */
+      const w = panel.offsetWidth;
+      const h = panel.offsetHeight;
+      const GAP = 4;
+      const M = 8;
+      const vw = Math.max(window.innerWidth, document.documentElement.clientWidth);
+      const vh = Math.max(window.innerHeight, document.documentElement.clientHeight);
+      const up = a.bottom + GAP + h > vh - M && a.top - GAP - h > M;
+      let left = align === "end" ? a.right - w : a.left;
+      if (vw > 40) left = Math.max(M, Math.min(left, vw - w - M));
+      const top = up ? a.top - GAP - h : a.bottom + GAP;
+      panel.style.setProperty("--lg-menu-x", `${Math.round(left)}px`);
+      panel.style.setProperty("--lg-menu-y", `${Math.round(Math.max(M, top))}px`);
+      /* the pop should come from the trigger, so a flipped panel rises */
+      panel.style.setProperty("--lg-menu-pop-y", up ? "var(--space-1)" : "calc(-1 * var(--space-1))");
+    };
+    place();
+    window.addEventListener("scroll", place, true);
+    window.addEventListener("resize", place);
+    return () => {
+      window.removeEventListener("scroll", place, true);
+      window.removeEventListener("resize", place);
+    };
+  }, [open, align, items.length]);
 
   /* focus the first item on open */
   useEffect(() => {
@@ -124,7 +183,7 @@ export function Menu({ trigger, items, align = "start", className, style }: Menu
   /* Tab out of the menu (or any other focus exit) closes it — an open panel
      the user has walked away from is a trap for the next keypress. */
   const onRootBlur = (e: FocusEvent<HTMLSpanElement>) => {
-    if (open && !e.currentTarget.contains(e.relatedTarget)) setOpen(false);
+    if (open && !inside(e.relatedTarget)) setOpen(false);
   };
 
   const triggerNode = isValidElement<AriaAttributes>(trigger)
@@ -146,35 +205,32 @@ export function Menu({ trigger, items, align = "start", className, style }: Menu
       >
         {triggerNode}
       </span>
-      {open && (
-        <div
-          ref={panelRef}
-          role="menu"
-          className={cx("lg-menu-panel", align === "end" && "lg-menu-panel--end")}
-          onKeyDown={onPanelKeyDown}
-        >
-          {items.map((item, i) => {
-            const Item: ElementType = item.disabled ? "button" : (item.as ?? "button");
-            return (
-              <Item
-                key={item.id ?? i}
-                {...(Item === "button"
-                  ? { type: "button", disabled: item.disabled }
-                  : { href: item.href })}
-                role="menuitem"
-                className={cx("lg-menu-item", item.danger && "lg-menu-item--danger")}
-                onClick={(e: MouseEvent<HTMLElement>) => {
-                  item.onSelect?.(e);
-                  close(true);
-                }}
-              >
-                {item.icon && <Icon as={item.icon} />}
-                {item.label}
-              </Item>
-            );
-          })}
-        </div>
-      )}
+      {open &&
+        createPortal(
+          <div ref={panelRef} role="menu" className="lg-menu-panel" onKeyDown={onPanelKeyDown}>
+            {items.map((item, i) => {
+              const Item: ElementType = item.disabled ? "button" : (item.as ?? "button");
+              return (
+                <Item
+                  key={item.id ?? i}
+                  {...(Item === "button"
+                    ? { type: "button", disabled: item.disabled }
+                    : { href: item.href })}
+                  role="menuitem"
+                  className={cx("lg-menu-item", item.danger && "lg-menu-item--danger")}
+                  onClick={(e: MouseEvent<HTMLElement>) => {
+                    item.onSelect?.(e);
+                    close(true);
+                  }}
+                >
+                  {item.icon && <Icon as={item.icon} />}
+                  {item.label}
+                </Item>
+              );
+            })}
+          </div>,
+          document.body,
+        )}
     </span>
   );
 }

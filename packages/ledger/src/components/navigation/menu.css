@@ -8,10 +8,15 @@
   display: inline-flex;
 }
 
+/* Portaled to <body> and placed from JS — fixed, not absolute, so no clipping
+   or transformed ancestor can cut it off or re-base its coordinates. The
+   component writes --lg-menu-x/y before paint; the fallbacks only ever show
+   for the frame before a measurement exists, which is why they are off-screen
+   rather than 0 0. */
 .lg-menu-panel {
-  position: absolute;
-  top: calc(100% + var(--space-1));
-  left: 0;
+  position: fixed;
+  top: var(--lg-menu-y, -9999px);
+  left: var(--lg-menu-x, -9999px);
   z-index: var(--z-overlay);
   min-width: var(--overlay-w-menu);
   display: flex;
@@ -24,10 +29,8 @@
   box-shadow: var(--shadow-md);
   animation: lg-menu-pop var(--dur-fast) var(--ease-out);
 }
-.lg-menu-panel--end {
-  left: auto;
-  right: 0;
-}
+/* `align` is no longer a CSS concern: end-alignment is the left coordinate the
+   component computed, having already clamped it to the viewport. */
 
 .lg-menu-item {
   display: flex;
@@ -68,7 +71,7 @@
 @keyframes lg-menu-pop {
   from {
     opacity: 0;
-    transform: translateY(calc(-1 * var(--space-1))) scale(0.98);
+    transform: translateY(var(--lg-menu-pop-y, calc(-1 * var(--space-1)))) scale(0.98);
   }
 }
 @media (prefers-reduced-motion: reduce) {

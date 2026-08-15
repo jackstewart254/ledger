@@ -131,6 +131,31 @@
 .lg-table tbody tr:hover { background: var(--surface-hover); }
 .lg-table tbody tr[data-selected] { background: var(--accent-subtle); }
 .lg-table--clickable tbody tr { cursor: pointer; }
+/* The keyboard is on a row, not a cell: the row's control is the only tab stop
+   it has, so the row is what should look reached. */
+.lg-table tbody tr:focus-within { background: var(--surface-hover); }
+
+/* The row's control — a real <a> or <button> living in the identifying cell.
+   Styled to disappear: the row already reads as clickable, and a second
+   underlined, button-coloured thing inside it would be one affordance too
+   many. The cell's truncation contract moves in here, because this element is
+   the cell's box now; the focus ring draws into the cell's 16px inset, which
+   is why it survives the td's overflow clip. */
+.lg-table-rowlink {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /* Checkbox column — the box plus the standard cell inset, so it lines up with
    every other column. */

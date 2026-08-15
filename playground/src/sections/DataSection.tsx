@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import {
   Card,
@@ -95,6 +95,8 @@ const DAEMONS: Daemon[] = [
   { id: "d5", name: "archive-gc", status: "live", uptime: "14d 2h", cpu: "0.1%" },
 ];
 
+/* Row link demo: the identifying column is the first, so the anchor lands
+   there by default and takes the daemon's name as its accessible name. */
 const DAEMON_COLUMNS: TableColumn<Daemon>[] = [
   { key: "name", header: "Daemon", numeric: true },
   {
@@ -110,6 +112,13 @@ const DAEMON_COLUMNS: TableColumn<Daemon>[] = [
   { key: "cpu", header: "CPU", align: "right", numeric: true },
 ];
 
+/* Same columns, with the row's control pushed off the first column — the
+   `link` flag is the escape hatch for tables that lead with a status dot. */
+const DAEMON_LINK_LAST: TableColumn<Daemon>[] = DAEMON_COLUMNS.map((c) => ({
+  ...c,
+  link: c.key === "cpu",
+}));
+
 const BALANCE_SERIES = [
   12180, 12140, 12210, 12190, 12080, 11960, 12040, 12110, 12100, 12230, 12310, 12280, 12190, 12240,
   12330, 12410, 12380, 12290, 12350, 12440, 12420, 12360, 12470, 12480,
@@ -123,6 +132,15 @@ export default function DataSection() {
   const [page, setPage] = useState(3);
   const [sort, setSort] = useState<TableSort>({ key: "date", dir: "desc" });
   const [selected, setSelected] = useState<ReadonlySet<TableRowKey>>(new Set());
+  const [opened, setOpened] = useState<string | null>(null);
+  const [hash, setHash] = useState("");
+
+  useEffect(() => {
+    const sync = () => setHash(window.location.hash);
+    sync();
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
 
   const sortedTxns = useMemo(() => {
     const dir = sort.dir === "asc" ? 1 : -1;
@@ -181,6 +199,30 @@ export default function DataSection() {
 
       <h3 style={sub}>Table — daemons</h3>
       <Table columns={DAEMON_COLUMNS} rows={DAEMONS} rowKey={(r) => r.id} />
+
+      <h3 style={sub}>Table — rowHref (serialisable template, keyboard-reachable)</h3>
+      <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", margin: "0 0 var(--space-3)" }}>
+        Tab into the table: each row is one stop. Enter follows the link, ⌘/middle-click opens a
+        tab. Current hash: <code>{hash || "—"}</code>
+      </p>
+      <Table
+        columns={DAEMON_COLUMNS}
+        rows={DAEMONS}
+        rowKey={(r) => r.id}
+        rowHref="#daemon-{id}"
+      />
+
+      <h3 style={sub}>Table — onRowClick, control moved to the CPU column</h3>
+      <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", margin: "0 0 var(--space-3)" }}>
+        No URL to point at, so the cell holds a button — Enter and Space both fire it.{" "}
+        {opened ? `Opened ${opened}` : "Nothing opened"}
+      </p>
+      <Table
+        columns={DAEMON_LINK_LAST}
+        rows={DAEMONS}
+        rowKey={(r) => r.id}
+        onRowClick={(r) => setOpened(r.name)}
+      />
 
       <h3 style={sub}>Table — sortable, selectable, sticky header</h3>
       <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", margin: "0 0 var(--space-3)" }}>

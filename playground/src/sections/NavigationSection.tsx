@@ -190,6 +190,43 @@ export default function NavigationSection() {
         />
       </div>
 
+      {/* The case JAC-302 was filed for: before portaling, both panels below
+          were cut off at the box edge. The second one also has nowhere to open
+          downward, so it should flip above its trigger. */}
+      <h3 style={{ fontSize: "var(--text-md)", fontWeight: "var(--fw-semibold)" }}>
+        Menu inside a clipping ancestor
+      </h3>
+      <div
+        style={{
+          display: "flex",
+          gap: "var(--space-4)",
+          overflow: "hidden",
+          height: "56px",
+          alignItems: "center",
+          padding: "0 var(--space-4)",
+          marginBottom: "var(--space-8)",
+          border: "1px solid var(--border)",
+          borderRadius: "var(--radius-surface)",
+        }}
+      >
+        <span style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>overflow: hidden</span>
+        <Menu
+          trigger={<Button>Clipped actions</Button>}
+          items={[
+            { label: "Rename", icon: Check },
+            { label: "Duplicate", icon: Plus },
+            { label: "Delete", icon: X, danger: true },
+          ]}
+        />
+        <div style={{ overflow: "auto", maxHeight: "40px", padding: "var(--space-1)" }}>
+          <Menu
+            align="end"
+            trigger={<IconButton icon={Ellipsis} label="Scroll-container actions" />}
+            items={[{ label: "Refresh" }, { label: "Sign out", danger: true }]}
+          />
+        </div>
+      </div>
+
       <h3 style={{ fontSize: "var(--text-md)", fontWeight: "var(--fw-semibold)" }}>Command menu</h3>
       <Button onClick={() => setCmdOpen(true)}>Open command menu</Button>
       <CommandMenu open={cmdOpen} onClose={() => setCmdOpen(false)} items={COMMANDS} />
