@@ -583,23 +583,43 @@ sorting and selection end to end.
 
 These are real. A guide that hides them costs you more than it saves.
 
-**`FormField` drops its label wiring on composite controls.** It clones a single
-element child to inject `id`, `aria-describedby` and `aria-invalid`. That works
-for `Input`, `Textarea`, `Select`, `SearchField`, `Switch`, `MultiSelect`,
-`DatePicker` and `Slider`, which all forward unknown props to a real
-focusable element. It does **not** work for `SegmentedControl` or `RadioGroup`,
-which take an explicit prop list and drop `id` on the floor — so the `<label
-htmlFor>` points at nothing, clicking the label does nothing, and any `error`
-you passed is not announced. Pass `aria-label` on those yourself:
+**`FormField` clones `id` onto its single element child, so that child has to be
+the control.** It clones the child to inject `id`, `aria-describedby` and
+`aria-invalid`. That works for `Input`, `Textarea`, `Select`, `SearchField`,
+`Switch`, `MultiSelect`, `DatePicker` and `Slider`, which all forward unknown
+props down to a real focusable element.
+
+When the child is *not* the control — a hand-built group whose root is a `<div>`
+— the `id` lands on that wrapper instead. You get a duplicate id in the document
+and a `<label htmlFor>` aimed at something that cannot take focus. The rule, and
+it applies to every non-control child rather than any particular component:
+
+> **If the child is not the focusable control, pass `group`.**
 
 ```tsx
-<FormField label="Appearance">
-  <SegmentedControl aria-label="Appearance" options={…} value={theme} onChange={setTheme} />
+{/* the kit's Input has no prefix slot, so a till-sized amount field is hand-built */}
+<FormField label="Amount" group>
+  <div className="amount-group">
+    <span aria-hidden>£</span>
+    <input inputMode="decimal" />
+  </div>
 </FormField>
 ```
 
-(A group wants `aria-labelledby` or `fieldset`/`legend` rather than `htmlFor`
-anyway, so this is a design gap, not just a missing spread.)
+`group` switches to the fieldset/legend shape — `role="group"` named by the
+label, the error announced on the group, the label click forwarded to the first
+tab stop inside — and clones nothing.
+
+A child that is a plain host element outside the labelable set (`input`,
+`select`, `textarea`, `button`, `meter`, `output`, `progress`) now warns in
+development and the clone is skipped, so this fails loudly instead of silently.
+A *component* child cannot be checked — its rendered root is unknowable from the
+outside, and that is exactly the case the kit's own controls rely on — so the
+rule is still worth knowing rather than waiting for.
+
+`RadioGroup`, `SegmentedControl` and `RangeSlider` take the group shape on their
+own: they carry a marker `FormField` recognises, so you do not pass `group` and
+you do not need an `aria-label` to name them.
 
 **`Table`'s `rowKey` defaults to the array index.** Fine for a static list;
 wrong the moment rows are filtered, sorted or paged, because React will then
