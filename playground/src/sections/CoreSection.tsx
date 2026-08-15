@@ -9,11 +9,14 @@ import {
   Ellipsis,
   ExternalLink,
   Funnel,
+  Info,
   Maximize,
   PoundSterling,
   RefreshCw,
   Search,
+  SendHorizontal,
   SlidersHorizontal,
+  Star,
   TriangleAlert,
   X,
   type LucideIcon,
@@ -122,6 +125,18 @@ export default function CoreSection() {
           <IconButton icon={SlidersHorizontal} label="Adjust" />
           <IconButton icon={ChartLine} label="Chart view" active />
           <IconButton icon={Maximize} label="Expand" disabled />
+          <IconButton icon={SendHorizontal} label="Send" variant="primary" />
+          <IconButton icon={SendHorizontal} label="Send" variant="primary" disabled />
+        </div>
+        {/* bare — annotation on the left, toggles on the right. The active
+            treatment is a filled chip now, not a colour step. */}
+        <div style={{ ...row, marginTop: "var(--space-3)", alignItems: "center" }}>
+          <span style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
+            Year-end projection
+          </span>
+          <IconButton icon={Info} label="All rows, not just this page" variant="bare" />
+          <IconButton icon={Star} label="Pin" variant="bare" />
+          <IconButton icon={Star} label="Pinned" variant="bare" active />
         </div>
       </Specimen>
 

@@ -80,6 +80,32 @@ export default function LayoutSection() {
             Card with the optional header row on --row-h.
           </div>
         </Card>
+        {/* flush + rest props: the body loses its inset so each row can carry
+            its own, and `id` lands on the card itself instead of a wrapper. */}
+        <Card
+          id="card-flush-demo"
+          data-demo="flush"
+          aria-label="Flush card"
+          flush
+          header={<span>flush — the body is the list</span>}
+          style={{ gridColumn: "1 / -1" }}
+        >
+          {ROWS.slice(0, 3).map((r) => (
+            <div
+              key={r.id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "var(--space-3) var(--space-4)",
+                borderBottom: "1px solid var(--border-subtle)",
+                color: "var(--text-muted)",
+              }}
+            >
+              <span>{r.description}</span>
+              <span style={{ fontFeatureSettings: "var(--num-features)" }}>{gbp(r.amount)}</span>
+            </div>
+          ))}
+        </Card>
       </div>
 
       <h3 style={sub}>PageColumn</h3>

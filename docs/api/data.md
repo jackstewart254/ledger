@@ -465,3 +465,4 @@ type BarTone = "neutral" | "success" | "warning" | "danger";
 | --- | --- | --- | --- |
 | `label` **·** required | `ReactNode` | — |  |
 | `value` **·** required | `ReactNode` | — |  |
+| `hint` | `string` | — | A qualifier that applies to this figure alone — "all rows, not just the page", "excludes VAT". It goes on an info glyph rather than into the label, because one label three words longer than its neighbours breaks the row's rhythm and the columns orientation ellipsises it away anyway. Plain text: it is also the glyph's accessible name. |

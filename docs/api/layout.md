@@ -64,12 +64,18 @@ The system's one surface: hairline border on --surface at radius-md, 1px inner t
 
 `Card` · props `CardProps` · [`packages/ledger/src/components/layout/Card.tsx`](../../packages/ledger/src/components/layout/Card.tsx)
 
+Not polymorphic, and not on purpose rather than by omission: a card that
+needs to be a `<button>` is a different component, because a control owes
+you a focus ring, a pressed state and a hit target that a container must
+not grow. `id`, `role` and `aria-*` are the opposite case — they describe
+the div that is already there, so they pass straight through.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `header` | `ReactNode` | — | Optional header row — hairline-separated, --row-h tall. |
-| `children` | `ReactNode` | — |  |
-| `className` | `string` | — |  |
-| `style` | `CSSProperties` | — |  |
+| `flush` | `boolean` | `false` | Drop the body's padding. For the card that *is* its content — a list of rows, a table — where the inset belongs to each row and not to the card. The header keeps its own padding either way. |
+
+Also accepts every prop of `HTMLAttributes<HTMLDivElement>` — they are spread onto the underlying element.
 
 ```tsx
 <Card header={<SectionHeading title="VAT return · Q2" />}>

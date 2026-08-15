@@ -39,3 +39,18 @@
   opacity: 0.55;
   cursor: not-allowed;
 }
+
+/* full width — `width: 100%` alone only widened the inline-flex box and left
+   the segments bunched at its left edge, because they never flexed. Equal
+   fractions (basis 0) rather than `flex: 1 1 auto`, so the cells stay the same
+   width as each other and the selected outline doesn't jump as labels change
+   length. */
+.lg-seg--full {
+  display: flex;
+  width: 100%;
+}
+.lg-seg--full .lg-seg__btn {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+}

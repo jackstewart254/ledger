@@ -3,7 +3,7 @@ export type { IconProps, LucideIcon } from "./Icon.js";
 export { Button } from "./Button.js";
 export type { ButtonProps, ButtonVariant } from "./Button.js";
 export { IconButton } from "./IconButton.js";
-export type { IconButtonProps } from "./IconButton.js";
+export type { IconButtonProps, IconButtonVariant } from "./IconButton.js";
 export { Badge } from "./Badge.js";
 export type { BadgeProps, BadgeTone, BadgeVariant } from "./Badge.js";
 export { StatusPill } from "./StatusPill.js";

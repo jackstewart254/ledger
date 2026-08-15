@@ -23,11 +23,6 @@
   border-radius: 0;
   color: var(--text-subtle);
 }
-.lg-icon-btn--bare:not(:disabled):hover,
-.lg-icon-btn--bare.lg-icon-btn--active {
-  background: transparent;
-  color: var(--text);
-}
 
 .lg-icon-btn:not(:disabled):hover {
   background: var(--surface-hover);
@@ -42,6 +37,42 @@
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+/* primary — Button's accent fill on the control box, for the glyph that IS the
+   action rather than one of several beside it. Same fill and the same hover
+   and press steps, so a send control and a Submit button are the same claim. */
+.lg-icon-btn--primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--border-strong);
+}
+.lg-icon-btn--primary:not(:disabled):hover {
+  background: var(--accent-hover);
+  color: var(--accent-fg);
+}
+.lg-icon-btn--primary.lg-icon-btn--active,
+.lg-icon-btn--primary:not(:disabled):active {
+  background: var(--accent-active);
+  color: var(--accent-fg);
+}
+
+/* bare's states go AFTER the shared ones: same specificity, so source order is
+   what decides. Hover stays boxless — that is the whole point of the variant. */
+.lg-icon-btn--bare:not(:disabled):not(.lg-icon-btn--active):hover {
+  background: transparent;
+  color: var(--text);
+}
+/* Active was a colour step alone, which is not enough to read as a toggle when
+   the glyph has no box to fill (JAC-310). It gets one — grown from the glyph
+   with a spread ring rather than padding, because padding on a state change
+   would shift every row that holds one the moment it is pressed. */
+.lg-icon-btn--bare.lg-icon-btn--active {
+  background: var(--surface-active);
+  color: var(--text-bright);
+  border-radius: var(--radius-control);
+  box-shadow: 0 0 0 var(--space-1) var(--surface-active);
+}
+
 .lg-icon-btn:not(:disabled):active { transform: scale(0.98); }
 @media (prefers-reduced-motion: reduce) {
   .lg-icon-btn:not(:disabled):active { transform: none; }

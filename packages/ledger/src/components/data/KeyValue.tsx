@@ -1,8 +1,18 @@
 import type { CSSProperties, ReactNode } from "react";
+import { Info } from "lucide-react";
+import { IconButton } from "../core/IconButton.js";
 
 export interface KeyValueItem {
   label: ReactNode;
   value: ReactNode;
+  /**
+   * A qualifier that applies to this figure alone — "all rows, not just the
+   * page", "excludes VAT". It goes on an info glyph rather than into the label,
+   * because one label three words longer than its neighbours breaks the row's
+   * rhythm and the columns orientation ellipsises it away anyway. Plain text:
+   * it is also the glyph's accessible name.
+   */
+  hint?: string;
 }
 
 export interface KeyValueProps {
@@ -40,7 +50,19 @@ export function KeyValue({ items, orientation = "rows", className, style }: KeyV
     <dl className={cls} style={style}>
       {items.map((item, i) => (
         <div key={i} className="lg-keyvalue-row">
-          <dt className="lg-keyvalue-label">{item.label}</dt>
+          <dt className="lg-keyvalue-label">
+            {item.label}
+            {/* IconButton, not a bare <Icon>: the tip has to reach a keyboard,
+                and `bare` is exactly the glyph-annotating-a-row case. */}
+            {item.hint != null && (
+              <IconButton
+                icon={Info}
+                variant="bare"
+                label={item.hint}
+                className="lg-keyvalue-hint"
+              />
+            )}
+          </dt>
           <dd className="lg-keyvalue-value">{item.value}</dd>
         </div>
       ))}

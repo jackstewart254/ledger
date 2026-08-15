@@ -24,6 +24,12 @@ export interface MultiSelectProps
   value?: string[];
   defaultValue?: string[];
   onChange?: (next: string[]) => void;
+  /**
+   * Form field name. Emits one hidden input per selected value, so
+   * `FormData.getAll(name)` reads the selection and the control works in an
+   * uncontrolled form like every other one in the kit.
+   */
+  name?: string;
   placeholder?: string;
   /** Filter row inside the popover. Defaults to on from 8 options up — a short list doesn't earn one. */
   searchable?: boolean;
@@ -39,6 +45,11 @@ const SEARCH_FROM = 8;
  * MultiSelect — trigger with chip summary + checkbox popover list. Real
  * checkboxes in the popover keep it keyboard accessible (tab + space); Esc or
  * an outside click closes it. Controlled or uncontrolled.
+ *
+ * Given a `name`, it serialises as repeated hidden fields rather than one JSON
+ * blob: repeated same-named fields are what `FormData.getAll` and every server
+ * action's parser already understand, whereas a blob makes the one control in
+ * the form that needs decoding before it can be read.
  */
 export function MultiSelect({
   options,
@@ -52,6 +63,9 @@ export function MultiSelect({
   style,
   disabled,
   onClick,
+  // intercepted, not forwarded: on a type="button" trigger `name` does nothing,
+  // and here it is the field the form is supposed to read
+  name,
   ...rest
 }: MultiSelectProps) {
   const [open, setOpen] = useState(false);
@@ -148,6 +162,13 @@ export function MultiSelect({
         {selected.length > 0 && <span className="lg-ms__badge">{selected.length}</span>}
         <Icon as={ChevronDown} className="lg-control__icon" />
       </button>
+
+      {/* `disabled` so the field drops out of the submission the way a disabled
+          Input does — a greyed-out control that still posts is a lie. */}
+      {name != null &&
+        selected.map((v) => (
+          <input key={v} type="hidden" name={name} value={v} disabled={disabled} />
+        ))}
 
       {open && (
         <div className="lg-ms__pop">
