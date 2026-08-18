@@ -5,10 +5,12 @@
     "packages/*",
     "playground"
   ],
+  "//typecheck": "The package tsconfig emits declarations for the build, so a check has to pass --noEmit or it leaves a dist/ behind. The playground aliases the DS to source, so this compiles both workspaces against the same sources CI builds.",
+  "//lint": "lint is eslint over the repo; lint:guard is the kit's own checks. The guards run by path from the root — they resolve their own sources, so they do not need the package as cwd.",
   "scripts": {
     "typecheck": "node node_modules/typescript/bin/tsc -p packages/ledger/tsconfig.json --noEmit && node node_modules/typescript/bin/tsc -p playground/tsconfig.json --noEmit",
     "lint": "node node_modules/eslint/bin/eslint.js .",
-    "lint:guard": "node packages/ledger/scripts/format-check.mjs && node packages/ledger/scripts/datepicker-check.mjs && node packages/ledger/scripts/metric-delta-check.mjs",
+    "lint:guard": "node packages/ledger/scripts/format-check.mjs && node packages/ledger/scripts/datepicker-check.mjs && node packages/ledger/scripts/metric-delta-check.mjs && node packages/ledger/scripts/css-token-check.mjs",
     "pack:ledger": "npm run build -w @mcleanstewart/ledger && npm pack -w @mcleanstewart/ledger --pack-destination .",
     "release:ledger:dry": "npm publish -w @mcleanstewart/ledger --dry-run",
     "release:ledger": "npm publish -w @mcleanstewart/ledger"

@@ -86,4 +86,9 @@
      gone; what is left that runs as a sentence is an alert body, and across a
      1280px pane it was setting ~150 characters to the line. */
   --measure-text:      44rem;      /* 704px — ~80 characters at 14px */
+  /* Where a portaled panel parks before it is placed. Menu writes its measured
+     coordinates in before paint; this is the position the panel holds for the
+     one frame between mount and measurement, so it is never seen at 0 0. A
+     sentinel, not a step: nothing that lays out on the page reaches for it. */
+  --overlay-offscreen: -9999px;
 }
