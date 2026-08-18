@@ -34,11 +34,34 @@
   padding: var(--space-3) var(--space-4);
   border-bottom: var(--space-px) solid var(--border);
 }
+/* A subtitle makes the lead a two-line block, and centring against it drops the
+   actions and the close button to the middle of both lines. They belong on the
+   title's line, so the row aligns to the top the moment there is a second one. */
+.lg-drawer-head:has(.lg-drawer-subtitle) {
+  align-items: flex-start;
+}
+.lg-drawer-heading {
+  flex: 1;
+  min-width: 0;
+}
 .lg-drawer-title {
   margin: 0;
   color: var(--text);
   font-size: var(--text-md);
   font-weight: var(--fw-emphasis);
+}
+.lg-drawer-subtitle {
+  margin: var(--space-0_5) 0 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+}
+
+.lg-drawer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
 }
 
 .lg-drawer-close {
@@ -64,6 +87,16 @@
   color: var(--text);
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
+}
+
+/* Overlay density: the head's title is this panel's h1-equivalent, so nothing in
+   the body may render larger than it. SectionHeading's 18px out-ranks the head's
+   16px and inverts the hierarchy, so inside a drawer it steps down to 14px and
+   carries --fw-title instead — the weight keeps it distinct from the 14px body
+   text around it without out-sizing the panel's own subject. */
+.lg-drawer-body .lg-section-heading-title {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-title);
 }
 
 .lg-drawer-footer {

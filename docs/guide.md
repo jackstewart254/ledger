@@ -304,6 +304,39 @@ of prose. That keeps the alert a fixed height, so it can't shove the page around
 when its text changes. If your detail cannot survive being one tooltip long, it
 is not alert text — it is page content.
 
+### A body shared between a route and an overlay
+
+**The overlay owns the header.** Under a route, the detail body owns its own and
+uses `PageHeader`. Inside a `Modal` or a `Drawer`, the overlay's head owns it —
+`title`, `subtitle`, `actions`, same slots and the same convention that markers
+ride inside `title` — and the body renders no header element at all. Two titles
+one hairline apart read as two different subjects.
+
+A body with both hosts takes a prop and omits the element:
+
+```tsx
+function PositionDetail({ heading = true }: { heading?: boolean }) {
+  return (
+    <>
+      {heading && <PageHeader title="AAPL" subtitle="120 units" />}
+      <KeyValue items={rows} />
+    </>
+  );
+}
+
+// route: the body owns the header
+<PositionDetail />
+
+// overlay: the head owns it, the body renders none
+<Drawer open={open} onClose={close} title="AAPL" subtitle="120 units">
+  <PositionDetail heading={false} />
+</Drawer>
+```
+
+Inside an overlay body `SectionHeading` renders a step down (14px at title
+weight) so it cannot out-size the head's 16px title. Nothing in an overlay body
+should render larger than the panel's own subject.
+
 ### `SummaryCard` vs a bare figure
 
 `SummaryCard` is one component for the whole summary board. Its variants are

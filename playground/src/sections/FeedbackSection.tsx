@@ -8,6 +8,7 @@ import {
   Kbd,
   Modal,
   Progress,
+  SectionHeading,
   Skeleton,
   Spinner,
   Toast,
@@ -57,6 +58,7 @@ export default function FeedbackSection() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         title="Close position"
+        subtitle="AAPL · 120 units"
         footer={
           <>
             <Button variant="tertiary" onClick={() => setModalOpen(false)}>
@@ -75,6 +77,12 @@ export default function FeedbackSection() {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         title="Filters"
+        subtitle="3 applied to the current view"
+        actions={
+          <Button variant="tertiary" onClick={() => setDrawerOpen(false)}>
+            Save view
+          </Button>
+        }
         footer={
           <>
             <Button variant="primary" onClick={() => setDrawerOpen(false)}>
@@ -86,8 +94,10 @@ export default function FeedbackSection() {
           </>
         }
       >
+        <SectionHeading title="Date range" />
         Filter controls land here — the drawer body scrolls independently while
-        the footer stays pinned.
+        the footer stays pinned. The section heading steps down inside an overlay
+        so it cannot out-size the drawer's own title.
       </Drawer>
 
       <h3 style={H3}>Toast</h3>

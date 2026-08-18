@@ -23,11 +23,22 @@ Centered dialog on the scrim. Surface-raised panel, hairline border, the sanctio
 
 **Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
 
+The modal owns the header. A body rendered inside `children` renders none of
+its own — the head already names the subject one hairline away, and a second
+title under the first reads as two different things. A body that is also a
+route uses `PageHeader` under the route and omits it here.
+
+`title` / `subtitle` / `actions` mirror `PageHeader`'s slots, including its
+convention: markers (a Badge, a StatusPill) belong inside `title`, not in
+`actions` — an 18px pill in a row of 36px controls steps the row.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `open` **·** required | `boolean` | — |  |
 | `onClose` **·** required **·** function | `() => void` | — |  |
 | `title` | `ReactNode` | — |  |
+| `subtitle` | `ReactNode` | — | Muted one-liner under the title. |
+| `actions` | `ReactNode` | — | Head controls, on the title's baseline, left of the close button. |
 | `children` | `ReactNode` | — |  |
 | `footer` | `ReactNode` | — | Right-aligned action slot under a hairline. |
 | `width` | `number` | `480` | Panel width in px (dynamic — passed as a custom property). |
@@ -60,11 +71,22 @@ Right-side sheet for filters/details. Slides in over the scrim, focus trapped, s
 
 **Client component** — the file carries `"use client"`. It renders from a server component; its props must be serialisable to get there.
 
+The drawer owns the header. A body rendered inside `children` renders none of
+its own — the head already names the subject one hairline away, and a second
+title under the first reads as two different things. A body that is also a
+route uses `PageHeader` under the route and omits it here.
+
+`title` / `subtitle` / `actions` mirror `PageHeader`'s slots, including its
+convention: markers (a Badge, a StatusPill) belong inside `title`, not in
+`actions` — an 18px pill in a row of 36px controls steps the row.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `open` **·** required | `boolean` | — |  |
 | `onClose` **·** required **·** function | `() => void` | — |  |
 | `title` | `ReactNode` | — |  |
+| `subtitle` | `ReactNode` | — | Muted one-liner under the title. |
+| `actions` | `ReactNode` | — | Head controls, on the title's baseline, left of the close button. |
 | `children` | `ReactNode` | — |  |
 | `footer` | `ReactNode` | — |  |
 | `width` | `number` | `360` | Panel width in px (dynamic — passed as a custom property). |
