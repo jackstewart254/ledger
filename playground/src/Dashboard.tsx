@@ -321,7 +321,6 @@ export default function Dashboard({ toolbar }: DashboardProps) {
   const runsToday = DAEMONS.reduce((n, d) => n + d.runsToday, 0);
   const queued = DAEMONS.reduce((n, d) => n + d.queue, 0);
   const failing = DAEMONS.filter((d) => d.state === "failing").length;
-  const live = DAEMONS.filter((d) => d.state !== "paused" && d.state !== "never").length;
 
   const toggleState = (state: DaemonState) => (on: boolean) =>
     setStates((prev) => (on ? [...prev, state] : prev.filter((s) => s !== state)));

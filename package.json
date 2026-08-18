@@ -6,11 +6,17 @@
     "playground"
   ],
   "scripts": {
+    "typecheck": "node node_modules/typescript/bin/tsc -p packages/ledger/tsconfig.json --noEmit && node node_modules/typescript/bin/tsc -p playground/tsconfig.json --noEmit",
+    "lint": "node node_modules/eslint/bin/eslint.js .",
+    "lint:guard": "node packages/ledger/scripts/format-check.mjs && node packages/ledger/scripts/datepicker-check.mjs && node packages/ledger/scripts/metric-delta-check.mjs",
     "pack:ledger": "npm run build -w @mcleanstewart/ledger && npm pack -w @mcleanstewart/ledger --pack-destination .",
     "release:ledger:dry": "npm publish -w @mcleanstewart/ledger --dry-run",
     "release:ledger": "npm publish -w @mcleanstewart/ledger"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.1",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.67.0"
   }
 }
