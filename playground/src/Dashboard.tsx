@@ -19,6 +19,7 @@ import {
   Badge,
   Button,
   Card,
+  CardLink,
   CommandMenu,
   CountBadge,
   Divider,
@@ -29,6 +30,7 @@ import {
   IconButton,
   InlineAlert,
   KeyValue,
+  Link,
   Menu,
   MetricDelta,
   SummaryCard,
@@ -659,6 +661,36 @@ export default function Dashboard({ toolbar }: DashboardProps) {
                   </div>
                 </Card>
               </div>
+            </div>
+
+            {/* Clickable cards, side by side. There is no test runner and no
+                browser in this repo, so this section IS the check: drag-select
+                the body text in each card (only route A's is selectable), and
+                click the chip and the button in route B (both must act, and
+                neither may navigate the card). */}
+            <SectionHeading title="Clickable cards" />
+            <div className="pg-db-cards">
+              <Card as="a" href="#route-a" header={<span>Route A · the card is the link</span>}>
+                <span className="pg-db-muted">
+                  bank-sync last ran at 07:02 and failed on a rejected refresh token.
+                  This text is selectable, and the whole card is one native anchor —
+                  middle-click, right-click and focus all behave.
+                </span>
+              </Card>
+
+              <Card interactive header={<span>Route B · the card holds a link</span>}>
+                <CardLink href="#route-b">Open the bank-sync daemon</CardLink>
+                <div className="pg-db-col">
+                  <span className="pg-db-muted">
+                    Same target, but this card carries controls, so the link is an
+                    overlay — which is why this text will not select.
+                  </span>
+                  <span className="pg-db-row pg-db-row--tight">
+                    <Link href="#pr-412">#412</Link>
+                    <Button onClick={() => setSelectedId("bank-sync")}>Retry</Button>
+                  </span>
+                </div>
+              </Card>
             </div>
           </div>
         </PageColumn>
