@@ -31,15 +31,38 @@
   gap: var(--space-3);
   padding: var(--space-3) var(--space-3) var(--space-2) var(--space-4);
 }
+/* A subtitle makes the heading a two-line block, and centring against it drops
+   the actions and the close button to the middle of both lines. They belong on
+   the title's line, so the row aligns to the top the moment there is a second. */
+.lg-modal-head:has(.lg-modal-subtitle) {
+  align-items: flex-start;
+}
 .lg-modal-heading {
   flex: 1;
   min-width: 0;
 }
+/* markers ride with the title text, not in the action row */
 .lg-modal-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   margin: 0;
   color: var(--text);
   font-size: var(--text-md);
   font-weight: var(--fw-emphasis);
+}
+.lg-modal-subtitle {
+  margin: var(--space-0_5) 0 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+}
+
+.lg-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
 }
 
 .lg-modal-close {
@@ -64,6 +87,17 @@
   color: var(--text);
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
+}
+
+/* Overlay density: the head's title is this panel's h1-equivalent, so no HEADING
+   in the body may render larger than it. SectionHeading's 18px out-ranks the
+   head's 16px and inverts the hierarchy, so inside a modal it steps down to
+   14px. Size is the only step needed — SectionHeading already carries
+   --fw-emphasis, which separates it from the --fw-body text around it. Figures
+   and values (KeyValue, SummaryCard) are sized for reading, not ranked in this
+   heading ramp, and keep their own sizes. */
+.lg-modal-body .lg-section-heading-title {
+  font-size: var(--text-sm);
 }
 
 /* The footer sizes its own region: the slot takes arbitrary nodes, not just

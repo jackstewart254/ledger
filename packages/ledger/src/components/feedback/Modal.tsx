@@ -12,6 +12,10 @@ export interface ModalProps {
   open: boolean;
   onClose: () => void;
   title?: ReactNode;
+  /** Muted one-liner under the title. */
+  subtitle?: ReactNode;
+  /** Head controls, on the title's baseline, left of the close button. */
+  actions?: ReactNode;
   children?: ReactNode;
   /** Right-aligned action slot under a hairline. */
   footer?: ReactNode;
@@ -26,11 +30,22 @@ export interface ModalProps {
  * the sanctioned shadow. Focus trapped, body scroll locked, Escape and
  * overlay-click close. Title + footer slots. Portaled to <body> so a
  * transformed or filtered ancestor can never re-base its fixed positioning.
+ *
+ * The modal owns the header. A body rendered inside `children` renders none of
+ * its own — the head already names the subject one hairline away, and a second
+ * title under the first reads as two different things. A body that is also a
+ * route uses `PageHeader` under the route and omits it here.
+ *
+ * `title` / `subtitle` / `actions` mirror `PageHeader`'s slots, including its
+ * convention: markers (a Badge, a StatusPill) belong inside `title`, not in
+ * `actions` — an 18px pill in a row of 36px controls steps the row.
  */
 export function Modal({
   open,
   onClose,
   title,
+  subtitle,
+  actions,
   children,
   footer,
   width = 480,
@@ -44,6 +59,7 @@ export function Modal({
 
   const id = useId();
   const titleId = `${id}-title`;
+  const subtitleId = `${id}-subtitle`;
   const trapRef = useFocusTrap<HTMLDivElement>(active);
 
   useEffect(() => {
@@ -70,6 +86,7 @@ export function Modal({
       role="dialog"
       aria-modal="true"
       aria-labelledby={title == null ? undefined : titleId}
+      aria-describedby={subtitle == null ? undefined : subtitleId}
       ref={trapRef}
       className="lg-modal"
       onMouseDown={(e) => {
@@ -82,12 +99,18 @@ export function Modal({
       >
         <div className="lg-modal-head">
           <div className="lg-modal-heading">
-            {title && (
+            {title != null && (
               <h2 id={titleId} className="lg-modal-title">
                 {title}
               </h2>
             )}
+            {subtitle != null && (
+              <p id={subtitleId} className="lg-modal-subtitle">
+                {subtitle}
+              </p>
+            )}
           </div>
+          {actions != null && <div className="lg-modal-actions">{actions}</div>}
           <button type="button" aria-label="Close" className="lg-modal-close" onClick={onClose}>
             <Icon as={X} />
           </button>
