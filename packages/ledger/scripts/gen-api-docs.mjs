@@ -377,6 +377,19 @@ const EXAMPLES = {
 </PageColumn>`,
   Card: `<Card header={<SectionHeading title="VAT return · Q2" />}>
   <KeyValue items={[{ label: "Due", value: "7 August 2026" }]} />
+</Card>
+
+{/* Route A — the card is the link. Nothing else in it may be a control. */}
+<Card as="a" href="/vat/2026-q2" header={<SectionHeading title="VAT return · Q2" />}>
+  <KeyValue items={[{ label: "Due", value: "7 August 2026" }]} />
+</Card>`,
+  CardLink: `{/* Route B — the card holds a stretched link, so the chip and the
+    button inside it stay real controls and need no z-index. */}
+<Card interactive header={<SectionHeading title="INV-2214 · Marlow Joinery" />}>
+  <CardLink href="/invoices/2214">Open invoice INV-2214</CardLink>
+  <KeyValue items={[{ label: "Due", value: "7 August 2026" }]} />
+  <Link href="https://find-and-update.company-information.service.gov.uk">Companies House</Link>
+  <Button onClick={sendReminder}>Send reminder</Button>
 </Card>`,
 
   Rail: `<Rail aria-label="Primary" footer={<RailItem icon={Settings} label="Settings" href="/settings" />}>

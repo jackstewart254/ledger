@@ -24,6 +24,15 @@
   gap: var(--space-3);
 }
 
+/* The two clickable-card routes, side by side so they can be compared in one
+   drag of the mouse. */
+.pg-db-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
 /* Worker list beside the side panels — fractions, so no width literal. */
 .pg-db-split {
   display: grid;

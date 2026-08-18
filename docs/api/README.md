@@ -12,7 +12,7 @@ import "@mcleanstewart/ledger/styles.css";
 ## Reading these tables
 
 **Client component** marks a component whose file carries `"use client"` — 32
-of 55. A **·** `function` tag marks a prop whose type is a function.
+of 56. A **·** `function` tag marks a prop whose type is a function.
 
 In a React Server Components app the pair is a trap. A client component
 renders from a server component perfectly well, so nothing warns you — but a
@@ -42,11 +42,12 @@ wrapper that fixes it.
 - [PageHeader](typography.md#pageheader) — The view title block (replaces the 8×-copy-pasted heading).
 - [SectionHeading](typography.md#sectionheading) — The title row for a section inside a page: a heading and an optional actions slot on the same line.
 
-## [Layout](layout.md) · 3
+## [Layout](layout.md) · 4
 
 - [AppShell](layout.md#appshell) — The dashboard chrome: a bare rail on the page background and the content in a rounded pane floating beside it.
 - [PageColumn](layout.md#pagecolumn) — The one centered column every page hangs from.
-- [Card](layout.md#card) — The system's one surface: hairline border on --surface at radius-md, 1px inner top-highlight, border-only hover.
+- [Card](layout.md#card) — The system's one surface: hairline border on --surface at radius-md, border-only hover.
+- [CardLink](layout.md#cardlink) — The stretched link that makes a whole `<Card interactive>` clickable: an overlay pinned to the card's four edges, cut to its radius.
 
 ## [Navigation](navigation.md) · 5
 
@@ -111,4 +112,4 @@ wrapper that fixes it.
 | `formatDate` | `(value: string \| number \| Date \| null \| undefined, locale?: string) => string` | Human date — "11 Aug 2026". ISO strings belong in the data layer, not on screen: `2026-08-11` makes the reader parse a format before reading a date, and a column of them reads as serial numbers. Native Intl, no dependency. |
 | `pct` | `(n: number \| null \| undefined, digits?: number) => string` | Percentage to `digits` places — 12.53 becomes "12.5%". Nullish and non-finite give an em dash, as compactNumber does. |
 
-_55 components, 32 exported types, 7 utilities._
+_56 components, 32 exported types, 7 utilities._

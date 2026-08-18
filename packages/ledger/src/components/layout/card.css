@@ -9,10 +9,144 @@
   border-radius: var(--radius-surface);
 }
 
-/* No hover state. A card is a container, not a control — darkening its border
-   on hover promises an interaction that isn't there, and every card lighting
-   up as the cursor crosses the page reads as cheap. A card that IS clickable
-   should say so with its content, or wrap the whole thing in a real control. */
+/* No hover state on a plain card. A card is a container, not a control —
+   darkening its border on hover promises an interaction that isn't there, and
+   every card lighting up as the cursor crosses the page reads as cheap.
+   The affordance is gated on the variant rather than withheld: a card that IS
+   a control (`as="a"`, `as="button"`, or `interactive` + a CardLink) has
+   earned it, and is the only thing below that gets it. */
+.lg-card--interactive {
+  /* The containing block for a CardLink's `inset: 0`. Without it the overlay
+     stretches to the nearest positioned ancestor — in practice the page. */
+  position: relative;
+  /* Control resets, so `as="button"` renders pixel-identical to the div: a
+     button arrives with UA padding, a UA background, centred text and its own
+     font, and an anchor arrives underlined. */
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: start;
+  font: inherit;
+  color: inherit;
+  background: var(--surface);
+  text-decoration: none;
+  /* The CSS half of the drag guard the component sets in JS — this is what
+     stops WebKit painting a drag image of the card. */
+  -webkit-user-drag: none;
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+
+/* The affordance, and only the affordance, waits for something to click. The
+   variant says "style me as a control", and `interactive` on its own — no `as`,
+   no CardLink — is an inert <div>: a pointer and a lighting border over one is
+   the exact lie the top of this file argues against, and the prop is not
+   evidence. So it is asked of the DOM instead: the card either IS a control, or
+   it holds an overlay. `as={NextLink}` renders an <a> and is covered by the
+   element selector without the prop being trusted at all.
+   Everything above stays unconditional — the resets cost nothing on a div, and
+   the positioned ancestor has to be there before a CardLink can mount into it.
+   The gate reads through nesting — a CardLink in a nested card satisfies the
+   outer card's `:has()` too — which costs nothing, because a clickable card
+   inside a clickable card is a control inside a control and already invalid for
+   the same reason route A is. */
+:is(a, button).lg-card--interactive,
+.lg-card--interactive:has(.lg-card-link) {
+  cursor: pointer;
+}
+:is(a, button).lg-card--interactive:hover,
+.lg-card--interactive:has(.lg-card-link):hover {
+  border-color: var(--border-strong);
+}
+
+/* `as="button"` with `disabled`: the pointer and the hover are a promise the
+   element can no longer keep, so both come off. Nothing else changes — dimming
+   a whole card would take its content down with it, and a disabled card is
+   still there to be read. */
+.lg-card--interactive:disabled {
+  cursor: default;
+}
+.lg-card--interactive:disabled:hover {
+  border-color: var(--border);
+}
+
+/* Route A needs nothing here: the card IS the focusable element, and the global
+   `*:focus-visible` rule in styles.css draws its ring with box-shadow, which
+   already traces the card's own --radius-surface.
+
+   Route B has to move it. The focused element is the overlay, and `inset: 0`
+   makes the overlay the card's PADDING box — a ring drawn there sits a hairline
+   inside the border, tracing a box that isn't the card. Suppress it on the
+   overlay and put it on the card, which is what the keyboard actually reached. */
+.lg-card-link:focus-visible {
+  box-shadow: none;
+}
+.lg-card--interactive:has(.lg-card-link:focus-visible) {
+  box-shadow: var(--focus-ring);
+}
+
+/* The stretched link. The radius is spent HERE, once, on the same token the
+   card is cut from — which is the whole point: no call site ever writes
+   --radius-surface to keep an overlay's corners in step with the card's.
+   Not `inherit`: that resolves against whatever element the CardLink happens
+   to be written inside, and everything but the card itself has a radius of 0. */
+.lg-card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: var(--radius-surface);
+  cursor: pointer;
+  /* The card's own `-webkit-user-drag` does not inherit, so the overlay — the
+     one element actually holding the href — needs its own copy. */
+  -webkit-user-drag: none;
+}
+
+/* The overlay's accessible name — in the tree, off the screen. Clipped rather
+   than display:none, which would take it out of the accessibility tree too and
+   leave a link with no name at all. */
+.lg-card-link-label {
+  position: absolute;
+  width: var(--space-px);
+  height: var(--space-px);
+  margin: calc(-1 * var(--space-px));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The whole point of route B: every control inside a stretched-link card rides
+   above the link, with no z-index constant for the call site to remember or
+   keep in sync. Gated on the card holding an overlay at all, so an ordinary
+   card's buttons are left exactly as they were — and gated on the card rather
+   than on the link's position, so it holds wherever the CardLink is written.
+
+   `:where()`, not `:is()`, and the number is the point: `:is()` takes the
+   specificity of its most specific argument, which would put this rule above a
+   component styling its OWN internals — RangeSlider absolutely positions its two
+   `input`s over one rail, and being dragged back into flow by a card destroys
+   the control. `:where()` contributes nothing, leaving (0,2,0): still far more
+   than the `static` a control defaults to, and a tie with any component rule of
+   the same weight. A tie is settled by source order, and styles.css imports
+   layout (line 10) AFTER core and typography (8, 9) and BEFORE everything else
+   (11-14) — so forms, navigation, data and feedback outrank this rule and core
+   and typography lose to it. That asymmetry is only survivable because nothing
+   in core positions an element this rule can reach: Button and Link set no
+   `position` at all, and Avatar, which does, is a span.
+
+   `:not(label *)` is the other half. Lift the OUTERMOST control and leave a
+   component's internals to sort themselves out: Checkbox is a <label> wrapping
+   an <input> and an absolutely positioned tick <svg> that carries no z-index of
+   its own, so lifting the input paints it over its own tick and a checked box
+   goes blank (MultiSelect's options are the same markup). The <label> is in the
+   list, so the whole control still rises. Every kit field that layers anything
+   over its input is label-wrapped; the ones that are not — Slider, Input,
+   RangeSlider — put the control itself at the top, so they stay lifted. */
+.lg-card--interactive:has(.lg-card-link)
+  :where(a, button, input, select, textarea, label, summary, [role="button"], [role="link"]):where(:not(.lg-card-link, label *)) {
+  position: relative;
+  z-index: 1;
+}
 
 .lg-card-header {
   display: flex;
@@ -28,6 +162,9 @@
 }
 
 .lg-card-body {
+  /* Explicit, because under `as="button"` this element is a <span> — see the
+     content-model note in Card.tsx. The header is already display:flex. */
+  display: block;
   padding: var(--space-4);
 }
 
