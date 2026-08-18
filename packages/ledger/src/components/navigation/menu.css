@@ -15,8 +15,8 @@
    rather than 0 0. */
 .lg-menu-panel {
   position: fixed;
-  top: var(--lg-menu-y, -9999px);
-  left: var(--lg-menu-x, -9999px);
+  top: var(--lg-menu-y, var(--overlay-offscreen));
+  left: var(--lg-menu-x, var(--overlay-offscreen));
   z-index: var(--z-overlay);
   min-width: var(--overlay-w-menu);
   display: flex;
