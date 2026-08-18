@@ -5,7 +5,12 @@
     "packages/*",
     "playground"
   ],
+  "//typecheck": "The package tsconfig emits declarations for the build, so a check has to pass --noEmit or it leaves a dist/ behind. The playground aliases the DS to source, so this compiles both workspaces against the same sources CI builds.",
+  "//lint": "The self-checks import ../src/*.ts relative to the package, so they only run with the package as cwd — hence -w rather than a path.",
   "scripts": {
+    "typecheck": "tsc -p packages/ledger/tsconfig.json --noEmit && tsc -p playground/tsconfig.json --noEmit",
+    "lint": "npm run lint -w @mcleanstewart/ledger",
+    "lint:guard": "npm run lint:guard -w @mcleanstewart/ledger",
     "pack:ledger": "npm run build -w @mcleanstewart/ledger && npm pack -w @mcleanstewart/ledger --pack-destination .",
     "release:ledger:dry": "npm publish -w @mcleanstewart/ledger --dry-run",
     "release:ledger": "npm publish -w @mcleanstewart/ledger"

@@ -50,6 +50,8 @@
   ],
   "scripts": {
     "build": "tsc && node scripts/copy-css.mjs",
+    "lint": "node scripts/format-check.mjs && node scripts/datepicker-check.mjs && node scripts/metric-delta-check.mjs",
+    "lint:guard": "node scripts/css-token-check.mjs",
     "docs": "node scripts/gen-api-docs.mjs",
     "prepublishOnly": "npm run build"
   },

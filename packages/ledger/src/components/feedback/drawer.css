@@ -66,11 +66,20 @@
   line-height: var(--leading-normal);
 }
 
+/* The footer sizes its own region: the slot takes arbitrary nodes, not just
+   controls, and an unsized child — a bare link or span — would otherwise
+   inherit the document root, since the kit ships no preflight. Centring is a
+   no-op for controls (they all have an explicit height) and stops a bare line
+   box top-aligning against them. */
 .lg-drawer-footer {
   display: flex;
+  align-items: center;
   gap: var(--space-2);
   padding: var(--space-3) var(--space-4);
   border-top: var(--space-px) solid var(--border);
+  color: var(--text);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
 }
 
 @keyframes lg-drawer-fade {

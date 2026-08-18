@@ -6,6 +6,7 @@ import {
   EmptyState,
   InlineAlert,
   Kbd,
+  Link,
   Modal,
   Progress,
   Skeleton,
@@ -59,6 +60,7 @@ export default function FeedbackSection() {
         title="Close position"
         footer={
           <>
+            <Link href="#feedback">Order ticket</Link>
             <Button variant="tertiary" onClick={() => setModalOpen(false)}>
               Cancel
             </Button>
@@ -83,6 +85,7 @@ export default function FeedbackSection() {
             <Button variant="tertiary" onClick={() => setDrawerOpen(false)}>
               Reset
             </Button>
+            <Link href="#feedback">Saved views</Link>
           </>
         }
       >

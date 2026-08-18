@@ -68,7 +68,11 @@
    takes its width out of the items region's content box, and only by reserving
    the same gutter (globally `stable`, styles.css) does the footer's glyph
    column stay on the same axis as the items' instead of sitting a half-bar to
-   the right of it. Platforms with overlay scrollbars reserve nothing, in both. */
+   the right of it. Platforms with overlay scrollbars reserve nothing, in both.
+   It also sizes its own region, for the reason the Drawer and Modal footers do:
+   the slot takes arbitrary nodes, not just controls, and an unsized child — a
+   bare link or span — would otherwise inherit the document root, since the kit
+   ships no preflight. */
 .lg-rail-footer {
   flex: 0 0 auto;
   overflow-y: auto;
@@ -76,6 +80,9 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-2);
+  color: var(--text);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
 }
 
 .lg-rail-item {
