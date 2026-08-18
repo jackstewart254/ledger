@@ -333,9 +333,18 @@ function PositionDetail({ heading = true }: { heading?: boolean }) {
 </Drawer>
 ```
 
-Inside an overlay body `SectionHeading` renders a step down (14px at title
-weight) so it cannot out-size the head's 16px title. Nothing in an overlay body
-should render larger than the panel's own subject.
+Inside an overlay body `SectionHeading` renders a step down (14px, keeping its
+own emphasis weight) so it cannot out-size the head's 16px title. No *heading*
+in an overlay body should render larger than the panel's own subject. Figures
+and values — a `KeyValue` value, a `SummaryCard` number — are sized for reading
+and are not part of that ramp; they keep their own sizes.
+
+The step is downward on purpose. An overlay body has no title of its own — the
+head owns it — so there is no body title to size, and because the head's title
+is the panel's subject, headings inside the body step down beneath it rather
+than the head stepping up. Promoting the head title above 18px was rejected: a
+20px title in a 12px-padded head row over-weights the chrome relative to the
+panel it introduces.
 
 ### `SummaryCard` vs a bare figure
 

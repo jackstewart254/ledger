@@ -29,7 +29,6 @@
 .lg-drawer-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-2_5);
   padding: var(--space-3) var(--space-4);
   border-bottom: var(--space-px) solid var(--border);
@@ -44,7 +43,11 @@
   flex: 1;
   min-width: 0;
 }
+/* markers ride with the title text, not in the action row */
 .lg-drawer-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   margin: 0;
   color: var(--text);
   font-size: var(--text-md);
@@ -89,14 +92,15 @@
   line-height: var(--leading-normal);
 }
 
-/* Overlay density: the head's title is this panel's h1-equivalent, so nothing in
-   the body may render larger than it. SectionHeading's 18px out-ranks the head's
-   16px and inverts the hierarchy, so inside a drawer it steps down to 14px and
-   carries --fw-title instead — the weight keeps it distinct from the 14px body
-   text around it without out-sizing the panel's own subject. */
+/* Overlay density: the head's title is this panel's h1-equivalent, so no HEADING
+   in the body may render larger than it. SectionHeading's 18px out-ranks the
+   head's 16px and inverts the hierarchy, so inside a drawer it steps down to
+   14px. Size is the only step needed — SectionHeading already carries
+   --fw-emphasis, which separates it from the --fw-body text around it. Figures
+   and values (KeyValue, SummaryCard) are sized for reading, not ranked in this
+   heading ramp, and keep their own sizes. */
 .lg-drawer-body .lg-section-heading-title {
   font-size: var(--text-sm);
-  font-weight: var(--fw-title);
 }
 
 .lg-drawer-footer {

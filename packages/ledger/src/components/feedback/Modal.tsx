@@ -99,7 +99,7 @@ export function Modal({
       >
         <div className="lg-modal-head">
           <div className="lg-modal-heading">
-            {title && (
+            {title != null && (
               <h2 id={titleId} className="lg-modal-title">
                 {title}
               </h2>
