@@ -24,6 +24,21 @@
   color: var(--text-subtle);
 }
 
+/* outline — the data-toolbar box. Squarer and smaller than `control`, and it
+   keeps its border at rest: in a toolbar the buttons have to read as targets
+   before you hover them, where a ghost control beside a Button does not. */
+.lg-icon-btn--outline {
+  width: var(--icon-btn-sm);
+  height: var(--icon-btn-sm);
+  border-radius: var(--radius-sm);
+  border-color: var(--border);
+  background: transparent;
+}
+.lg-icon-btn--outline .lg-icon {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
 .lg-icon-btn:not(:disabled):hover {
   background: var(--surface-hover);
   color: var(--text);

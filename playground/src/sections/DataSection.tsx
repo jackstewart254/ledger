@@ -1,17 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
+import { Columns3, ListFilter, X } from "lucide-react";
 import {
+  Avatar,
+  Badge,
+  Button,
   Card,
   formatDate,
+  IconButton,
   KeyValue,
   MetricDelta,
+  SearchField,
+  StatusDot,
   SummaryCard,
   Pagination,
   Sparkline,
   Table,
+  TableCard,
   TrendChart,
 } from "@mcleanstewart/ledger";
-import type { TableColumn, TableRowKey, TableSort } from "@mcleanstewart/ledger";
+import type { BadgeTone, StatusDotStatus, TableColumn, TableRowKey, TableSort } from "@mcleanstewart/ledger";
 
 const sub: CSSProperties = {
   fontSize: "var(--text-md)",
@@ -124,6 +132,155 @@ const BALANCE_SERIES = [
   12330, 12410, 12380, 12290, 12350, 12440, 12420, 12360, 12470, 12480,
 ];
 
+/* ── TableCard demo: a caseload list ─────────────────────────────────────
+   The shape the kit's tables are tuned for — an identity column, a run of
+   secondary text, pills carrying state, and a row action. Names are invented. */
+interface Resident {
+  id: string;
+  name: string;
+  photo?: string;
+  /** null = not yet housed; the cell shows a pill instead of an address. */
+  place: string | null;
+  worker: string | null;
+  stage: "Pre-housing" | "Housed" | "Exited";
+  payment: "In payment" | "Not in payment" | null;
+  due: string | null;
+  /** true renders `due` as an overdue count rather than a date. */
+  dueOverdue?: boolean;
+  session: { label: string; state: StatusDotStatus };
+}
+
+const RESIDENTS: Resident[] = [
+  { id: "r1", name: "Aaron Bevan", place: null, worker: "Priya Sandhu", stage: "Pre-housing", payment: null, due: null, session: { label: "Today", state: "good" } },
+  { id: "r2", name: "Nadia Okonkwo", place: "Grove Lane · Room 3", worker: "Priya Sandhu", stage: "Housed", payment: "In payment", due: "01 Oct 2026", session: { label: "2 days ago", state: "good" } },
+  { id: "r3", name: "Tomas Lindqvist", place: "Grove Lane · Room 7", worker: "Marcus Reid", stage: "Housed", payment: "Not in payment", due: "79 days overdue", dueOverdue: true, session: { label: "5 days ago", state: "watch" } },
+  { id: "r4", name: "Bella Carrington", place: "Ashworth House · Room 1", worker: "Marcus Reid", stage: "Housed", payment: "In payment", due: "14 Oct 2026", session: { label: "1 day ago", state: "good" } },
+  { id: "r5", name: "Idris Haddad", place: null, worker: null, stage: "Pre-housing", payment: null, due: null, session: { label: "No sessions", state: "risk" } },
+  { id: "r6", name: "Shauna Whelan", place: "Ashworth House · Room 4", worker: "Priya Sandhu", stage: "Housed", payment: "In payment", due: "22 Oct 2026", session: { label: "6 days ago", state: "watch" } },
+  { id: "r7", name: "Kwame Baptiste", place: "Marsh Court · Room 2", worker: "Elena Vargas", stage: "Exited", payment: null, due: null, session: { label: "11 days ago", state: "risk" } },
+  { id: "r8", name: "Fiona Del Rosario", place: "Marsh Court · Room 9", worker: "Elena Vargas", stage: "Housed", payment: "In payment", due: "03 Nov 2026", session: { label: "3 days ago", state: "good" } },
+];
+
+const STAGE_TONE: Record<Resident["stage"], BadgeTone> = {
+  "Pre-housing": "info",
+  Housed: "success",
+  Exited: "muted",
+};
+
+/* The healthy state colours the DOT and leaves the text muted; only warning and
+   overdue colour the words. A green label on every fresh row would make "fine"
+   the loudest thing on the page. */
+const SESSION_COLOUR: Record<StatusDotStatus, string> = {
+  good: "var(--text-muted)",
+  watch: "var(--tone-warning)",
+  risk: "var(--tone-danger)",
+  unknown: "var(--text-muted)",
+};
+
+const muted: CSSProperties = { color: "var(--text-muted)" };
+const dash = <span style={muted}>-</span>;
+
+const RESIDENT_COLUMNS: TableColumn<Resident>[] = [
+  {
+    key: "name",
+    header: "Name",
+    width: "234px",
+    render: (r) => (
+      <span style={{ display: "flex", alignItems: "center", gap: "var(--space-2_5)", minWidth: 0 }}>
+        <Avatar name={r.name} src={r.photo} size={34} decorative />
+        <span style={{ fontWeight: "var(--fw-emphasis)", overflow: "hidden", textOverflow: "ellipsis" }}>
+          {r.name}
+        </span>
+      </span>
+    ),
+  },
+  {
+    key: "place",
+    header: "Property / Room",
+    width: "232px",
+    render: (r) =>
+      r.place ?? (
+        <Badge tone="warning" variant="subtle">
+          No house
+        </Badge>
+      ),
+  },
+  { key: "worker", header: "Support worker", width: "130px", render: (r) => r.worker ?? dash },
+  {
+    key: "stage",
+    header: "Stage",
+    width: "109px",
+    render: (r) => (
+      <Badge tone={STAGE_TONE[r.stage]} variant="subtle">
+        {r.stage}
+      </Badge>
+    ),
+  },
+  {
+    key: "payment",
+    header: "Payment",
+    width: "127px",
+    render: (r) =>
+      r.payment == null ? (
+        dash
+      ) : (
+        <Badge tone={r.payment === "In payment" ? "success" : "warning"} variant="subtle">
+          {r.payment}
+        </Badge>
+      ),
+  },
+  {
+    key: "due",
+    header: "UC statement due",
+    width: "133px",
+    render: (r) =>
+      r.due == null ? (
+        dash
+      ) : (
+        <span
+          style={
+            r.dueOverdue
+              ? { color: "var(--tone-danger)", fontWeight: "var(--fw-emphasis)" }
+              : muted
+          }
+        >
+          {r.due}
+        </span>
+      ),
+  },
+  {
+    key: "session",
+    header: "Last session",
+    width: "117px",
+    render: (r) => (
+      <span
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "var(--space-2)",
+          color: SESSION_COLOUR[r.session.state],
+        }}
+      >
+        <StatusDot status={r.session.state} label={`Last session ${r.session.label}`} />
+        {r.session.label}
+      </span>
+    ),
+  },
+  {
+    key: "action",
+    header: "",
+    width: "120px",
+    align: "right",
+    render: (r) =>
+      r.place == null ? (
+        // The row itself is a link; the button is a different action inside it.
+        <Button variant="secondary" onClick={(e) => e.stopPropagation()}>
+          Add to a room
+        </Button>
+      ) : null,
+  },
+];
+
 const SPARK_A = [4, 6, 5, 8, 7, 9, 11, 10, 12, 11, 13, 14];
 const SPARK_B = [14, 12, 13, 11, 12, 9, 10, 8, 9, 7, 8, 6];
 const SPARK_C = [5, 5, 6, 5, 7, 6, 6, 7, 6, 7, 7, 8];
@@ -134,6 +291,8 @@ export default function DataSection() {
   const [selected, setSelected] = useState<ReadonlySet<TableRowKey>>(new Set());
   const [opened, setOpened] = useState<string | null>(null);
   const [hash, setHash] = useState("");
+  const [residentPage, setResidentPage] = useState(1);
+  const [residentQuery, setResidentQuery] = useState("");
 
   useEffect(() => {
     const sync = () => setHash(window.location.hash);
@@ -141,6 +300,14 @@ export default function DataSection() {
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
   }, []);
+
+  const residents = useMemo(() => {
+    const q = residentQuery.trim().toLowerCase();
+    if (q === "") return RESIDENTS;
+    return RESIDENTS.filter(
+      (r) => r.name.toLowerCase().includes(q) || (r.place ?? "").toLowerCase().includes(q),
+    );
+  }, [residentQuery]);
 
   const sortedTxns = useMemo(() => {
     const dir = sort.dir === "asc" ? 1 : -1;
@@ -150,6 +317,54 @@ export default function DataSection() {
   return (
     <section id="data" className="pg-section">
       <h2 className="pg-section-title">Data</h2>
+
+      <h3 style={{ ...sub, marginTop: "var(--space-6)" }}>
+        TableCard — toolbar, sticky header, pinned footer
+      </h3>
+      <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", margin: "0 0 var(--space-3)" }}>
+        Fixed height, so the body is the only thing that scrolls: scroll it and the toolbar, the
+        column headings and the pager all stay put.
+      </p>
+      <TableCard
+        height="420px"
+        toolbar={
+          <>
+            <SearchField
+              placeholder="Search by name or property"
+              value={residentQuery}
+              onChange={(e) => setResidentQuery(e.target.value)}
+              onClear={() => setResidentQuery("")}
+            />
+            <IconButton icon={ListFilter} label="Filter" variant="outline" tooltip={false} />
+            <IconButton icon={Columns3} label="Columns" variant="outline" tooltip={false} />
+            <IconButton
+              icon={X}
+              label="Clear filters"
+              variant="outline"
+              tooltip={false}
+              disabled={residentQuery === ""}
+              onClick={() => setResidentQuery("")}
+            />
+          </>
+        }
+        footer={
+          <>
+            <span>
+              1-{residents.length} of 144 residents · Payment status derived from the remittance,
+              w/c 07 Sep 2026
+            </span>
+            <Pagination compact page={residentPage} pageCount={3} onPageChange={setResidentPage} />
+          </>
+        }
+      >
+        <Table
+          columns={RESIDENT_COLUMNS}
+          rows={residents}
+          rowKey={(r) => r.id}
+          rowHref="#resident-{id}"
+          empty="No residents match that search."
+        />
+      </TableCard>
 
       <h3 style={sub}>KpiTile + MetricDelta</h3>
       <div
@@ -237,6 +452,9 @@ export default function DataSection() {
         onSortChange={setSort}
         selectedKeys={selected}
         onSelectionChange={setSelected}
+        // Without this the checkbox reads out "Select t3" — the rowKey, which is
+        // an opaque id here and a uuid in a real app.
+        selectLabel={(t) => `Select ${t.description}, ${formatDate(t.date)}`}
       />
 
       <h3 style={sub}>Sparkline</h3>

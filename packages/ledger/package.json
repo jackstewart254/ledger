@@ -1,6 +1,6 @@
 {
   "name": "@mcleanstewart/ledger",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Ledger — a dashboard design system: dark-first, almost-monochrome, hairlines instead of shadows, tabular figures. Typed React components and vanilla CSS, no bundler and no runtime dependency beyond icons.",
   "keywords": [
     "design-system",

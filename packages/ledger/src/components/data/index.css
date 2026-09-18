@@ -1,5 +1,8 @@
 /* data component styles — string-form @imports only. */
 @import "./table.css";
+/* after table.css: the in-card overrides are higher specificity, but the
+   Button and SearchField rules lean on source order too */
+@import "./table-card.css";
 @import "./metric-delta.css";
 @import "./sparkline.css";
 /* chart.css first: the shared .lg-chart-svg rules and bar-chart.css's overrides

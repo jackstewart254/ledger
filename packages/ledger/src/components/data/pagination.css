@@ -43,6 +43,43 @@
   color: var(--text-bright);
 }
 
+/* compact — Prev / "2 / 3" / Next. Borderless and transparent, unlike the
+   window form's outlined chevrons: this sits in a card footer that already has
+   its own edge, so an outline there is a box inside a box. */
+.lg-pagination-step {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: var(--btn-h-compact);
+  padding: 0 var(--space-2);
+  border: var(--space-px) solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs-dense);
+  font-weight: var(--fw-emphasis);
+  line-height: var(--leading-none);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+.lg-pagination-step:not(:disabled):hover { background: var(--surface-hover); }
+/* pointer-events:none as well as the fade — the first page's Prev is still a
+   <button> and still focusable, but there is nothing to click through to. */
+.lg-pagination-step:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
+}
+
+.lg-pagination-count {
+  padding: 0 var(--space-1_5);
+  font-size: var(--text-xs-dense);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
 .lg-pagination-gap {
   min-width: var(--control-h-sm);
   text-align: center;

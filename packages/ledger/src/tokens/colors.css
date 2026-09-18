@@ -125,6 +125,34 @@
   --neutral-status-subtle: var(--brand-neutral-subtle, rgba(255, 255, 255, 0.07));
   --neutral-status-text:   var(--brand-neutral-text, var(--text-secondary));
 
+  /* ---- Marker tones (Badge) --------------------------------------------
+     A pill is three values, not one: full-strength ink, a 10-16% wash behind
+     it and a 20-30% border. They are a separate family from --success /
+     --danger because those are FILLS (a solid button, a chart bar, a dot) and
+     a fill wants a colour that carries white text; a pill wants a colour that
+     carries ITSELF, on a tinted wash, at 12px. The dark values are the kit's
+     own palette; light matches the reference table exactly. */
+  --tone-success:        var(--positive-line);
+  --tone-success-bg:     rgba(91, 168, 106, 0.16);
+  --tone-success-border: rgba(91, 168, 106, 0.30);
+  --tone-warning:        var(--warning-text);
+  --tone-warning-bg:     rgba(240, 185, 62, 0.16);
+  --tone-warning-border: rgba(240, 185, 62, 0.30);
+  --tone-info:           var(--accent-subtle-fg);
+  --tone-info-bg:        rgba(7, 149, 255, 0.16);
+  --tone-info-border:    rgba(7, 149, 255, 0.30);
+  --tone-danger:         var(--negative);
+  --tone-danger-bg:      rgba(224, 104, 107, 0.16);
+  --tone-danger-border:  rgba(224, 104, 107, 0.30);
+  --tone-muted:          var(--text-muted);
+  --tone-muted-bg:       rgba(255, 255, 255, 0.06);
+  --tone-muted-border:   var(--border);
+
+  /* Row hover. Lighter than --surface-hover, which is tuned for a control: a
+     51px row lighting up as hard as a button turns a scanned list into a
+     flicker. */
+  --table-row-hover: rgba(255, 255, 255, 0.045);
+
   /* data-viz (Sparkline / TrendChart / BarChart) */
   /* Charts draw in the ACCENT, not in a status colour. A series is only red
      when the thing it plots is bad; a balance chart that is always red says
@@ -229,6 +257,29 @@
   --neutral-status:        var(--neutral-dot);
   --neutral-status-subtle: var(--brand-neutral-subtle, rgba(0, 0, 0, 0.05));
   --neutral-status-text:   var(--brand-neutral-text, var(--text-secondary));
+
+  /* ---- Marker tones (Badge) — the reference table's values, exactly.
+     These are BRIGHTER than the light financial palette above (#2F7D44,
+     #B23A3E): a 12px pill on a 10% wash needs a hue that still reads as green
+     at that size, where a deep forest green just reads as dark. The fills keep
+     the deep values, so a solid button and a chart series are unchanged. */
+  --tone-success:        #21C45D;                    /* rgb(33,196,93)   */
+  --tone-success-bg:     rgba(33, 196, 93, 0.10);
+  --tone-success-border: rgba(33, 196, 93, 0.20);
+  --tone-warning:        #DB7706;                    /* rgb(219,119,6)   */
+  --tone-warning-bg:     rgba(219, 119, 6, 0.10);
+  --tone-warning-border: rgba(219, 119, 6, 0.20);
+  --tone-info:           #0DA2E7;                    /* rgb(13,162,231)  */
+  --tone-info-bg:        rgba(13, 162, 231, 0.10);
+  --tone-info-border:    rgba(13, 162, 231, 0.20);
+  --tone-danger:         #EF4444;                    /* rgb(239,68,68)   */
+  --tone-danger-bg:      rgba(239, 68, 68, 0.10);
+  --tone-danger-border:  rgba(239, 68, 68, 0.20);
+  --tone-muted:          #737373;                    /* rgb(115,115,115) */
+  --tone-muted-bg:       rgba(245, 245, 245, 0.40);
+  --tone-muted-border:   #E5E5E5;                    /* rgb(229,229,229) */
+
+  --table-row-hover: rgba(245, 245, 245, 0.50);
 
   --chart-line:    var(--brand-chart-line, var(--accent));
   --chart-grid:    var(--brand-chart-grid, var(--border-subtle));

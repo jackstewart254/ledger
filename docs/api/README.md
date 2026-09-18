@@ -12,7 +12,7 @@ import "@mcleanstewart/ledger/styles.css";
 ## Reading these tables
 
 **Client component** marks a component whose file carries `"use client"` — 32
-of 55. A **·** `function` tag marks a prop whose type is a function.
+of 56. A **·** `function` tag marks a prop whose type is a function.
 
 In a React Server Components app the pair is a trap. A client component
 renders from a server component perfectly well, so nothing warns you — but a
@@ -73,9 +73,10 @@ wrapper that fixes it.
 - [Slider](forms.md#slider) — A native range with a filled track: the accent up to the thumb, faint after it, so the value reads at a glance instead of being inferred from the thumb's position against nothing.
 - [RangeSlider](forms.md#rangeslider) — A genuine two-ended range: `{min, max}` in, `{min, max}` out.
 
-## [Data](data.md) · 10
+## [Data](data.md) · 11
 
-- [Table](data.md#table) — Render-prop columns, row hover, 42px rows (--lg-table-row-h, which defaults to --control-h-lg; override per instance with `rowHeight`).
+- [Table](data.md#table) — Render-prop columns, row hover, 51px rows (--lg-table-row-h, which defaults to --table-row-h; override per instance with `rowHeight`).
+- [TableCard](data.md#tablecard) — The shell a data table lives in: toolbar, scrolling body, footer, clipped to a 12px radius.
 - [MetricDelta](data.md#metricdelta) — A signed change as a tinted badge: good green, bad red, grey at zero.
 - [Sparkline](data.md#sparkline) — Tiny inline SVG polyline from a number[].
 - [TrendChart](data.md#trendchart) — Area chart: gradient fill under a hairline-thin line, grid at rounded tick values, y ticks in the left gutter, x labels at the ends.
@@ -111,4 +112,4 @@ wrapper that fixes it.
 | `formatDate` | `(value: string \| number \| Date \| null \| undefined, locale?: string) => string` | Human date — "11 Aug 2026". ISO strings belong in the data layer, not on screen: `2026-08-11` makes the reader parse a format before reading a date, and a column of them reads as serial numbers. Native Intl, no dependency. |
 | `pct` | `(n: number \| null \| undefined, digits?: number) => string` | Percentage to `digits` places — 12.53 becomes "12.5%". Nullish and non-finite give an em dash, as compactNumber does. |
 
-_55 components, 32 exported types, 7 utilities._
+_56 components, 32 exported types, 7 utilities._

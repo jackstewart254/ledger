@@ -18,8 +18,11 @@
   height: 100%;
   border-radius: var(--lg-avatar-radius);
   object-fit: cover;
-  border: var(--space-px) solid var(--border);
-  background: var(--surface);
+  /* No hairline. A 1px ring around a 34px circle in a 51px row is a fourth
+     line competing with the row separator, the header rule and the card edge —
+     and on a photo it reads as a badly-cut sticker. */
+  border: 0;
+  background: var(--surface-hover);
   opacity: 0;
   transition: opacity var(--dur-base) var(--ease-standard);
 }
@@ -34,13 +37,20 @@
   width: 100%;
   height: 100%;
   border-radius: var(--lg-avatar-radius);
-  border: var(--space-px) solid var(--border);
-  background: var(--surface);
-  color: var(--text);
+  border: 0;
+  /* A muted disc, not a bordered surface: the initials are a stand-in for a
+     photo, so the box should read as an empty frame rather than as a control. */
+  background: var(--surface-hover);
+  color: var(--text-muted);
   font-family: var(--font-sans);
-  font-weight: var(--fw-body);
-  font-size: max(var(--text-xs), calc(var(--lg-avatar-size) * 0.38));
-  letter-spacing: var(--tracking-wide);
+  font-weight: var(--fw-emphasis);
+  /* 0.28, with --text-3xs (10px) as the floor — which is what every avatar up
+     to ~36px actually lands on, including the 34px table one. Two letters at
+     10px inside a 34px circle leave the ring of empty space that makes it read
+     as a placeholder; scale them and it reads as a logo. */
+  font-size: max(var(--text-3xs), calc(var(--lg-avatar-size) * 0.28));
+  letter-spacing: normal;
+  text-transform: uppercase;
   user-select: none;
 }
 

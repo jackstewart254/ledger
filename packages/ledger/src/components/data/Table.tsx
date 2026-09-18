@@ -82,6 +82,15 @@ export interface TableProps<Row> {
   /** Row-height override — sets the --lg-table-row-h custom prop. */
   rowHeight?: string;
   /**
+   * Hide the column headings (`false`). They are shown by default: a 40px band
+   * of 12px labels is what tells you a column of "01 Oct 2026" is a statement
+   * date rather than a move-in date, and it is the surface a sticky header
+   * needs to have. Reach for `false` only where the labels genuinely restate
+   * the data and something else already names the columns — the header row
+   * stays in the DOM either way, so assistive tech keeps it.
+   */
+  showHeader?: boolean;
+  /**
    * Caps the scroll container's height. A visible header row (see the note on
    * the component) pins itself to the top of that container as the body
    * scrolls — there is no prop for it, because a scrolling table that loses
@@ -113,6 +122,14 @@ export interface TableProps<Row> {
    * on a filtered or paged view doesn't silently drop what's off-screen.
    */
   onSelectionChange?: (keys: Set<TableRowKey>) => void;
+  /**
+   * Accessible name for a row's checkbox. Defaults to `Select {rowKey}`, which
+   * is fine while the key is a name and useless the moment it is a uuid — a
+   * screen reader then reads out thirty-six characters of hex per row and
+   * names none of them. Point this at whatever identifies the row on screen:
+   * `(t) => \`Select \${t.merchant}, \${t.date}\``.
+   */
+  selectLabel?: (row: Row) => string;
   empty?: ReactNode;
   className?: string;
   style?: CSSProperties;
@@ -130,8 +147,8 @@ const rowHrefFor = <Row,>(spec: string | ((row: Row) => string), row: Row): stri
       );
 
 /**
- * Table — render-prop columns, row hover, 42px rows (--lg-table-row-h, which
- * defaults to --control-h-lg; override per instance with `rowHeight`).
+ * Table — render-prop columns, row hover, 51px rows (--lg-table-row-h, which
+ * defaults to --table-row-h; override per instance with `rowHeight`).
  *
  * An interactive row (`rowHref` or `onRowClick`) puts a real `<a>`/`<button>`
  * in the row's identifying cell rather than wiring keys onto the `<tr>`. The
@@ -141,17 +158,13 @@ const rowHrefFor = <Row,>(spec: string | ((row: Row) => string), row: Row): stri
  * heading that told them what its cells meant. A control in a cell keeps the
  * table a table, and its accessible name is that cell's own text.
  *
- * The header row is in the DOM but hidden visually: a column of dates under a
- * heading that reads "Date" tells the reader what they already worked out, and
- * on a full-page table those labels are the only chrome left. Screen readers
- * still get them, so the table stays navigable by column.
- *
- * It un-hides itself when it has something to hold — a `sortable` column, or
- * selection — because that is the point at which the header stops being a
- * restatement of the data and becomes a row of controls. That is keyed off the
- * props, not exposed as one: there is nothing for a consumer to remember, and
- * a sort control with nothing visible to click is worse than no sorting at all.
- * Once visible it is also sticky, so `maxHeight` scrolls the body under it.
+ * The header row is visible by default and sticky, pinning to the top of
+ * whatever scrolls — `maxHeight` here, or the surrounding TableCard's body. It
+ * used to hide itself until it held a control; that made every unsorted table
+ * a grid of unlabelled columns, and it meant a table could not be dropped into
+ * a card without losing the one band that named its data. `showHeader={false}`
+ * brings the old behaviour back per instance; the row stays in the DOM and
+ * clipped, so screen readers keep it either way.
  *
  * Sorting and selection are both fully controlled and neither touches `rows`.
  */
@@ -162,21 +175,23 @@ export function Table<Row>({
   rowHref,
   onRowClick,
   rowHeight,
+  showHeader = true,
   maxHeight,
   sort,
   onSortChange,
   selectedKeys,
   onSelectionChange,
+  selectLabel,
   empty,
   className,
   style,
 }: TableProps<Row>) {
   const selectable = selectedKeys != null && onSelectionChange != null;
-  // A `sortable` column with no handler is inert, so it doesn't count towards
-  // showing the header — otherwise a half-wired table loses its hidden header
-  // and gains a row of dead labels.
+  // Selection and sorting both put CONTROLS in the header, so they force it
+  // visible: `showHeader={false}` beside a select-all checkbox would clip the
+  // only way to reach it.
   const sortableHead = onSortChange != null && columns.some((c) => c.sortable);
-  const showHead = selectable || sortableHead;
+  const showHead = showHeader || selectable || sortableHead;
 
   const keys = rows.map((row, i) => (rowKey ? rowKey(row, i) : i));
   const allSelected = selectable && keys.length > 0 && keys.every((k) => selectedKeys.has(k));
@@ -332,7 +347,7 @@ export function Table<Row>({
                     // row's own onRowClick opens a drawer every time you tick.
                     <td className="lg-table-cell--select" onClick={(e) => e.stopPropagation()}>
                       <Checkbox
-                        aria-label={`Select ${k}`}
+                        aria-label={selectLabel ? selectLabel(row) : `Select ${k}`}
                         checked={selected}
                         onChange={() => toggleRow(k)}
                       />

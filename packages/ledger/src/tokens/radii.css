@@ -41,9 +41,28 @@
   --shadow-sm: none;
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);    /* crosshair tooltip (dark)  */
   --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+
+  /* The data card's edge, as one composed box-shadow — NOT a shadow token that
+     a component then concatenates a ring onto. `box-shadow: 0 0 0 1px X, none`
+     is invalid, and an invalid shadow list is dropped whole, so the dark card
+     silently lost its outline. One value per theme, used verbatim.
+     In DARK there is no drop shadow at all: a card lighter than the page
+     already reads as raised, and a black glow under a near-black page is
+     either invisible or a smudge. The ring is the whole edge. */
+  --ring-card:   var(--border);
+  --shadow-card: 0 0 0 1px var(--ring-card);
 }
 [data-theme="light"] {
   --shadow-sm: none;
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);   /* crosshair tooltip (light) */
   --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  /* LIGHT is the deliberate exception to "hairlines, not shadows": a white card
+     on a white page has no value difference to separate it, so the ring alone
+     draws a flat outline rather than a surface. A 5% foreground ring plus the
+     two-layer shadow-md measured off the reference table. */
+  --ring-card:   rgba(10, 10, 10, 0.05);
+  --shadow-card: 0 0 0 1px var(--ring-card),
+                 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                 0 2px 4px -2px rgba(0, 0, 0, 0.1);
 }

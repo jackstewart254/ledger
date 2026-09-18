@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { Icon, type LucideIcon } from "./Icon.js";
 import { Tooltip, type TooltipSide } from "../feedback/Tooltip.js";
 
-export type IconButtonVariant = "control" | "primary" | "bare";
+export type IconButtonVariant = "control" | "primary" | "bare" | "outline";
 
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: LucideIcon;
@@ -16,7 +16,10 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
    * that *is* the action — a send control at the end of an input. `bare` drops
    * the box entirely — for a glyph annotating a heading or a row, where a
    * control-sized target around a 17px icon is all chrome and no message. Still
-   * a button, so it keeps focus and the tooltip.
+   * a button, so it keeps focus and the tooltip. `outline` is the data-toolbar
+   * box: 32px square, hairline border, 8px radius — smaller and squarer than
+   * `control`, because a row of them sits inside a 45px bar rather than beside
+   * a Button, and a pill there reads as three loose tablets.
    */
   variant?: IconButtonVariant;
   /** Override the tip text, or `false` to suppress it (menu triggers, toolbars
