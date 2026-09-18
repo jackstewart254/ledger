@@ -1,6 +1,7 @@
 import type { HTMLAttributes } from "react";
 
-export type BadgeTone = "neutral" | "accent" | "success" | "warning" | "danger";
+/** `muted` is an alias of `neutral` — both render the hairline grey pill. */
+export type BadgeTone = "neutral" | "muted" | "accent" | "info" | "success" | "warning" | "danger";
 export type BadgeVariant = "subtle" | "solid" | "outline";
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {

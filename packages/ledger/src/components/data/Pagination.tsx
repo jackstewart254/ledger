@@ -9,6 +9,13 @@ export interface PaginationProps {
   page: number;
   pageCount: number;
   onPageChange: (page: number) => void;
+  /**
+   * Prev / "2 / 3" / Next instead of the run of numbered buttons. For a card
+   * footer, where the numbers are competing with a summary line for a 45px
+   * band and nobody jumps to page 7 of 9 anyway. The window form stays the
+   * default — this is a second shape, not a replacement.
+   */
+  compact?: boolean;
   className?: string;
   style?: CSSProperties;
 }
@@ -33,8 +40,50 @@ function pageWindow(page: number, pageCount: number): number[] {
  * Pagination — controlled: hairline chevron buttons + a fixed-width run of
  * page numerals.
  */
-export function Pagination({ page, pageCount, onPageChange, className, style }: PaginationProps) {
-  const cls = ["lg-pagination", className].filter(Boolean).join(" ");
+export function Pagination({
+  page,
+  pageCount,
+  onPageChange,
+  compact = false,
+  className,
+  style,
+}: PaginationProps) {
+  const cls = ["lg-pagination", compact && "lg-pagination--compact", className]
+    .filter(Boolean)
+    .join(" ");
+
+  if (compact)
+    return (
+      <nav className={cls} style={style} aria-label="Pagination">
+        <button
+          type="button"
+          className="lg-pagination-step"
+          disabled={page <= 1}
+          onClick={() => onPageChange(page - 1)}
+        >
+          {/* 14px, not the kit's 17: the glyph is punctuation beside a 12px
+              word here, not the control itself. */}
+          <Icon as={ChevronLeft} size={14} />
+          Prev
+        </button>
+        {/* Not aria-live: the page number is the OUTCOME of a button the user
+            just pressed, and announcing it again interrupts the row they were
+            sent to. The buttons' own disabled state carries the boundaries. */}
+        <span className="lg-pagination-count">
+          {page} / {pageCount}
+        </span>
+        <button
+          type="button"
+          className="lg-pagination-step"
+          disabled={page >= pageCount}
+          onClick={() => onPageChange(page + 1)}
+        >
+          Next
+          <Icon as={ChevronRight} size={14} />
+        </button>
+      </nav>
+    );
+
   return (
     <nav className={cls} style={style} aria-label="Pagination">
       <button

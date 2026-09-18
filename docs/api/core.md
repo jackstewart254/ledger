@@ -69,7 +69,7 @@ The icon-only control. A glyph alone is only legible if it says what it is on ho
 | `icon` **·** required | `LucideIcon` | — |  |
 | `label` **·** required | `string` | — | Accessible name — becomes aria-label and, by default, the tooltip. |
 | `active` | `boolean` | `false` | Persistent pressed look (toolbar toggles). |
-| `variant` | `IconButtonVariant` | `"control"` | `control` (default) is the 36px box that lines up with Button. `primary` is that same box carrying Button's accent fill, for the one glyph in a cluster that *is* the action — a send control at the end of an input. `bare` drops the box entirely — for a glyph annotating a heading or a row, where a control-sized target around a 17px icon is all chrome and no message. Still a button, so it keeps focus and the tooltip. |
+| `variant` | `IconButtonVariant` | `"control"` | `control` (default) is the 36px box that lines up with Button. `primary` is that same box carrying Button's accent fill, for the one glyph in a cluster that *is* the action — a send control at the end of an input. `bare` drops the box entirely — for a glyph annotating a heading or a row, where a control-sized target around a 17px icon is all chrome and no message. Still a button, so it keeps focus and the tooltip. `outline` is the data-toolbar box: 32px square, hairline border, 8px radius — smaller and squarer than `control`, because a row of them sits inside a 45px bar rather than beside a Button, and a pill there reads as three loose tablets. |
 | `tooltip` | `ReactNode \| false` | — | Override the tip text, or `false` to suppress it (menu triggers, toolbars that already name themselves). Defaults to `label`. |
 | `tooltipSide` | `TooltipSide` | `"top"` |  |
 | `type` | `"submit" \| "reset" \| "button"` | `"button"` | _(inherited)_ |
@@ -266,13 +266,15 @@ type ButtonVariant = "primary" | "secondary" | "tertiary" | "danger";
 ### IconButtonVariant
 
 ```ts
-type IconButtonVariant = "control" | "primary" | "bare";
+type IconButtonVariant = "control" | "primary" | "bare" | "outline";
 ```
 
 ### BadgeTone
 
+`muted` is an alias of `neutral` — both render the hairline grey pill.
+
 ```ts
-type BadgeTone = "neutral" | "accent" | "success" | "warning" | "danger";
+type BadgeTone = "neutral" | "muted" | "accent" | "info" | "success" | "warning" | "danger";
 ```
 
 ### BadgeVariant

@@ -8,6 +8,9 @@
   --dur-instant: 80ms;
   --dur-fast:    120ms;
   --dur-base:    160ms;
+  --dur-hover:   150ms;  /* row / cell hover — a shade slower than a control's
+                            120ms so a pointer crossing a long list doesn't
+                            strobe */
   --dur-slow:    220ms;
 
   /* ambient loops — deliberately outside the 120–180ms interaction band */

@@ -30,6 +30,12 @@
   --icon-btn:     var(--control-h-md);  /* square icon button — same height as
                                            every other inline control, so a row
                                            of them lines up with a Button */
+  --icon-btn-sm:  32px;   /* the bordered toolbar icon button — the size that
+                             sits inside a 45px bar with 6px above and below */
+  --btn-h-compact: 28px;  /* the small button that lives INSIDE data chrome: a
+                             footer pager step, a row's secondary action. Not a
+                             third Button size — Button itself is still one
+                             height; this is the in-table exception. */
 
   /* per-size horizontal padding — pairs with --control-h-* */
   --control-pad-x-xs: var(--space-2);    /* 8px  */
@@ -50,11 +56,19 @@
      button, the fix is not to inflate it — it is that a marker was put in a row
      of controls. */
   --pill-h-sm:    16px;
-  --pill-h-md:    18px;
+  --pill-h-md:    20px;
   --row-h:        48px;   /* Card's header row, KeyValue's rows, and the unit
                              Textarea and the MultiSelect popover measure in.
                              NOT Table: its rows are --lg-table-row-h, which
-                             defaults to --control-h-lg. */
+                             defaults to --table-row-h. */
+
+  /* table geometry — the three bands a data card is built from. Row height is
+     the avatar (34) plus its 8px cell padding plus the separator; the header is
+     deliberately 11px shorter than a row, and the toolbar and footer are the
+     same height as each other so the card reads as symmetrical. */
+  --table-row-h:  51px;
+  --table-head-h: 40px;
+  --table-bar-h:  45px;
 
   /* page geometry — PageColumn reads these (kills the negative-margin hack) */
   --page-max-width: 1288px;
@@ -66,6 +80,7 @@
   --rail-w:   56px;
   --header-h: 52px;
   --search-w: 320px;  /* the centred header search — one width across apps */
+  --search-min-w: 10rem;  /* floor for a search that flexes inside a toolbar */
 
   /* status dot — one size, shared by StatusDot and StatusPill. The dot is bare:
      the glow ring went, and its token with it. */

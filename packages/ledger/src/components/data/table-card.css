@@ -1,0 +1,124 @@
+/* TableCard — toolbar / scrolling body / footer, clipped to one radius.
+
+   The edge is a ring plus a shadow, which is the doctrine's one sanctioned
+   exception and it is a LIGHT-mode one: a white card on a white page has no
+   value difference to separate it, so a hairline alone draws an outline rather
+   than a surface. In dark --shadow-card is `none` and the ring is the border
+   token, so the card is still hairline-separated there (see tokens/radii.css). */
+.lg-table-card {
+  display: flex;
+  flex-direction: column;
+  /* min-height:0 on the card as well as the body: a flex ITEM's default
+     min-height is auto, so a card inside a page-height flex column would
+     refuse to shrink below its content and push the footer off-screen. */
+  min-height: 0;
+  height: var(--lg-table-card-h, auto);
+  padding: 0;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  /* clips the table's first and last rows to the radius — the table itself is
+     flush with this edge, it has no inset of its own */
+  overflow: hidden;
+}
+
+.lg-table-card-toolbar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-1_5);
+  height: var(--table-bar-h);
+  padding: 0 var(--space-2);
+  border-bottom: var(--space-px) solid var(--border);
+  /* Controls scroll sideways rather than wrapping: a toolbar that becomes two
+     rows changes the card's header height, and every row below it moves. */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.lg-table-card-toolbar::-webkit-scrollbar { display: none; }
+
+/* The only thing that scrolls. min-height:0 is load-bearing — without it the
+   flex item sizes to its content and the card grows past its own height. */
+.lg-table-card-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.lg-table-card-footer {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--table-bar-h);
+  padding: 0 var(--space-4);
+  /* A softer rule than the toolbar's, deliberately: the toolbar divides two
+     kinds of control, the footer divides data from a note about the data. */
+  border-top: var(--space-px) solid var(--border-subtle);
+  background: var(--surface-hover);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-body);
+}
+/* The summary line truncates rather than pushing the pager out of the card. */
+.lg-table-card-footer > :first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- A Table inside the card --------------------------------------------
+   The card owns the frame and the scrolling; the table gives both up. */
+.lg-table-card .lg-table {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  /* Load-bearing, not tidying. `overflow: hidden` clips the standalone table to
+     its own radius — but an overflow that is not `visible` makes an element a
+     scrollport for `position: sticky` inside it, so the header would pin to
+     this box, which never scrolls, and slide away with the rows. Same reason
+     .lg-table-scroll goes visible: the card's body has to be the ONE scrolling
+     ancestor between the `th` and the page. */
+  overflow: visible;
+}
+.lg-table-card .lg-table-scroll {
+  overflow: visible;
+  max-height: none;
+}
+
+/* ---- A SearchField inside the toolbar ------------------------------------
+   Bare until focused. A bordered pill beside two bordered icon buttons gives
+   the bar three competing outlines, and the field is the one that is almost
+   always empty. --_bc is Input's own border hook, so overriding it here beats
+   .lg-control's hover/focus rules by specificity rather than by !important. */
+.lg-table-card-toolbar .lg-search {
+  --_bc: transparent;
+  flex: 1;
+  min-width: var(--search-min-w);
+  height: var(--icon-btn-sm);
+  padding: 0 var(--space-3);
+  gap: var(--space-2);
+  border-radius: var(--radius-sm);
+  background: transparent;
+}
+.lg-table-card-toolbar .lg-search:hover { --_bc: transparent; }
+.lg-table-card-toolbar .lg-search:focus-within {
+  --_bc: var(--border-strong);
+  background: var(--surface-hover);
+}
+.lg-table-card-toolbar .lg-search .lg-icon {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+/* Nothing but the search may shrink. IconButton sets flex-shrink itself, but
+   .lg-control (Select, DatePicker, MultiSelect, Input) and .lg-seg do not — so
+   a crowded toolbar quietly compressed a Select to an unreadable stub instead
+   of overflowing, and the overflow-x above never fired. AFTER the .lg-search
+   rule, which is more specific and keeps its `flex: 1`: the field is the one
+   thing that should absorb the slack, down to its --search-min-w floor. */
+.lg-table-card-toolbar > * {
+  flex-shrink: 0;
+}

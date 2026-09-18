@@ -7,6 +7,7 @@ export {
   type TableSortDir,
   type TableRowKey,
 } from "./Table.js";
+export { TableCard, type TableCardProps } from "./TableCard.js";
 export { MetricDelta, type MetricDeltaProps, type MetricPolarity } from "./MetricDelta.js";
 export { Sparkline, type SparklineProps } from "./Sparkline.js";
 export { TrendChart, type TrendChartProps } from "./TrendChart.js";

@@ -1,4 +1,7 @@
-/* Badge — small status/label token. Tones map to semantic colors only. */
+/* Badge — small status/label token. Tones map to semantic colors only.
+   20px tall, 12px text at 500, fully round, and a border on every tone: the
+   wash alone is too weak to hold an edge at 10% opacity, so the 20% border is
+   what makes the pill a shape rather than a smudge behind three words. */
 .lg-badge {
   display: inline-flex;
   align-items: center;
@@ -8,9 +11,10 @@
   border: var(--space-px) solid transparent;
   border-radius: var(--radius-control);
   font-family: var(--font-sans);
-  font-size: var(--text-xs);
-  font-weight: var(--fw-body);
+  font-size: var(--text-xs-dense);
+  font-weight: var(--fw-emphasis);
   line-height: var(--leading-none);
+  letter-spacing: normal;
   white-space: nowrap;
 }
 .lg-badge-dot {
@@ -21,13 +25,19 @@
   flex-shrink: 0;
 }
 
-/* tone custom props: subtle bg / subtle fg / solid bg / solid fg / dot */
-.lg-badge--neutral { --lg-badge-subtle-bg: var(--neutral-status-subtle); --lg-badge-subtle-fg: var(--neutral-status-text); --lg-badge-solid: var(--neutral-status); --lg-badge-solid-fg: var(--text-inverse); --lg-badge-dot: var(--neutral-status); }
-.lg-badge--accent  { --lg-badge-subtle-bg: var(--accent-subtle);  --lg-badge-subtle-fg: var(--accent-subtle-fg); --lg-badge-solid: var(--accent);  --lg-badge-solid-fg: var(--accent-fg);  --lg-badge-dot: var(--accent); }
-.lg-badge--success { --lg-badge-subtle-bg: var(--success-subtle); --lg-badge-subtle-fg: var(--success-text);     --lg-badge-solid: var(--success); --lg-badge-solid-fg: var(--success-fg); --lg-badge-dot: var(--success); }
-.lg-badge--warning { --lg-badge-subtle-bg: var(--warning-subtle); --lg-badge-subtle-fg: var(--warning-text);     --lg-badge-solid: var(--warning); --lg-badge-solid-fg: var(--warning-fg); --lg-badge-dot: var(--warning); }
-.lg-badge--danger  { --lg-badge-subtle-bg: var(--danger-subtle);  --lg-badge-subtle-fg: var(--danger-text);      --lg-badge-solid: var(--danger);  --lg-badge-solid-fg: var(--danger-fg);  --lg-badge-dot: var(--danger); }
+/* tone custom props: subtle bg / subtle fg / subtle border / solid bg / solid
+   fg / dot. The subtle trio comes from --tone-*, the MARKER palette, not from
+   --success / --danger: those are fills, tuned to carry white text on a solid
+   button, and at 12px on a 10% wash they read as mud. The solid variant still
+   uses them, because there the fill IS the job. */
+.lg-badge--neutral,
+.lg-badge--muted   { --lg-badge-subtle-bg: var(--tone-muted-bg);   --lg-badge-subtle-fg: var(--tone-muted);   --lg-badge-subtle-border: var(--tone-muted-border);   --lg-badge-solid: var(--neutral-status); --lg-badge-solid-fg: var(--text-inverse); --lg-badge-dot: var(--neutral-status); }
+.lg-badge--accent  { --lg-badge-subtle-bg: var(--accent-subtle);   --lg-badge-subtle-fg: var(--accent-subtle-fg); --lg-badge-subtle-border: var(--accent-border);   --lg-badge-solid: var(--accent);  --lg-badge-solid-fg: var(--accent-fg);  --lg-badge-dot: var(--accent); }
+.lg-badge--info    { --lg-badge-subtle-bg: var(--tone-info-bg);    --lg-badge-subtle-fg: var(--tone-info);    --lg-badge-subtle-border: var(--tone-info-border);    --lg-badge-solid: var(--accent);  --lg-badge-solid-fg: var(--accent-fg);  --lg-badge-dot: var(--tone-info); }
+.lg-badge--success { --lg-badge-subtle-bg: var(--tone-success-bg); --lg-badge-subtle-fg: var(--tone-success); --lg-badge-subtle-border: var(--tone-success-border); --lg-badge-solid: var(--success); --lg-badge-solid-fg: var(--success-fg); --lg-badge-dot: var(--tone-success); }
+.lg-badge--warning { --lg-badge-subtle-bg: var(--tone-warning-bg); --lg-badge-subtle-fg: var(--tone-warning); --lg-badge-subtle-border: var(--tone-warning-border); --lg-badge-solid: var(--warning); --lg-badge-solid-fg: var(--warning-fg); --lg-badge-dot: var(--tone-warning); }
+.lg-badge--danger  { --lg-badge-subtle-bg: var(--tone-danger-bg);  --lg-badge-subtle-fg: var(--tone-danger);  --lg-badge-subtle-border: var(--tone-danger-border);  --lg-badge-solid: var(--danger);  --lg-badge-solid-fg: var(--danger-fg);  --lg-badge-dot: var(--tone-danger); }
 
-.lg-badge--subtle { background: var(--lg-badge-subtle-bg); color: var(--lg-badge-subtle-fg); }
+.lg-badge--subtle { background: var(--lg-badge-subtle-bg); color: var(--lg-badge-subtle-fg); border-color: var(--lg-badge-subtle-border); }
 .lg-badge--solid { background: var(--lg-badge-solid); color: var(--lg-badge-solid-fg); }
 .lg-badge--outline { background: transparent; color: var(--lg-badge-subtle-fg); border-color: var(--border-strong); }

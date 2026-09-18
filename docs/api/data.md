@@ -2,7 +2,8 @@
 
 Generated from `src/components/data` — do not edit by hand, run `npm run docs`.
 
-- [Table](#table) — Render-prop columns, row hover, 42px rows (--lg-table-row-h, which defaults to --control-h-lg; override per instance with `rowHeight`).
+- [Table](#table) — Render-prop columns, row hover, 51px rows (--lg-table-row-h, which defaults to --table-row-h; override per instance with `rowHeight`).
+- [TableCard](#tablecard) — The shell a data table lives in: toolbar, scrolling body, footer, clipped to a 12px radius.
 - [MetricDelta](#metricdelta) — A signed change as a tinted badge: good green, bad red, grey at zero.
 - [Sparkline](#sparkline) — Tiny inline SVG polyline from a number[].
 - [TrendChart](#trendchart) — Area chart: gradient fill under a hairline-thin line, grid at rounded tick values, y ticks in the left gutter, x labels at the ends.
@@ -17,7 +18,7 @@ Generated from `src/components/data` — do not edit by hand, run `npm run docs`
 
 ### Table
 
-Render-prop columns, row hover, 42px rows (--lg-table-row-h, which defaults to --control-h-lg; override per instance with `rowHeight`).
+Render-prop columns, row hover, 51px rows (--lg-table-row-h, which defaults to --table-row-h; override per instance with `rowHeight`).
 
 `Table<Row>` · props `TableProps<Row>` · [`packages/ledger/src/components/data/Table.tsx`](../../packages/ledger/src/components/data/Table.tsx)
 
@@ -31,17 +32,13 @@ the table altogether, so the reader gains a button and loses every column
 heading that told them what its cells meant. A control in a cell keeps the
 table a table, and its accessible name is that cell's own text.
 
-The header row is in the DOM but hidden visually: a column of dates under a
-heading that reads "Date" tells the reader what they already worked out, and
-on a full-page table those labels are the only chrome left. Screen readers
-still get them, so the table stays navigable by column.
-
-It un-hides itself when it has something to hold — a `sortable` column, or
-selection — because that is the point at which the header stops being a
-restatement of the data and becomes a row of controls. That is keyed off the
-props, not exposed as one: there is nothing for a consumer to remember, and
-a sort control with nothing visible to click is worse than no sorting at all.
-Once visible it is also sticky, so `maxHeight` scrolls the body under it.
+The header row is visible by default and sticky, pinning to the top of
+whatever scrolls — `maxHeight` here, or the surrounding TableCard's body. It
+used to hide itself until it held a control; that made every unsorted table
+a grid of unlabelled columns, and it meant a table could not be dropped into
+a card without losing the one band that named its data. `showHeader={false}`
+brings the old behaviour back per instance; the row stays in the DOM and
+clipped, so screen readers keep it either way.
 
 Sorting and selection are both fully controlled and neither touches `rows`.
 
@@ -53,16 +50,18 @@ Sorting and selection are both fully controlled and neither touches `rows`.
 | `rowHref` **·** function | `string \| ((row: Row) => string)` | — | Makes each row a link. The row's identifying cell (the first column, or the one flagged `link`) becomes a real `<a href>`, which is what buys focus, Enter, middle-click and open-in-new-tab without a line of key handling. Clicking anywhere else on the row follows it too. Takes a template string as well as a function, and the template is the form to reach for: `"/runs/{id}"` interpolates fields from the row (URI-encoded) and is serialisable, so a server component can pass it. A function cannot cross that boundary — it type-checks and throws when the route renders. Set this or `onRowClick`, not usually both: with both, the control navigates and `onRowClick` still fires for clicks elsewhere in the row. |
 | `onRowClick` **·** function | `(row: Row) => void` | — | Row action for rows that have no URL to point at — a drawer, a modal. Same identifying cell becomes a `<button>`, so the row is reachable by keyboard; the whole row stays clickable for the mouse. |
 | `rowHeight` | `string` | — | Row-height override — sets the --lg-table-row-h custom prop. |
+| `showHeader` | `boolean` | `true` | Hide the column headings (`false`). They are shown by default: a 40px band of 12px labels is what tells you a column of "01 Oct 2026" is a statement date rather than a move-in date, and it is the surface a sticky header needs to have. Reach for `false` only where the labels genuinely restate the data and something else already names the columns — the header row stays in the DOM either way, so assistive tech keeps it. |
 | `maxHeight` | `string` | — | Caps the scroll container's height. A visible header row (see the note on the component) pins itself to the top of that container as the body scrolls — there is no prop for it, because a scrolling table that loses its headings is only ever worse. |
 | `sort` | `TableSort \| null` | — | Current sort, or null/undefined for none. Fully controlled: the kit draws the header affordance and the direction arrow, the CONSUMER owns the comparator and passes rows already in order. Nothing here re-orders `rows` — a component that sorts your data owns state you can't see, and the sort you want ("live first, then name") is rarely the one it would guess. |
 | `onSortChange` **·** function | `(sort: TableSort) => void` | — | Fires with the next sort when a sortable header is activated: a new column starts at "asc", the sorted column flips direction. Two states only — there is no third click back to unsorted. |
 | `selectedKeys` | `ReadonlySet<TableRowKey>` | — | Selected row keys (from `rowKey`). Fully controlled — pass this together with `onSelectionChange` to get the checkbox column. |
 | `onSelectionChange` **·** function | `(keys: Set<TableRowKey>) => void` | — | Fires with the next selection. The header checkbox adds or removes every key in the CURRENT `rows`, leaving keys outside them alone, so selecting on a filtered or paged view doesn't silently drop what's off-screen. |
+| `selectLabel` **·** function | `(row: Row) => string` | — | Accessible name for a row's checkbox. Defaults to `Select {rowKey}`, which is fine while the key is a name and useless the moment it is a uuid — a screen reader then reads out thirty-six characters of hex per row and names none of them. Point this at whatever identifies the row on screen: `(t) => \`Select \${t.merchant}, \${t.date}\``. |
 | `empty` | `ReactNode` | — |  |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
 
-`rowKey`, `rowHref`, `onRowClick`, `onSortChange` and `onSelectionChange` are functions, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
+`rowKey`, `rowHref`, `onRowClick`, `onSortChange`, `onSelectionChange` and `selectLabel` are functions, and a function cannot cross the server→client boundary. Passing one from a server component typechecks, compiles, and throws the first time the route renders. [Recipe 7](../recipes.md#7-charts-and-tables-under-a-server-component) is the shape that works.
 
 ```tsx
 <Table
@@ -86,6 +85,37 @@ Sorting and selection are both fully controlled and neither touches `rows`.
   maxHeight="60vh"
   empty="Nothing to reconcile"
 />
+```
+
+### TableCard
+
+The shell a data table lives in: toolbar, scrolling body, footer, clipped to a 12px radius.
+
+`TableCard` · props `TableCardProps` · [`packages/ledger/src/components/data/TableCard.tsx`](../../packages/ledger/src/components/data/TableCard.tsx)
+
+It exists instead of `Card` with a `flush` body because the three bands are
+the point. A Card is one padded box; this is a flex column whose middle
+child is the only thing that scrolls, which is what buys a sticky header, a
+pinned pager, and a toolbar that does not slide away — none of which a
+container with a single content slot can give you.
+
+A Table dropped inside loses its own border and radius, and its internal
+scroll container goes `overflow: visible`, so the card's body is the single
+scrolling ancestor. Without that the table would scroll inside a box that
+is itself inside a scrolling box, and the sticky header would pin to a
+container that never moves.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `toolbar` | `ReactNode` | — | Filter / search row along the top — one bar, hairline-separated. |
+| `footer` | `ReactNode` | — | Summary and pager along the bottom. Pinned: it is a sibling of the scrolling body, not inside it, so it needs no sticky positioning. |
+| `height` | `string \| number` | — | Fixed card height (a number is read as px). The body then scrolls inside it and the toolbar, header row and footer stay put. Left unset the card grows to its content and the page scrolls instead — which is what you want for a short table, and what you do NOT want for a long one, since a scrolling page takes the column headings with it. |
+| `children` **·** required | `ReactNode` | — |  |
+| `className` | `string` | — |  |
+| `style` | `CSSProperties` | — |  |
+
+```tsx
+<TableCard>…</TableCard>
 ```
 
 ### MetricDelta
@@ -376,6 +406,7 @@ Controlled: hairline chevron buttons + a fixed-width run of page numerals.
 | `page` **·** required | `number` | — | Current page, 1-based. |
 | `pageCount` **·** required | `number` | — |  |
 | `onPageChange` **·** required **·** function | `(page: number) => void` | — |  |
+| `compact` | `boolean` | `false` | Prev / "2 / 3" / Next instead of the run of numbered buttons. For a card footer, where the numbers are competing with a summary line for a 45px band and nobody jumps to page 7 of 9 anyway. The window form stays the default — this is a second shape, not a replacement. |
 | `className` | `string` | — |  |
 | `style` | `CSSProperties` | — |  |
 
